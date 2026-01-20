@@ -61,7 +61,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                 <circle cx="16" cy="16" r="2" fill="currentColor" />
               </svg>
               <span className="font-heading text-xl font-semibold text-foreground">
-                JewelCraft
+                SumShineBySums
               </span>
             </div>
           </Link>
