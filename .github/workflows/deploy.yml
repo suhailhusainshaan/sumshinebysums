@@ -30,10 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Build with ES modules
+      - name: Build
         run: npm run build
         env:
-          NODE_OPTIONS: '--experimental-vm-modules' # For ES modules support
+          NODE_OPTIONS: '--experimental-vm-modules'
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
