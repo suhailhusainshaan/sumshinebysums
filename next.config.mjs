@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  output: 'export',
   productionBrowserSourceMaps: true,
   distDir: process.env.DIST_DIR || '.next',  typescript: {
     ignoreBuildErrors: true,
@@ -8,6 +10,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -27,6 +30,8 @@ const nextConfig = {
       },
     ],
   },
+  basePath: process.env.NODE_ENV === 'production' ? '/sumshinebysums' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/sumshinebysums/' : '', 
   async redirects() {
     return [
       {
