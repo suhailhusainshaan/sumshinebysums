@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #D4A574; /* Warm champagne gold */
+    --color-primary-foreground: #FFFFFF; /* white */
+    
+    /* Secondary Colors */
+    --color-secondary: #E8B4A0; /* Soft rose gold */
+    --color-secondary-foreground: #2C1810; /* Rich dark brown */
+    
+    /* Accent Colors */
+    --color-accent: #C67B5C; /* Rich copper */
+    --color-accent-foreground: #FFFFFF; /* white */
+    
+    /* Background Colors */
+    --color-background: #FEFCFA; /* Warm off-white */
+    --color-foreground: #2C1810; /* Rich dark brown */
+    
+    /* Surface Colors */
+    --color-card: #F9F6F2; /* Subtle cream */
+    --color-card-foreground: #2C1810; /* Rich dark brown */
+    
+    --color-popover: #F9F6F2; /* Subtle cream */
+    --color-popover-foreground: #2C1810; /* Rich dark brown */
+    
+    /* Muted Colors */
+    --color-muted: #F9F6F2; /* Subtle cream */
+    --color-muted-foreground: #6B5B4F; /* Muted brown */
+    
+    /* Border & Input */
+    --color-border: rgba(212, 165, 116, 0.15); /* Primary with opacity */
+    --color-input: #F9F6F2; /* Subtle cream */
+    --color-ring: #D4A574; /* Warm champagne gold */
+    
+    /* State Colors */
+    --color-success: #8B9D83; /* Sage green */
+    --color-success-foreground: #FFFFFF; /* white */
+    
+    --color-warning: #E6A85C; /* Warm amber */
+    --color-warning-foreground: #2C1810; /* Rich dark brown */
+    
+    --color-error: #C85A54; /* Muted coral */
+    --color-error-foreground: #FFFFFF; /* white */
+    
+    --color-destructive: #C85A54; /* Muted coral */
+    --color-destructive-foreground: #FFFFFF; /* white */
+    
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+  }
+
+  .dark {
+    /* Primary Colors */
+    --color-primary: #D4A574; /* Warm champagne gold */
+    --color-primary-foreground: #1A1612; /* Dark background */
+    
+    /* Secondary Colors */
+    --color-secondary: #E8B4A0; /* Soft rose gold */
+    --color-secondary-foreground: #1A1612; /* Dark background */
+    
+    /* Accent Colors */
+    --color-accent: #C67B5C; /* Rich copper */
+    --color-accent-foreground: #1A1612; /* Dark background */
+    
+    /* Background Colors */
+    --color-background: #1A1612; /* Dark warm background */
+    --color-foreground: #EBE8E5; /* Cream white 92% */
+    
+    /* Surface Colors */
+    --color-card: #2A2218; /* Elevated dark surface */
+    --color-card-foreground: #EBE8E5; /* Cream white 92% */
+    
+    --color-popover: #2A2218; /* Elevated dark surface */
+    --color-popover-foreground: #EBE8E5; /* Cream white 92% */
+    
+    /* Muted Colors */
+    --color-muted: #3A3228; /* Higher elevation surface */
+    --color-muted-foreground: #B8AFA5; /* Muted cream */
+    
+    /* Border & Input */
+    --color-border: rgba(212, 165, 116, 0.2); /* Amber-tinted border */
+    --color-input: #2A2218; /* Elevated dark surface */
+    --color-ring: #D4A574; /* Warm champagne gold */
+    
+    /* State Colors */
+    --color-success: #8B9D83; /* Sage green */
+    --color-success-foreground: #1A1612; /* Dark background */
+    
+    --color-warning: #E6A85C; /* Warm amber */
+    --color-warning-foreground: #1A1612; /* Dark background */
+    
+    --color-error: #C85A54; /* Muted coral */
+    --color-error-foreground: #1A1612; /* Dark background */
+    
+    --color-destructive: #C85A54; /* Muted coral */
+    --color-destructive-foreground: #1A1612; /* Dark background */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Crimson Text', serif;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+    line-height: 1.25;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+  
+  h4 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+  
+  h5 {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 768px) {
+    body {
+      font-size: 15px;
+    }
+  }
+}
+
+@layer utilities {
+  .text-caption {
+    font-family: 'Karla', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    letter-spacing: 0.025em;
+  }
+  
+  .text-data {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+  }
+  
+  .transition-luxe {
+    transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .transition-spring {
+    transition: all 250ms cubic-bezier(0.34, 1.26, 0.64, 1);
+  }
+  
+  .shadow-warm-sm {
+    box-shadow: 0 1px 3px rgba(44, 24, 16, 0.08);
+  }
+  
+  .shadow-warm {
+    box-shadow: 0 2px 6px rgba(44, 24, 16, 0.1);
+  }
+  
+  .shadow-warm-md {
+    box-shadow: 0 4px 12px rgba(44, 24, 16, 0.12);
+  }
+  
+  .shadow-warm-lg {
+    box-shadow: 0 8px 24px rgba(44, 24, 16, 0.14);
+  }
+  
+  .shadow-warm-xl {
+    box-shadow: 0 20px 40px -8px rgba(44, 24, 16, 0.16);
+  }
+}
