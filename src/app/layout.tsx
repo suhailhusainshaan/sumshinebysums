@@ -8,8 +8,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Next.js with Tailwind CSS',
-  description: 'A boilerplate project with Next.js and Tailwind CSS',
+  title: 'SumShineBySums',
+  description: 'Exquisite collection of handcrafted artificial jewelry',
   icons: {
     icon: [
       { url: '/favicon.ico', type: 'image/x-icon' }
@@ -25,9 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>{children}
-
-        <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fjewelcraft3356back.builtwithrocket.new&_be=https%3A%2F%2Fappanalytics.rocket.new&_v=0.1.14" />
-        <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2" /></body>
+        <script type="module" />
+        <script type="module" /></body>
     </html>
   );
 }
