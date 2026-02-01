@@ -65,7 +65,6 @@ const ProductCard = ({
             height={400}
             onClick={() => setImageLoaded(true)}
           />
-          
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {isNew && (
@@ -98,9 +97,9 @@ const ProductCard = ({
         {/* Product Info */}
         <div className="p-4">
           <p className="text-caption text-muted-foreground mb-1">{category}</p>
-          <h3 className="font-medium text-foreground mb-2 line-clamp-2 min-h-[3rem]">
+          <p className="font-medium text-foreground mb-2 line-clamp-3 min-h-[3rem]">
             {name}
-          </h3>
+          </p>
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-3">
