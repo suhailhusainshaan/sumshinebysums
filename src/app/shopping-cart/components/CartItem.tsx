@@ -20,6 +20,7 @@ export interface CartItemData {
   maxQuantity: number;
 }
 
+
 interface CartItemProps {
   item: CartItemData;
   onQuantityChange: (id: string, newQuantity: number) => void;
