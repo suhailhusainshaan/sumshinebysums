@@ -25,41 +25,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@/admin": [
-        "./src/icons/admin/index.tsx"
-      ],
-      "@/components/common/*": [
-        "./src/components/admin/common/*",
-        "./src/components/common/*"
-      ],
-      "@/components/ui/*": [
-        "./src/components/admin/ui/*",
-        "./src/components/ui/*"
-      ],
-      "@/components/auth/*": [
-        "./src/components/admin/auth/*"
-      ],
-      "@/components/charts/*": [
-        "./src/components/admin/charts/*"
-      ],
-      "@/components/form/*": [
-        "./src/components/admin/form/*"
-      ],
-      "@/components/tables/*": [
-        "./src/components/admin/tables/*"
-      ],
-      "@/components/calendar/*": [
-        "./src/components/admin/calendar/*"
-      ],
-      "@/components/user-profile/*": [
-        "./src/components/admin/user-profile/*"
-      ],
-      "@/components/example/*": [
-        "./src/components/admin/example/*"
-      ],
-      "@/hooks/useModal": [
-        "./src/hooks/admin/useModal.ts"
       ]
     }
   },
