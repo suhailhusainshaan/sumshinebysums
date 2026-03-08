@@ -1,4 +1,6 @@
+const isProd = process.env.NODE_ENV === 'production';
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   turbopack: {
     rules: {
@@ -11,7 +13,8 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   productionBrowserSourceMaps: true,
-  distDir: process.env.DIST_DIR || '.next',  typescript: {
+  distDir: process.env.DIST_DIR || '.next',
+  typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
@@ -39,7 +42,7 @@ const nextConfig = {
     ],
   },
   basePath: process.env.NODE_ENV === 'production' ? '/sumshinebysums' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/sumshinebysums/' : '', 
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/sumshinebysums/' : '',
   async redirects() {
     return [
       {
@@ -53,9 +56,11 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.(jsx|tsx)$/,
       exclude: [/node_modules/],
-      use: [{
-        loader: '@dhiwise/component-tagger/nextLoader',
-      }],
+      use: [
+        {
+          loader: '@dhiwise/component-tagger/nextLoader',
+        },
+      ],
     });
     return config;
   },
