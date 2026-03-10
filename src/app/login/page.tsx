@@ -1,89 +1,96 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import Icon from "@/components/ui/AppIcon";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      // REPLACE THIS with your actual API call
-      // const res = await fetch('/api/login', { method: 'POST', body: JSON.stringify({ email, password }) });
-      // const data = await res.json();
-
-      // MOCK LOGIC for demonstration:
-      if (email === 'admin@sumshine.com' && password === 'password123') {
-        // Redirect to TailAdmin Dashboard
-        router.push('/dashboard');
-      } else if (email === 'user@gmail.com') {
-        // Redirect to Public Jewelry Store
-        router.push('/');
-      } else {
-        throw new Error('Invalid credentials');
-      }
-    } catch (err) {
-      setError('Failed to login. Please check your email and password.');
-    } finally {
-      setLoading(false);
-    }
+    console.log(email, password);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-800">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">SumShineBySums</h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Sign in to your account</p>
+    <div className="min-h-screen flex items-center justify-center bg-background px-6">
+
+      <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative">
+
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-heading font-semibold text-primary">
+            Sunshine by Sums
+          </h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            Luxury Jewellery Collection
+          </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          {error && <div className="rounded bg-red-50 p-2 text-sm text-red-500">{error}</div>}
+        <h2 className="text-xl font-semibold text-center text-foreground mb-6">
+          Login to your account
+        </h2>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email Address
-              </label>
-              <input
-                type="email"
-                required
-                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <input
-                type="password"
-                required
-                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              Email
+            </label>
+
+            <input
+              type="email"
+              placeholder="john@example.com"
+              className="w-full h-12 px-4 bg-input border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              Password
+            </label>
+
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="w-full h-12 px-4 bg-input border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-end text-sm">
+            <a className="text-primary hover:underline cursor-pointer">
+              Forgot Password?
+            </a>
           </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full rounded-md bg-blue-600 py-2 text-white hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-md font-medium hover:shadow-warm-md transition-luxe flex items-center justify-center space-x-2"
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            <span>Login</span>
+            <Icon name="ArrowRightIcon" size={18} />
           </button>
+
         </form>
+
+        <div className="flex items-center my-6">
+          <div className="flex-1 border-t border-border"></div>
+          <span className="px-3 text-sm text-muted-foreground">or</span>
+          <div className="flex-1 border-t border-border"></div>
+        </div>
+
+        <p className="text-center text-sm text-muted-foreground">
+          New to Sunshine by Sums?{" "}
+          <span className="text-primary font-medium cursor-pointer hover:underline">
+            Create Account
+          </span>
+        </p>
+
       </div>
+
     </div>
   );
 }
