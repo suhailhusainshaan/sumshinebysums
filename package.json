@@ -67,6 +67,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "apexcharts": "^4.7.0",
     "autoprefixer": "^10.4.22",
+    "axios": "^1.13.6",
     "flatpickr": "^4.6.13",
     "next": "16.1.4",
     "react": "19.2.3",
