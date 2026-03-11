@@ -2,7 +2,9 @@ name: Next.js Validation
 
 on:
   pull_request:
-    branches: ["main", "uat"]
+    branches:
+      - main
+      - uat
 
 jobs:
   check-changes:
