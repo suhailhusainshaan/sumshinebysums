@@ -1,29 +1,51 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Icon from "@/components/ui/AppIcon";
+import { useState } from 'react';
+import Icon from '@/components/ui/AppIcon';
+import { useRouter } from 'next/navigation'; // For redirection
+import { authService } from '@/service/auth.service';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: any) => {
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   console.log(email, password);
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // Backend expects "username", not "email"
+      const res = await authService.login({ username: email, password });
+
+      if (res.status === 200) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+
+        // Redirect to dashboard
+        router.push('/dashboard');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
-
       <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative">
-
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-heading font-semibold text-primary">
-            Sunshine by Sums
-          </h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Luxury Jewellery Collection
-          </p>
+          <h1 className="text-3xl font-heading font-semibold text-primary">Sunshine by Sums</h1>
+          <p className="text-muted-foreground text-sm mt-1">Luxury Jewellery Collection</p>
         </div>
 
         <h2 className="text-xl font-semibold text-center text-foreground mb-6">
@@ -31,11 +53,8 @@ export default function LoginPage() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-1">Email</label>
 
             <input
               type="email"
@@ -47,9 +66,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-1">Password</label>
 
             <input
               type="password"
@@ -61,9 +78,7 @@ export default function LoginPage() {
           </div>
 
           <div className="flex justify-end text-sm">
-            <a className="text-primary hover:underline cursor-pointer">
-              Forgot Password?
-            </a>
+            <a className="text-primary hover:underline cursor-pointer">Forgot Password?</a>
           </div>
 
           <button
@@ -73,7 +88,6 @@ export default function LoginPage() {
             <span>Login</span>
             <Icon name="ArrowRightIcon" size={18} />
           </button>
-
         </form>
 
         <div className="flex items-center my-6">
@@ -83,14 +97,12 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground">
-          New to Sunshine by Sums?{" "}
+          New to Sunshine by Sums?{' '}
           <span className="text-primary font-medium cursor-pointer hover:underline">
             Create Account
           </span>
         </p>
-
       </div>
-
     </div>
   );
 }
