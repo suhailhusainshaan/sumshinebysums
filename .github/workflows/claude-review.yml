@@ -4,8 +4,9 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - dev
-      - qa
+      - staging
       - uat
+      - main
 
 jobs:
   claude-review:
