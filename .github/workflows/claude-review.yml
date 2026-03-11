@@ -15,14 +15,12 @@ jobs:
       pull-requests: write
       issues: write
       id-token: write
-      actions: read        # ← added
-
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # ← changed from 1
+          fetch-depth: 1
 
-      - uses: anthropics/claude-code-action@v1   # ← changed from @beta
+      - uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -32,5 +30,6 @@ jobs:
             - Security vulnerabilities
             - Performance concerns
             - Breaking changes
+
             Target branch: ${{ github.base_ref }}
             Be concise. Approve if no critical issues are found.
