@@ -15,11 +15,7 @@ interface ActiveFiltersProps {
   onClearAll: () => void;
 }
 
-const ActiveFilters = ({
-  filters,
-  onRemoveFilter,
-  onClearAll,
-}: ActiveFiltersProps) => {
+const ActiveFilters = ({ filters, onRemoveFilter, onClearAll }: ActiveFiltersProps) => {
   if (filters.length === 0) return null;
 
   return (

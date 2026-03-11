@@ -132,9 +132,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               }`}
               placeholder="John"
             />
-            {errors.firstName && (
-              <p className="mt-1 text-sm text-error">{errors.firstName}</p>
-            )}
+            {errors.firstName && <p className="mt-1 text-sm text-error">{errors.firstName}</p>}
           </div>
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-foreground mb-1">
@@ -150,9 +148,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               }`}
               placeholder="Doe"
             />
-            {errors.lastName && (
-              <p className="mt-1 text-sm text-error">{errors.lastName}</p>
-            )}
+            {errors.lastName && <p className="mt-1 text-sm text-error">{errors.lastName}</p>}
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
@@ -168,9 +164,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               }`}
               placeholder="john.doe@example.com"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-error">{errors.email}</p>
-            )}
+            {errors.email && <p className="mt-1 text-sm text-error">{errors.email}</p>}
           </div>
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1">
@@ -186,9 +180,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               }`}
               placeholder="(555) 123-4567"
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-error">{errors.phone}</p>
-            )}
+            {errors.phone && <p className="mt-1 text-sm text-error">{errors.phone}</p>}
           </div>
         </div>
       </div>
@@ -214,9 +206,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               }`}
               placeholder="123 Main Street"
             />
-            {errors.address && (
-              <p className="mt-1 text-sm text-error">{errors.address}</p>
-            )}
+            {errors.address && <p className="mt-1 text-sm text-error">{errors.address}</p>}
           </div>
           <div>
             <label htmlFor="apartment" className="block text-sm font-medium text-foreground mb-1">
@@ -246,9 +236,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
                 }`}
                 placeholder="New York"
               />
-              {errors.city && (
-                <p className="mt-1 text-sm text-error">{errors.city}</p>
-              )}
+              {errors.city && <p className="mt-1 text-sm text-error">{errors.city}</p>}
             </div>
             <div>
               <label htmlFor="state" className="block text-sm font-medium text-foreground mb-1">
@@ -264,9 +252,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
                 }`}
                 placeholder="NY"
               />
-              {errors.state && (
-                <p className="mt-1 text-sm text-error">{errors.state}</p>
-              )}
+              {errors.state && <p className="mt-1 text-sm text-error">{errors.state}</p>}
             </div>
             <div>
               <label htmlFor="zipCode" className="block text-sm font-medium text-foreground mb-1">
@@ -282,9 +268,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
                 }`}
                 placeholder="10001"
               />
-              {errors.zipCode && (
-                <p className="mt-1 text-sm text-error">{errors.zipCode}</p>
-              )}
+              {errors.zipCode && <p className="mt-1 text-sm text-error">{errors.zipCode}</p>}
             </div>
           </div>
         </div>
@@ -302,7 +286,8 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
               key={option.id}
               className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-luxe ${
                 formData.deliveryOption === option.id
-                  ? 'border-primary bg-primary/5' :'border-border hover:border-primary/50'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50'
               }`}
             >
               <div className="flex items-center space-x-3">

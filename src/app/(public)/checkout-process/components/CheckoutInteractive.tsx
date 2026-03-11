@@ -80,7 +80,12 @@ const CheckoutInteractive = () => {
   ];
 
   const subtotal = mockCartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shippingCost = shippingData?.deliveryOption === 'express' ? 12.99 : shippingData?.deliveryOption === 'overnight' ? 24.99 : 5.99;
+  const shippingCost =
+    shippingData?.deliveryOption === 'express'
+      ? 12.99
+      : shippingData?.deliveryOption === 'overnight'
+        ? 24.99
+        : 5.99;
   const giftWrappingCost = shippingData?.giftWrapping ? 4.99 : 0;
 
   const handleShippingNext = (data: ShippingFormData) => {
@@ -104,9 +109,9 @@ const CheckoutInteractive = () => {
 
   const handleApplyPromo = (code: string) => {
     const validPromoCodes: Record<string, number> = {
-      'WELCOME10': 10,
-      'SAVE20': 20,
-      'FIRST15': 15,
+      WELCOME10: 10,
+      SAVE20: 20,
+      FIRST15: 15,
     };
 
     if (validPromoCodes[code]) {
@@ -116,22 +121,27 @@ const CheckoutInteractive = () => {
   };
 
   const handleContinueShopping = () => {
-    router.push('/homepage');
+    router.push('/');
   };
 
   const getEstimatedDelivery = () => {
     if (!isHydrated) return 'Calculating...';
-    
+
     const today = new Date();
-    const deliveryDays = shippingData?.deliveryOption === 'overnight' ? 1 : shippingData?.deliveryOption === 'express' ? 3 : 7;
+    const deliveryDays =
+      shippingData?.deliveryOption === 'overnight'
+        ? 1
+        : shippingData?.deliveryOption === 'express'
+          ? 3
+          : 7;
     const deliveryDate = new Date(today);
     deliveryDate.setDate(today.getDate() + deliveryDays);
-    
-    return deliveryDate.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+
+    return deliveryDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 

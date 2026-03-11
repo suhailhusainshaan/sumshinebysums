@@ -42,8 +42,8 @@ const CheckoutProgress = ({ currentStep }: CheckoutProgressProps) => {
                   isCompleted
                     ? 'bg-primary text-primary-foreground'
                     : isActive
-                    ? 'bg-primary text-primary-foreground ring-4 ring-primary/20'
-                    : 'bg-muted text-muted-foreground'
+                      ? 'bg-primary text-primary-foreground ring-4 ring-primary/20'
+                      : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {isCompleted ? (

@@ -126,11 +126,7 @@ const HomepageInteractive = () => {
         cartItemCount={cartItemCount}
       />
 
-      <SearchComponent
-        isOpen={isSearchOpen}
-        onClose={handleSearchClose}
-        onSearch={handleSearch}
-      />
+      <SearchComponent isOpen={isSearchOpen} onClose={handleSearchClose} onSearch={handleSearch} />
 
       <main className="pt-16 lg:pt-18">
         <HeroSection onShopNowClick={handleShopNowClick} />

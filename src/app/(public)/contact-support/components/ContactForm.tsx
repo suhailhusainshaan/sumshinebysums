@@ -84,7 +84,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -92,18 +92,18 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-    
+
     setTimeout(() => {
       onSubmit(formData);
       setSubmitSuccess(true);
       setIsSubmitting(false);
-      
+
       setFormData({
         name: '',
         email: '',
@@ -125,12 +125,8 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
           <Icon name="EnvelopeIcon" size={24} className="text-primary" />
         </div>
         <div>
-          <h2 className="font-heading text-2xl font-semibold text-foreground">
-            Send Us a Message
-          </h2>
-          <p className="text-caption text-muted-foreground">
-            We typically respond within 24 hours
-          </p>
+          <h2 className="font-heading text-2xl font-semibold text-foreground">Send Us a Message</h2>
+          <p className="text-caption text-muted-foreground">We typically respond within 24 hours</p>
         </div>
       </div>
 
@@ -258,14 +254,15 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
                 <span>{errors.message}</span>
               </p>
             ) : (
-              <span className="text-caption text-muted-foreground">
-                Minimum 10 characters
-              </span>
+              <span className="text-caption text-muted-foreground">Minimum 10 characters</span>
             )}
-            <span className={`text-caption ${
-              formData.message.length > maxMessageLength * 0.9
-                ? 'text-warning' :'text-muted-foreground'
-            }`}>
+            <span
+              className={`text-caption ${
+                formData.message.length > maxMessageLength * 0.9
+                  ? 'text-warning'
+                  : 'text-muted-foreground'
+              }`}
+            >
               {formData.message.length}/{maxMessageLength}
             </span>
           </div>

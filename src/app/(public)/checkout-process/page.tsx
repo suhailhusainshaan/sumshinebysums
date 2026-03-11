@@ -5,7 +5,8 @@ import CheckoutInteractive from './components/CheckoutInteractive';
 
 export const metadata: Metadata = {
   title: 'Checkout - JewelCraft',
-  description: 'Complete your purchase securely with our streamlined checkout process. Enter shipping details, select delivery options, and finalize payment for your artificial jewelry order.',
+  description:
+    'Complete your purchase securely with our streamlined checkout process. Enter shipping details, select delivery options, and finalize payment for your artificial jewelry order.',
 };
 
 export default function CheckoutProcessPage() {
@@ -25,9 +26,7 @@ export default function CheckoutProcessPage() {
             <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
               Secure Checkout
             </h1>
-            <p className="text-muted-foreground">
-              Complete your order in just a few simple steps
-            </p>
+            <p className="text-muted-foreground">Complete your order in just a few simple steps</p>
           </div>
           <CheckoutInteractive />
         </div>

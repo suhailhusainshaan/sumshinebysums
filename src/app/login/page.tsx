@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import { useRouter } from 'next/navigation'; // For redirection
 import { authService } from '@/service/auth.service';
+import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,6 +19,10 @@ export default function LoginPage() {
   //   console.log(email, password);
   // };
 
+  const handleRegisterClick = () => {
+    router.push('/register');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -29,9 +35,8 @@ export default function LoginPage() {
       if (res.status === 200) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
-
-        // Redirect to dashboard
-        router.push('/dashboard');
+        const redirectUrl = res.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';
+        router.push(redirectUrl);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -44,7 +49,11 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-heading font-semibold text-primary">Sunshine by Sums</h1>
+          <Link href="/" className="group">
+            <h1 className="text-3xl font-heading font-semibold text-primary transition-luxe group-hover:opacity-80">
+              Sunshine by Sums
+            </h1>
+          </Link>
           <p className="text-muted-foreground text-sm mt-1">Luxury Jewellery Collection</p>
         </div>
 
@@ -98,7 +107,10 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-muted-foreground">
           New to Sunshine by Sums?{' '}
-          <span className="text-primary font-medium cursor-pointer hover:underline">
+          <span
+            className="text-primary font-medium cursor-pointer hover:underline"
+            onClick={handleRegisterClick}
+          >
             Create Account
           </span>
         </p>

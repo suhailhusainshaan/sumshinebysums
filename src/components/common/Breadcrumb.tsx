@@ -18,12 +18,9 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   if (!items || items.length === 0) return null;
 
   return (
-    <nav
-      aria-label="Breadcrumb"
-      className={`flex items-center space-x-2 text-sm ${className}`}
-    >
+    <nav aria-label="Breadcrumb" className={`flex items-center space-x-2 text-sm ${className}`}>
       <Link
-        href="/homepage"
+        href="/"
         className="text-muted-foreground hover:text-primary transition-luxe flex items-center"
       >
         <Icon name="HomeIcon" size={16} />
@@ -34,11 +31,7 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
 
         return (
           <React.Fragment key={index}>
-            <Icon
-              name="ChevronRightIcon"
-              size={16}
-              className="text-muted-foreground"
-            />
+            <Icon name="ChevronRightIcon" size={16} className="text-muted-foreground" />
             {isLast || !item.path ? (
               <span className="text-foreground font-medium truncate max-w-[200px] sm:max-w-none">
                 {item.label}

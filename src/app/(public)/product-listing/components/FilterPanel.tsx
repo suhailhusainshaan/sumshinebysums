@@ -114,9 +114,7 @@ const FilterPanel = ({
                     {category.label}
                   </span>
                 </div>
-                <span className="text-caption text-muted-foreground">
-                  ({category.count})
-                </span>
+                <span className="text-caption text-muted-foreground">({category.count})</span>
               </label>
             ))}
           </div>
@@ -178,9 +176,7 @@ const FilterPanel = ({
                     {material.label}
                   </span>
                 </div>
-                <span className="text-caption text-muted-foreground">
-                  ({material.count})
-                </span>
+                <span className="text-caption text-muted-foreground">({material.count})</span>
               </label>
             ))}
           </div>

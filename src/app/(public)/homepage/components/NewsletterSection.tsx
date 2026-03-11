@@ -32,7 +32,8 @@ const NewsletterSection = () => {
             Join Our Newsletter
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Subscribe to receive exclusive offers, style tips, and be the first to know about new collections
+            Subscribe to receive exclusive offers, style tips, and be the first to know about new
+            collections
           </p>
         </div>
       </section>
@@ -50,7 +51,8 @@ const NewsletterSection = () => {
           Join Our Newsletter
         </h2>
         <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Subscribe to receive exclusive offers, style tips, and be the first to know about new collections
+          Subscribe to receive exclusive offers, style tips, and be the first to know about new
+          collections
         </p>
 
         {isSubmitted ? (

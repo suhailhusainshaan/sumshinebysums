@@ -5,19 +5,17 @@ import ContactSupportInteractive from './components/ContactSupportInteractive';
 
 export const metadata: Metadata = {
   title: 'Contact Support - JewelCraft',
-  description: 'Get in touch with JewelCraft customer support team. We offer multiple communication channels including live chat, email, and phone support with comprehensive FAQ resources to help you with orders, shipping, returns, and product inquiries.',
+  description:
+    'Get in touch with JewelCraft customer support team. We offer multiple communication channels including live chat, email, and phone support with comprehensive FAQ resources to help you with orders, shipping, returns, and product inquiries.',
 };
 
 export default function ContactSupportPage() {
-  const breadcrumbItems = [
-    { label: 'Home', path: '/homepage' },
-    { label: 'Contact Support' },
-  ];
+  const breadcrumbItems = [{ label: 'Home', path: '/' }, { label: 'Contact Support' }];
 
   return (
     <div className="min-h-screen bg-background">
       <Header cartItemCount={3} />
-      
+
       <main className="pt-20 lg:pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
@@ -29,7 +27,8 @@ export default function ContactSupportPage() {
               How Can We Help You?
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our dedicated support team is here to assist you with any questions or concerns about your JewelCraft experience.
+              Our dedicated support team is here to assist you with any questions or concerns about
+              your JewelCraft experience.
             </p>
           </div>
 
@@ -40,7 +39,8 @@ export default function ContactSupportPage() {
               Need Immediate Assistance?
             </h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              For urgent matters requiring immediate attention, our phone support team is available during business hours to provide real-time assistance.
+              For urgent matters requiring immediate attention, our phone support team is available
+              during business hours to provide real-time assistance.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a

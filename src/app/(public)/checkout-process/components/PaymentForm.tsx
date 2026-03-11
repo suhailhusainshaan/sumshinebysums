@@ -148,9 +148,7 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
               placeholder="1234 5678 9012 3456"
               maxLength={19}
             />
-            {errors.cardNumber && (
-              <p className="mt-1 text-sm text-error">{errors.cardNumber}</p>
-            )}
+            {errors.cardNumber && <p className="mt-1 text-sm text-error">{errors.cardNumber}</p>}
           </div>
           <div>
             <label htmlFor="cardName" className="block text-sm font-medium text-foreground mb-1">
@@ -166,13 +164,14 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
               }`}
               placeholder="JOHN DOE"
             />
-            {errors.cardName && (
-              <p className="mt-1 text-sm text-error">{errors.cardName}</p>
-            )}
+            {errors.cardName && <p className="mt-1 text-sm text-error">{errors.cardName}</p>}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="expiryDate" className="block text-sm font-medium text-foreground mb-1">
+              <label
+                htmlFor="expiryDate"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
                 Expiry Date *
               </label>
               <input
@@ -186,9 +185,7 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
                 placeholder="MM/YY"
                 maxLength={5}
               />
-              {errors.expiryDate && (
-                <p className="mt-1 text-sm text-error">{errors.expiryDate}</p>
-              )}
+              {errors.expiryDate && <p className="mt-1 text-sm text-error">{errors.expiryDate}</p>}
             </div>
             <div>
               <label htmlFor="cvv" className="block text-sm font-medium text-foreground mb-1">
@@ -205,9 +202,7 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
                 placeholder="123"
                 maxLength={4}
               />
-              {errors.cvv && (
-                <p className="mt-1 text-sm text-error">{errors.cvv}</p>
-              )}
+              {errors.cvv && <p className="mt-1 text-sm text-error">{errors.cvv}</p>}
             </div>
           </div>
           <label className="flex items-center space-x-3 cursor-pointer">
@@ -240,7 +235,10 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
         {!formData.billingAddressSame && (
           <div className="space-y-4">
             <div>
-              <label htmlFor="billingAddress" className="block text-sm font-medium text-foreground mb-1">
+              <label
+                htmlFor="billingAddress"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
                 Street Address *
               </label>
               <input
@@ -259,7 +257,10 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label htmlFor="billingCity" className="block text-sm font-medium text-foreground mb-1">
+                <label
+                  htmlFor="billingCity"
+                  className="block text-sm font-medium text-foreground mb-1"
+                >
                   City *
                 </label>
                 <input
@@ -277,7 +278,10 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
                 )}
               </div>
               <div>
-                <label htmlFor="billingState" className="block text-sm font-medium text-foreground mb-1">
+                <label
+                  htmlFor="billingState"
+                  className="block text-sm font-medium text-foreground mb-1"
+                >
                   State *
                 </label>
                 <input
@@ -295,7 +299,10 @@ const PaymentForm = ({ onNext, onBack, initialData }: PaymentFormProps) => {
                 )}
               </div>
               <div>
-                <label htmlFor="billingZipCode" className="block text-sm font-medium text-foreground mb-1">
+                <label
+                  htmlFor="billingZipCode"
+                  className="block text-sm font-medium text-foreground mb-1"
+                >
                   ZIP Code *
                 </label>
                 <input

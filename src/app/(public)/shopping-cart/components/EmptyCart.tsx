@@ -21,7 +21,11 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
     <div className="max-w-4xl mx-auto px-4 py-12 text-center">
       {/* Empty State Icon */}
       <div className="mb-6">
-        <Icon name="ShoppingBagIcon" size={80} className="mx-auto text-muted-foreground opacity-50" />
+        <Icon
+          name="ShoppingBagIcon"
+          size={80}
+          className="mx-auto text-muted-foreground opacity-50"
+        />
       </div>
 
       {/* Empty State Message */}
@@ -29,7 +33,8 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
         Your Cart is Empty
       </h2>
       <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-        Looks like you haven't added any items to your cart yet. Start shopping to discover our beautiful jewelry collection.
+        Looks like you haven't added any items to your cart yet. Start shopping to discover our
+        beautiful jewelry collection.
       </p>
 
       {/* Action Buttons */}
@@ -42,7 +47,7 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
           Browse Collection
         </Link>
         <Link
-          href="/homepage"
+          href="/"
           className="inline-flex items-center justify-center gap-2 h-12 px-8 bg-secondary text-secondary-foreground rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe"
         >
           <Icon name="HomeIcon" size={20} />
@@ -73,9 +78,7 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
                   />
                 </div>
                 <div className="p-3">
-                  <p className="text-caption text-muted-foreground mb-1">
-                    {product.category}
-                  </p>
+                  <p className="text-caption text-muted-foreground mb-1">{product.category}</p>
                   <h4 className="font-medium text-foreground text-sm line-clamp-2 mb-2">
                     {product.name}
                   </h4>

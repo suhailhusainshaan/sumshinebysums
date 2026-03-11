@@ -25,16 +25,17 @@ const HeroSection = ({ onShopNowClick }: HeroSectionProps) => {
           <div className="inline-block mb-4 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full">
             <p className="text-caption text-accent font-medium">New Collection 2026</p>
           </div>
-          
+
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
             Elegance Redefined
             <span className="block text-primary mt-2">Timeless Beauty</span>
           </h1>
-          
+
           <p className="text-lg text-muted-foreground mb-8 max-w-xl">
-            Discover our exquisite collection of handcrafted artificial jewelry. Premium quality designs that capture the essence of luxury at accessible prices.
+            Discover our exquisite collection of handcrafted artificial jewelry. Premium quality
+            designs that capture the essence of luxury at accessible prices.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={onShopNowClick}

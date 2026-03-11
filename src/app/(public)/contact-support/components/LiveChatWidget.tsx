@@ -52,30 +52,24 @@ const LiveChatWidget = ({ onStartChat }: LiveChatWidgetProps) => {
           onClick={() => setIsExpanded(!isExpanded)}
           className="p-2 text-muted-foreground hover:text-foreground transition-luxe lg:hidden"
         >
-          <Icon
-            name={isExpanded ? 'ChevronUpIcon' : 'ChevronDownIcon'}
-            size={20}
-          />
+          <Icon name={isExpanded ? 'ChevronUpIcon' : 'ChevronDownIcon'} size={20} />
         </button>
       </div>
 
       <div className={`space-y-4 ${isExpanded ? 'block' : 'hidden lg:block'}`}>
         <p className="text-sm text-muted-foreground">
-          Get instant help from our customer service team. Average response time is under 2 minutes during business hours.
+          Get instant help from our customer service team. Average response time is under 2 minutes
+          during business hours.
         </p>
 
         <div className="space-y-3">
           <div className="flex items-center space-x-3 text-sm">
             <Icon name="ClockIcon" size={16} className="text-primary" />
-            <span className="text-muted-foreground">
-              Monday - Friday: 9:00 AM - 6:00 PM EST
-            </span>
+            <span className="text-muted-foreground">Monday - Friday: 9:00 AM - 6:00 PM EST</span>
           </div>
           <div className="flex items-center space-x-3 text-sm">
             <Icon name="ClockIcon" size={16} className="text-primary" />
-            <span className="text-muted-foreground">
-              Saturday: 10:00 AM - 4:00 PM EST
-            </span>
+            <span className="text-muted-foreground">Saturday: 10:00 AM - 4:00 PM EST</span>
           </div>
           <div className="flex items-center space-x-3 text-sm">
             <Icon name="UserGroupIcon" size={16} className="text-primary" />
@@ -110,7 +104,13 @@ const LiveChatWidget = ({ onStartChat }: LiveChatWidgetProps) => {
             <div className="flex items-center space-x-2">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Icon key={star} name="StarIcon" size={14} className="text-warning" variant="solid" />
+                  <Icon
+                    key={star}
+                    name="StarIcon"
+                    size={14}
+                    className="text-warning"
+                    variant="solid"
+                  />
                 ))}
               </div>
               <span className="text-xs text-muted-foreground">4.9/5 from 2,847 chats</span>

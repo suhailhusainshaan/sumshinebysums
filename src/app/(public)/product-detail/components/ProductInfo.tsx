@@ -30,17 +30,13 @@ const ProductInfo = ({
     setIsWishlisted(!isWishlisted);
   };
 
-  const discount = originalPrice
-    ? Math.round(((originalPrice - price) / originalPrice) * 100)
-    : 0;
+  const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   return (
     <div className="space-y-6">
       {/* Product Name & Wishlist */}
       <div className="flex items-start justify-between gap-4">
-        <h1 className="font-heading text-3xl lg:text-4xl font-semibold text-foreground">
-          {name}
-        </h1>
+        <h1 className="font-heading text-3xl lg:text-4xl font-semibold text-foreground">{name}</h1>
         <button
           onClick={toggleWishlist}
           className="p-2 hover:bg-muted rounded-full transition-luxe flex-shrink-0"
@@ -76,9 +72,7 @@ const ProductInfo = ({
 
       {/* Price */}
       <div className="flex items-baseline space-x-3">
-        <span className="text-data text-4xl font-semibold text-primary">
-          ${price.toFixed(2)}
-        </span>
+        <span className="text-data text-4xl font-semibold text-primary">${price.toFixed(2)}</span>
         {originalPrice && (
           <>
             <span className="text-data text-2xl text-muted-foreground line-through">
@@ -100,12 +94,7 @@ const ProductInfo = ({
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Availability:</span>
           <span className="flex items-center space-x-2">
-            <Icon
-              name="CheckCircleIcon"
-              size={16}
-              variant="solid"
-              className="text-success"
-            />
+            <Icon name="CheckCircleIcon" size={16} variant="solid" className="text-success" />
             <span className="text-success font-medium">{availability}</span>
           </span>
         </div>

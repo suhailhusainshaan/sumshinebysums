@@ -125,7 +125,11 @@ const SearchComponent = ({
 
           {!isLoading && searchQuery.trim().length >= 2 && searchResults.length === 0 && (
             <div className="p-8 text-center">
-              <Icon name="MagnifyingGlassIcon" size={48} className="mx-auto text-muted-foreground mb-4" />
+              <Icon
+                name="MagnifyingGlassIcon"
+                size={48}
+                className="mx-auto text-muted-foreground mb-4"
+              />
               <p className="text-foreground font-medium mb-2">No results found</p>
               <p className="text-caption text-muted-foreground">
                 Try searching with different keywords
@@ -150,12 +154,8 @@ const SearchComponent = ({
                     className="rounded-md object-cover"
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-foreground truncate">
-                      {result.name}
-                    </h3>
-                    <p className="text-caption text-muted-foreground">
-                      {result.category}
-                    </p>
+                    <h3 className="font-medium text-foreground truncate">{result.name}</h3>
+                    <p className="text-caption text-muted-foreground">{result.category}</p>
                     <p className="text-data text-primary font-medium mt-1">
                       ${result.price.toFixed(2)}
                     </p>

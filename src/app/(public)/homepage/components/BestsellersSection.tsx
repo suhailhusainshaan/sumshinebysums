@@ -127,9 +127,7 @@ const BestsellersSection = () => {
     }
 
     if (hasHalfStar) {
-      stars.push(
-        <Icon key="half" name="StarIcon" size={16} className="text-accent" />
-      );
+      stars.push(<Icon key="half" name="StarIcon" size={16} className="text-accent" />);
     }
 
     const remainingStars = 5 - Math.ceil(rating);
@@ -191,9 +189,7 @@ const BestsellersSection = () => {
               </div>
 
               <div className="p-4">
-                <h3 className="font-medium text-foreground mb-2 line-clamp-1">
-                  {product.name}
-                </h3>
+                <h3 className="font-medium text-foreground mb-2 line-clamp-1">{product.name}</h3>
 
                 {isHydrated && (
                   <div className="flex items-center space-x-1 mb-2">
