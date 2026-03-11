@@ -19,7 +19,7 @@ const ShoppingCartInteractive = () => {
 
   useEffect(() => {
     setIsHydrated(true);
-    
+
     // Mock cart data
     const mockCartItems: CartItemData[] = [
       {
@@ -32,22 +32,22 @@ const ShoppingCartInteractive = () => {
         category: 'Necklaces',
         selectedOptions: {
           size: '18 inches',
-          color: 'Rose Gold'
+          color: 'Rose Gold',
         },
-        maxQuantity: 10
+        maxQuantity: 10,
       },
       {
         id: '2',
         name: 'Vintage Pearl Drop Earrings',
-        price: 32.50,
+        price: 32.5,
         quantity: 2,
         image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908',
         alt: 'Vintage style pearl drop earrings with gold hooks on velvet display',
         category: 'Earrings',
         selectedOptions: {
-          color: 'Gold'
+          color: 'Gold',
         },
-        maxQuantity: 15
+        maxQuantity: 15,
       },
       {
         id: '3',
@@ -59,10 +59,10 @@ const ShoppingCartInteractive = () => {
         category: 'Bracelets',
         selectedOptions: {
           size: '7 inches',
-          color: 'Gold'
+          color: 'Gold',
         },
-        maxQuantity: 12
-      }
+        maxQuantity: 12,
+      },
     ];
 
     setCartItems(mockCartItems);
@@ -75,15 +75,15 @@ const ShoppingCartInteractive = () => {
       price: 24.99,
       image: 'https://images.pexels.com/photos/1454171/pexels-photo-1454171.jpeg',
       alt: 'Sparkling crystal stud earrings on black velvet jewelry display',
-      category: 'Earrings'
+      category: 'Earrings',
     },
     {
       id: '102',
       name: 'Gold Layered Necklace Set',
-      price: 38.50,
+      price: 38.5,
       image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f',
       alt: 'Three layered gold necklaces of varying lengths on white background',
-      category: 'Necklaces'
+      category: 'Necklaces',
     },
     {
       id: '103',
@@ -91,7 +91,7 @@ const ShoppingCartInteractive = () => {
       price: 29.99,
       image: 'https://images.pixabay.com/photo/2017/11/22/19/00/ring-2971782_1280.jpg',
       alt: 'Set of three statement rings with colorful gemstones on marble surface',
-      category: 'Rings'
+      category: 'Rings',
     },
     {
       id: '104',
@@ -99,20 +99,18 @@ const ShoppingCartInteractive = () => {
       price: 34.75,
       image: 'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg',
       alt: 'Silver charm bracelet with multiple crystal charms on jewelry stand',
-      category: 'Bracelets'
-    }
+      category: 'Bracelets',
+    },
   ];
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+    setCartItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
     );
   };
 
   const handleRemoveItem = (id: string) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleApplyPromoCode = (code: string) => {
@@ -135,10 +133,7 @@ const ShoppingCartInteractive = () => {
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const breadcrumbItems = [
-    { label: 'Shop', path: '/product-listing' },
-    { label: 'Shopping Cart' }
-  ];
+  const breadcrumbItems = [{ label: 'Shop', path: '/product-listing' }, { label: 'Shopping Cart' }];
 
   if (!isHydrated) {
     return (
@@ -240,17 +235,19 @@ const ShoppingCartInteractive = () => {
         {/* Guest Checkout Notice */}
         <div className="mt-8 p-4 bg-muted rounded-md border border-border">
           <div className="flex items-start gap-3">
-            <Icon name="InformationCircleIcon" size={20} className="text-primary flex-shrink-0 mt-0.5" />
+            <Icon
+              name="InformationCircleIcon"
+              size={20}
+              className="text-primary flex-shrink-0 mt-0.5"
+            />
             <div>
-              <p className="text-sm font-medium text-foreground mb-1">
-                Guest Checkout Available
-              </p>
+              <p className="text-sm font-medium text-foreground mb-1">Guest Checkout Available</p>
               <p className="text-caption text-muted-foreground">
                 You can checkout as a guest or{' '}
-                <Link href="/homepage" className="text-primary hover:underline">
+                <Link href="/" className="text-primary hover:underline">
                   sign in to your account
-                </Link>
-                {' '}to save your cart and track orders.
+                </Link>{' '}
+                to save your cart and track orders.
               </p>
             </div>
           </div>

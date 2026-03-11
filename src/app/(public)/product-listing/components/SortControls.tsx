@@ -58,7 +58,9 @@ const SortControls = ({
           <button
             onClick={() => onViewModeChange('grid')}
             className={`p-2 transition-luxe ${
-              viewMode === 'grid' ?'bg-primary text-primary-foreground' :'bg-card text-foreground hover:bg-muted'
+              viewMode === 'grid'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card text-foreground hover:bg-muted'
             }`}
             aria-label="Grid view"
           >
@@ -67,7 +69,9 @@ const SortControls = ({
           <button
             onClick={() => onViewModeChange('list')}
             className={`p-2 transition-luxe ${
-              viewMode === 'list' ?'bg-primary text-primary-foreground' :'bg-card text-foreground hover:bg-muted'
+              viewMode === 'list'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card text-foreground hover:bg-muted'
             }`}
             aria-label="List view"
           >

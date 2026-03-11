@@ -70,7 +70,8 @@ const FeaturedCollections = () => {
             Featured Collections
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore our curated selection of jewelry categories, each designed to complement your unique style
+            Explore our curated selection of jewelry categories, each designed to complement your
+            unique style
           </p>
         </div>
 

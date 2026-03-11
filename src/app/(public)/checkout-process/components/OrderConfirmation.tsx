@@ -26,9 +26,7 @@ const OrderConfirmation = ({
         </div>
 
         {/* Success Message */}
-        <h2 className="font-heading text-3xl font-bold text-foreground mb-2">
-          Order Confirmed!
-        </h2>
+        <h2 className="font-heading text-3xl font-bold text-foreground mb-2">Order Confirmed!</h2>
         <p className="text-lg text-muted-foreground mb-8">
           Thank you for your purchase. Your order has been successfully placed.
         </p>
@@ -65,30 +63,24 @@ const OrderConfirmation = ({
           <div className="bg-card border border-border rounded-lg p-4 text-center">
             <Icon name="EnvelopeIcon" size={32} className="mx-auto text-primary mb-2" />
             <p className="text-sm font-medium text-foreground mb-1">Email Sent</p>
-            <p className="text-caption text-muted-foreground">
-              Check your inbox for order details
-            </p>
+            <p className="text-caption text-muted-foreground">Check your inbox for order details</p>
           </div>
           <div className="bg-card border border-border rounded-lg p-4 text-center">
             <Icon name="TruckIcon" size={32} className="mx-auto text-primary mb-2" />
             <p className="text-sm font-medium text-foreground mb-1">Processing</p>
-            <p className="text-caption text-muted-foreground">
-              Your order is being prepared
-            </p>
+            <p className="text-caption text-muted-foreground">Your order is being prepared</p>
           </div>
           <div className="bg-card border border-border rounded-lg p-4 text-center">
             <Icon name="BellIcon" size={32} className="mx-auto text-primary mb-2" />
             <p className="text-sm font-medium text-foreground mb-1">Updates</p>
-            <p className="text-caption text-muted-foreground">
-              We'll notify you of any changes
-            </p>
+            <p className="text-caption text-muted-foreground">We'll notify you of any changes</p>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
-            href="/homepage"
+            href="/"
             onClick={onContinueShopping}
             className="flex-1 bg-primary text-primary-foreground py-4 px-6 rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center space-x-2"
           >
@@ -106,9 +98,7 @@ const OrderConfirmation = ({
 
         {/* Help Section */}
         <div className="mt-8 pt-8 border-t border-border">
-          <p className="text-sm text-muted-foreground mb-4">
-            Need help with your order?
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">Need help with your order?</p>
           <Link
             href="/contact-support"
             className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 transition-luxe"

@@ -30,9 +30,7 @@ const StickyAddToCart = ({ productName, price, onAddToCart }: StickyAddToCartPro
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between space-x-4">
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground truncate">{productName}</p>
-          <p className="text-data text-lg font-semibold text-primary">
-            ${price.toFixed(2)}
-          </p>
+          <p className="text-data text-lg font-semibold text-primary">${price.toFixed(2)}</p>
         </div>
         <button
           onClick={onAddToCart}

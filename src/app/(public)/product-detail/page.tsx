@@ -48,23 +48,48 @@ export default function ProductDetailPage() {
     ],
     description: `Elevate your style with our stunning Rose Gold Elegance Necklace, a masterpiece of artificial jewelry craftsmanship. This exquisite piece features a delicate rose gold-plated chain adorned with a beautifully designed pendant that captures light from every angle.\n\nCrafted from high-quality brass with premium rose gold plating, this necklace offers the luxurious appearance of fine jewelry at an accessible price point. The intricate floral-inspired pendant design showcases exceptional attention to detail, making it perfect for both everyday elegance and special occasions.\n\nThe adjustable chain length ensures a comfortable fit for all necklines, while the secure lobster clasp provides peace of mind during wear. Each piece is carefully inspected to meet our rigorous quality standards, ensuring you receive jewelry that looks and feels premium.\n\nWhether you're treating yourself or searching for the perfect gift, this Rose Gold Elegance Necklace comes beautifully packaged in our signature gift box, ready to delight.`,
     careInstructions: [
-      'Store in the provided jewelry box or soft pouch when not wearing to prevent scratches','Avoid contact with water, perfumes, lotions, and harsh chemicals to maintain the rose gold finish','Remove jewelry before swimming, showering, or exercising to prevent tarnishing','Clean gently with a soft, dry cloth after each wear to remove oils and maintain shine','Keep away from direct sunlight and extreme temperatures for longevity','Apply cosmetics, hairspray, and perfume before putting on your jewelry',
+      'Store in the provided jewelry box or soft pouch when not wearing to prevent scratches',
+      'Avoid contact with water, perfumes, lotions, and harsh chemicals to maintain the rose gold finish',
+      'Remove jewelry before swimming, showering, or exercising to prevent tarnishing',
+      'Clean gently with a soft, dry cloth after each wear to remove oils and maintain shine',
+      'Keep away from direct sunlight and extreme temperatures for longevity',
+      'Apply cosmetics, hairspray, and perfume before putting on your jewelry',
     ],
     reviews: [
       {
-        id: '1',author: 'Sarah Mitchell',rating: 5,date: 'January 15, 2026',comment:'Absolutely stunning! The rose gold color is perfect and the quality exceeded my expectations. I wear it almost every day and always get compliments. The packaging was also beautiful - perfect for gifting!',
+        id: '1',
+        author: 'Sarah Mitchell',
+        rating: 5,
+        date: 'January 15, 2026',
+        comment:
+          'Absolutely stunning! The rose gold color is perfect and the quality exceeded my expectations. I wear it almost every day and always get compliments. The packaging was also beautiful - perfect for gifting!',
         verified: true,
       },
       {
-        id: '2',author: 'Emily Rodriguez',rating: 5,date: 'January 10, 2026',comment:'This necklace is gorgeous! The pendant design is so elegant and delicate. It looks much more expensive than it actually is. Great value for money and fast shipping too.',
+        id: '2',
+        author: 'Emily Rodriguez',
+        rating: 5,
+        date: 'January 10, 2026',
+        comment:
+          'This necklace is gorgeous! The pendant design is so elegant and delicate. It looks much more expensive than it actually is. Great value for money and fast shipping too.',
         verified: true,
       },
       {
-        id: '3',author: 'Jessica Chen',rating: 4,date: 'January 5, 2026',comment:'Beautiful necklace with excellent craftsmanship. The only reason I gave 4 stars instead of 5 is that I wish the chain was slightly longer, but the adjustable length still works well for me.',
+        id: '3',
+        author: 'Jessica Chen',
+        rating: 4,
+        date: 'January 5, 2026',
+        comment:
+          'Beautiful necklace with excellent craftsmanship. The only reason I gave 4 stars instead of 5 is that I wish the chain was slightly longer, but the adjustable length still works well for me.',
         verified: true,
       },
       {
-        id: '4',author: 'Amanda Thompson',rating: 5,date: 'December 28, 2025',comment:'Bought this as a gift for my sister and she absolutely loves it! The rose gold finish is beautiful and hasn\'t tarnished at all. Will definitely be ordering more pieces from this collection.',
+        id: '4',
+        author: 'Amanda Thompson',
+        rating: 5,
+        date: 'December 28, 2025',
+        comment:
+          "Bought this as a gift for my sister and she absolutely loves it! The rose gold finish is beautiful and hasn't tarnished at all. Will definitely be ordering more pieces from this collection.",
         verified: true,
       },
       {
@@ -73,7 +98,7 @@ export default function ProductDetailPage() {
         rating: 5,
         date: 'December 20, 2025',
         comment:
-          'Perfect everyday necklace! It\'s elegant enough for work but also looks great with casual outfits. The quality is impressive for artificial jewelry. Highly recommend!',
+          "Perfect everyday necklace! It's elegant enough for work but also looks great with casual outfits. The quality is impressive for artificial jewelry. Highly recommend!",
         verified: true,
       },
     ],
@@ -180,7 +205,7 @@ export default function ProductDetailPage() {
                 </li>
                 <li>
                   <a
-                    href="/homepage"
+                    href="/"
                     className="text-caption text-muted-foreground hover:text-primary transition-luxe"
                   >
                     New Arrivals
@@ -188,7 +213,7 @@ export default function ProductDetailPage() {
                 </li>
                 <li>
                   <a
-                    href="/homepage"
+                    href="/"
                     className="text-caption text-muted-foreground hover:text-primary transition-luxe"
                   >
                     Best Sellers
@@ -211,7 +236,7 @@ export default function ProductDetailPage() {
                 </li>
                 <li>
                   <a
-                    href="/homepage"
+                    href="/"
                     className="text-caption text-muted-foreground hover:text-primary transition-luxe"
                   >
                     Shipping Info
@@ -219,7 +244,7 @@ export default function ProductDetailPage() {
                 </li>
                 <li>
                   <a
-                    href="/homepage"
+                    href="/"
                     className="text-caption text-muted-foreground hover:text-primary transition-luxe"
                   >
                     Returns
@@ -228,9 +253,7 @@ export default function ProductDetailPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-heading text-lg font-semibold text-foreground mb-4">
-                Follow Us
-              </h3>
+              <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Follow Us</h3>
               <div className="flex space-x-4">
                 <a
                   href="#"

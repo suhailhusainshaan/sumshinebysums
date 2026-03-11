@@ -77,12 +77,7 @@ const ProductDetailInteractive = ({ productData }: ProductDetailInteractiveProps
       {cartNotification && (
         <div className="fixed top-20 right-4 bg-success text-success-foreground px-6 py-4 rounded-lg shadow-warm-lg z-notification animate-slide-in-right">
           <div className="flex items-center space-x-3">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

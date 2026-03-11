@@ -90,9 +90,7 @@ const NewArrivalsSection = () => {
               </div>
 
               <div className="p-4">
-                <h3 className="font-medium text-foreground mb-2 line-clamp-1">
-                  {item.name}
-                </h3>
+                <h3 className="font-medium text-foreground mb-2 line-clamp-1">{item.name}</h3>
                 <div className="flex items-center justify-between">
                   <span className="text-data text-lg font-semibold text-primary">
                     ${item.price.toFixed(2)}

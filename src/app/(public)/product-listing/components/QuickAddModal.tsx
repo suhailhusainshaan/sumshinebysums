@@ -19,12 +19,7 @@ interface QuickAddModalProps {
   onAddToCart: (productId: string, size?: string, quantity?: number) => void;
 }
 
-const QuickAddModal = ({
-  isOpen,
-  onClose,
-  product,
-  onAddToCart,
-}: QuickAddModalProps) => {
+const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalProps) => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -96,9 +91,7 @@ const QuickAddModal = ({
               {/* Product Details */}
               <div className="flex-1 space-y-6">
                 <div>
-                  <p className="text-caption text-muted-foreground mb-2">
-                    {product.category}
-                  </p>
+                  <p className="text-caption text-muted-foreground mb-2">{product.category}</p>
                   <h3 className="font-heading text-xl font-semibold text-foreground mb-3">
                     {product.name}
                   </h3>
@@ -110,9 +103,7 @@ const QuickAddModal = ({
                 {/* Size Selection */}
                 {product.requiresSize && (
                   <div>
-                    <label className="block font-medium text-foreground mb-3">
-                      Select Size
-                    </label>
+                    <label className="block font-medium text-foreground mb-3">Select Size</label>
                     <div className="flex flex-wrap gap-3">
                       {sizes.map((size) => (
                         <button
@@ -133,9 +124,7 @@ const QuickAddModal = ({
 
                 {/* Quantity Selection */}
                 <div>
-                  <label className="block font-medium text-foreground mb-3">
-                    Quantity
-                  </label>
+                  <label className="block font-medium text-foreground mb-3">Quantity</label>
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => handleQuantityChange(-1)}

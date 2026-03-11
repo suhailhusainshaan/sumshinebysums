@@ -15,16 +15,56 @@ const ShippingCalculator = ({ onCalculate }: ShippingCalculatorProps) => {
 
   const countries = ['United States', 'Canada', 'United Kingdom', 'Australia'];
   const usStates = [
-    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
-    'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
-    'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-    'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-    'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
-    'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
-    'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
-    'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-    'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
-    'West Virginia', 'Wisconsin', 'Wyoming'
+    'Alabama',
+    'Alaska',
+    'Arizona',
+    'Arkansas',
+    'California',
+    'Colorado',
+    'Connecticut',
+    'Delaware',
+    'Florida',
+    'Georgia',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Maryland',
+    'Massachusetts',
+    'Michigan',
+    'Minnesota',
+    'Mississippi',
+    'Missouri',
+    'Montana',
+    'Nebraska',
+    'Nevada',
+    'New Hampshire',
+    'New Jersey',
+    'New Mexico',
+    'New York',
+    'North Carolina',
+    'North Dakota',
+    'Ohio',
+    'Oklahoma',
+    'Oregon',
+    'Pennsylvania',
+    'Rhode Island',
+    'South Carolina',
+    'South Dakota',
+    'Tennessee',
+    'Texas',
+    'Utah',
+    'Vermont',
+    'Virginia',
+    'Washington',
+    'West Virginia',
+    'Wisconsin',
+    'Wyoming',
   ];
 
   const handleCalculate = () => {
@@ -38,9 +78,7 @@ const ShippingCalculator = ({ onCalculate }: ShippingCalculatorProps) => {
     <div className="bg-muted rounded-md p-4 sm:p-6">
       <div className="flex items-center gap-2 mb-4">
         <Icon name="TruckIcon" size={20} className="text-primary" />
-        <h3 className="font-heading text-lg font-semibold text-foreground">
-          Estimate Shipping
-        </h3>
+        <h3 className="font-heading text-lg font-semibold text-foreground">Estimate Shipping</h3>
       </div>
 
       <div className="space-y-4">
@@ -112,9 +150,7 @@ const ShippingCalculator = ({ onCalculate }: ShippingCalculatorProps) => {
           <div className="flex items-center justify-between p-3 bg-success/10 border border-success/20 rounded-md">
             <div className="flex items-center gap-2">
               <Icon name="CheckCircleIcon" size={20} className="text-success" />
-              <span className="text-sm font-medium text-foreground">
-                Standard Shipping
-              </span>
+              <span className="text-sm font-medium text-foreground">Standard Shipping</span>
             </div>
             <span className="text-data font-semibold text-success">FREE</span>
           </div>

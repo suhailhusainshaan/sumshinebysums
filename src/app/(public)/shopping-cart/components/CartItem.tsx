@@ -73,9 +73,7 @@ const CartItem = ({ item, onQuantityChange, onRemove }: CartItemProps) => {
             >
               {item.name}
             </Link>
-            <p className="text-caption text-muted-foreground mt-1">
-              {item.category}
-            </p>
+            <p className="text-caption text-muted-foreground mt-1">{item.category}</p>
           </div>
           <button
             onClick={() => onRemove(item.id)}
@@ -132,12 +130,8 @@ const CartItem = ({ item, onQuantityChange, onRemove }: CartItemProps) => {
             </button>
           </div>
           <div className="text-right">
-            <p className="text-data text-lg font-semibold text-primary">
-              ${itemTotal.toFixed(2)}
-            </p>
-            <p className="text-caption text-muted-foreground">
-              ${item.price.toFixed(2)} each
-            </p>
+            <p className="text-data text-lg font-semibold text-primary">${itemTotal.toFixed(2)}</p>
+            <p className="text-caption text-muted-foreground">${item.price.toFixed(2)} each</p>
           </div>
         </div>
       </div>

@@ -52,7 +52,8 @@ const ProductTabs = ({
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center space-x-2 px-6 py-4 font-medium transition-luxe border-b-2 ${
                 activeTab === tab.id
-                  ? 'border-primary text-primary' :'border-transparent text-muted-foreground hover:text-foreground'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
               <Icon name={tab.icon as any} size={20} />
@@ -110,7 +111,8 @@ const ProductTabs = ({
                           variant={index < Math.floor(averageRating) ? 'solid' : 'outline'}
                           className={
                             index < Math.floor(averageRating)
-                              ? 'text-warning' :'text-muted-foreground'
+                              ? 'text-warning'
+                              : 'text-muted-foreground'
                           }
                         />
                       ))}
@@ -184,9 +186,7 @@ const ProductTabs = ({
                   <Icon name="BoltIcon" size={24} className="text-primary" />
                   <h4 className="font-medium text-foreground">Express Shipping</h4>
                 </div>
-                <p className="text-caption text-muted-foreground">
-                  $12.99 • 2-3 business days
-                </p>
+                <p className="text-caption text-muted-foreground">$12.99 • 2-3 business days</p>
               </div>
             </div>
           </div>

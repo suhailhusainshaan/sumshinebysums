@@ -47,11 +47,7 @@ const OrderSummary = ({
   };
 
   return (
-    <div
-      className={`bg-card rounded-lg shadow-warm ${
-        isSticky ? 'lg:sticky lg:top-24' : ''
-      }`}
-    >
+    <div className={`bg-card rounded-lg shadow-warm ${isSticky ? 'lg:sticky lg:top-24' : ''}`}>
       <div className="p-6 border-b border-border">
         <h2 className="font-heading text-xl font-semibold text-foreground">Order Summary</h2>
       </div>
@@ -163,9 +159,7 @@ const OrderSummary = ({
         <div className="pt-3 border-t border-border">
           <div className="flex items-center justify-between">
             <span className="font-heading text-lg font-semibold text-foreground">Total</span>
-            <span className="text-data text-2xl font-bold text-primary">
-              ${total.toFixed(2)}
-            </span>
+            <span className="text-data text-2xl font-bold text-primary">${total.toFixed(2)}</span>
           </div>
         </div>
       </div>

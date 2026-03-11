@@ -31,62 +31,74 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
     {
       category: 'shipping',
       question: 'What are your shipping options and delivery times?',
-      answer: 'We offer Standard Shipping (5-7 business days, $5.99), Express Shipping (2-3 business days, $12.99), and Next Day Delivery (1 business day, $24.99). Free standard shipping on orders over $75. All orders are processed within 1-2 business days.',
+      answer:
+        'We offer Standard Shipping (5-7 business days, $5.99), Express Shipping (2-3 business days, $12.99), and Next Day Delivery (1 business day, $24.99). Free standard shipping on orders over $75. All orders are processed within 1-2 business days.',
     },
     {
       category: 'shipping',
       question: 'Do you ship internationally?',
-      answer: 'Yes, we ship to over 50 countries worldwide. International shipping rates and delivery times vary by destination. Customs duties and taxes may apply and are the responsibility of the recipient.',
+      answer:
+        'Yes, we ship to over 50 countries worldwide. International shipping rates and delivery times vary by destination. Customs duties and taxes may apply and are the responsibility of the recipient.',
     },
     {
       category: 'shipping',
       question: 'How can I track my order?',
-      answer: 'Once your order ships, you\'ll receive a tracking number via email. You can also track your order by logging into your account and visiting the Order History section.',
+      answer:
+        "Once your order ships, you'll receive a tracking number via email. You can also track your order by logging into your account and visiting the Order History section.",
     },
     {
       category: 'returns',
       question: 'What is your return policy?',
-      answer: 'We offer a 30-day return policy for unworn items in original condition with tags attached. Returns are free for US customers. Refunds are processed within 5-7 business days of receiving your return.',
+      answer:
+        'We offer a 30-day return policy for unworn items in original condition with tags attached. Returns are free for US customers. Refunds are processed within 5-7 business days of receiving your return.',
     },
     {
       category: 'returns',
       question: 'Can I exchange an item?',
-      answer: 'Yes! We offer free exchanges within 30 days. Simply initiate a return and place a new order for the item you want. We\'ll refund your original purchase once we receive the return.',
+      answer:
+        "Yes! We offer free exchanges within 30 days. Simply initiate a return and place a new order for the item you want. We'll refund your original purchase once we receive the return.",
     },
     {
       category: 'returns',
       question: 'What items cannot be returned?',
-      answer: 'Earrings (for hygiene reasons), personalized items, and sale items marked as final sale cannot be returned. Gift cards are also non-refundable.',
+      answer:
+        'Earrings (for hygiene reasons), personalized items, and sale items marked as final sale cannot be returned. Gift cards are also non-refundable.',
     },
     {
       category: 'sizing',
       question: 'How do I find my ring size?',
-      answer: 'Use our printable ring sizer available on product pages, or visit a local jeweler for professional sizing. Our rings are available in sizes 5-10, including half sizes.',
+      answer:
+        'Use our printable ring sizer available on product pages, or visit a local jeweler for professional sizing. Our rings are available in sizes 5-10, including half sizes.',
     },
     {
       category: 'sizing',
       question: 'Are your necklaces adjustable?',
-      answer: 'Most of our necklaces feature adjustable chains with 2-inch extenders, allowing you to customize the length. Specific measurements are listed on each product page.',
+      answer:
+        'Most of our necklaces feature adjustable chains with 2-inch extenders, allowing you to customize the length. Specific measurements are listed on each product page.',
     },
     {
       category: 'care',
       question: 'How should I care for my artificial jewelry?',
-      answer: 'Store pieces separately in a cool, dry place. Avoid contact with water, perfumes, and lotions. Clean gently with a soft cloth. Remove jewelry before swimming, exercising, or sleeping.',
+      answer:
+        'Store pieces separately in a cool, dry place. Avoid contact with water, perfumes, and lotions. Clean gently with a soft cloth. Remove jewelry before swimming, exercising, or sleeping.',
     },
     {
       category: 'care',
       question: 'Will the jewelry tarnish?',
-      answer: 'Our jewelry is made with high-quality materials and protective coatings to resist tarnishing. With proper care, your pieces will maintain their beauty for years. We also offer a 6-month warranty against manufacturing defects.',
+      answer:
+        'Our jewelry is made with high-quality materials and protective coatings to resist tarnishing. With proper care, your pieces will maintain their beauty for years. We also offer a 6-month warranty against manufacturing defects.',
     },
     {
       category: 'payment',
       question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption.',
+      answer:
+        'We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption.',
     },
     {
       category: 'payment',
       question: 'Do you offer payment plans?',
-      answer: 'Yes! We partner with Afterpay and Klarna to offer interest-free payment plans. Split your purchase into 4 installments with no hidden fees. Available on orders $35-$1,000.',
+      answer:
+        'Yes! We partner with Afterpay and Klarna to offer interest-free payment plans. Split your purchase into 4 installments with no hidden fees. Available on orders $35-$1,000.',
     },
   ];
 
@@ -166,7 +178,11 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
       <div className="space-y-3">
         {filteredFAQs.length === 0 ? (
           <div className="text-center py-12">
-            <Icon name="MagnifyingGlassIcon" size={48} className="mx-auto text-muted-foreground mb-4" />
+            <Icon
+              name="MagnifyingGlassIcon"
+              size={48}
+              className="mx-auto text-muted-foreground mb-4"
+            />
             <p className="text-foreground font-medium mb-2">No results found</p>
             <p className="text-caption text-muted-foreground">
               Try adjusting your search or browse by category
@@ -203,7 +219,11 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
 
       <div className="mt-8 p-6 bg-muted rounded-lg">
         <div className="flex items-start space-x-3">
-          <Icon name="InformationCircleIcon" size={24} className="text-primary flex-shrink-0 mt-0.5" />
+          <Icon
+            name="InformationCircleIcon"
+            size={24}
+            className="text-primary flex-shrink-0 mt-0.5"
+          />
           <div>
             <h3 className="font-medium text-foreground mb-2">Still have questions?</h3>
             <p className="text-sm text-muted-foreground mb-3">

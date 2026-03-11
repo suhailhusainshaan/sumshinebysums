@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -12,7 +13,7 @@ interface HeaderProps {
 
 const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const router = useRouter();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -27,6 +28,10 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
     }
   };
 
+  const handleLoginClick = () => {
+    router.push('/login');
+  };
+
   const handleCartClick = () => {
     if (onCartClick) {
       onCartClick();
@@ -38,7 +43,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo */}
-          <Link href="/homepage" className="flex items-center" onClick={closeMobileMenu}>
+          <Link href="/" className="flex items-center" onClick={closeMobileMenu}>
             <div className="flex items-center space-x-2">
               <svg
                 width="32"
@@ -48,16 +53,8 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                 xmlns="http://www.w3.org/2000/svg"
                 className="text-primary"
               >
-                <path
-                  d="M16 4L8 12L16 20L24 12L16 4Z"
-                  fill="currentColor"
-                  opacity="0.9"
-                />
-                <path
-                  d="M16 14L12 18L16 22L20 18L16 14Z"
-                  fill="currentColor"
-                  opacity="0.7"
-                />
+                <path d="M16 4L8 12L16 20L24 12L16 4Z" fill="currentColor" opacity="0.9" />
+                <path d="M16 14L12 18L16 22L20 18L16 14Z" fill="currentColor" opacity="0.7" />
                 <circle cx="16" cy="16" r="2" fill="currentColor" />
               </svg>
               <span className="font-heading text-xl font-semibold text-foreground">
@@ -81,7 +78,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               Cart
             </Link>
             <Link
-              href="/homepage"
+              href="/"
               className="text-foreground hover:text-primary transition-luxe font-medium"
             >
               Account
@@ -114,6 +111,13 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                   {cartItemCount > 9 ? '9+' : cartItemCount}
                 </span>
               )}
+            </button>
+            <button
+              onClick={handleLoginClick}
+              className="p-2 text-foreground hover:text-primary transition-luxe flex items-center justify-center"
+              aria-label="Login"
+            >
+              <Icon name="UserIcon" size={24} />
             </button>
           </div>
 
@@ -168,7 +172,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               Cart
             </Link>
             <Link
-              href="/homepage"
+              href="/"
               className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
               onClick={closeMobileMenu}
             >

@@ -43,17 +43,10 @@ const ShoppingCartIcon = ({
     }
   };
 
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Link
         href="/shopping-cart"
         className="relative p-2 text-foreground hover:text-primary transition-luxe inline-flex items-center"
@@ -96,9 +89,7 @@ const ShoppingCartIcon = ({
                   <p className="text-sm font-medium text-popover-foreground truncate">
                     {item.name}
                   </p>
-                  <p className="text-caption text-muted-foreground">
-                    Qty: {item.quantity}
-                  </p>
+                  <p className="text-caption text-muted-foreground">Qty: {item.quantity}</p>
                   <p className="text-data text-sm font-medium text-primary">
                     ${item.price.toFixed(2)}
                   </p>

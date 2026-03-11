@@ -40,9 +40,7 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-heading text-2xl lg:text-3xl font-semibold text-foreground">
-          {title}
-        </h2>
+        <h2 className="font-heading text-2xl lg:text-3xl font-semibold text-foreground">{title}</h2>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => scroll('left')}
@@ -103,7 +101,8 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
                       variant={index < Math.floor(product.rating) ? 'solid' : 'outline'}
                       className={
                         index < Math.floor(product.rating)
-                          ? 'text-warning' :'text-muted-foreground'
+                          ? 'text-warning'
+                          : 'text-muted-foreground'
                       }
                     />
                   ))}

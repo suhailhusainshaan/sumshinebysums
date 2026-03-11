@@ -95,11 +95,7 @@ const ProductImageGallery = ({ images, productName }: ProductImageGalleryProps) 
             }`}
             aria-label={`View image ${index + 1}`}
           >
-            <AppImage
-              src={image.url}
-              alt={image.alt}
-              className="w-full h-full object-cover"
-            />
+            <AppImage src={image.url} alt={image.alt} className="w-full h-full object-cover" />
           </button>
         ))}
       </div>

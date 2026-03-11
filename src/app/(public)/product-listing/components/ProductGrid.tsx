@@ -35,16 +35,15 @@ const ProductGrid = ({
 }: ProductGridProps) => {
   if (isLoading) {
     return (
-      <div className={`grid gap-6 ${
+      <div
+        className={`grid gap-6 ${
           viewMode === 'grid'
             ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
             : 'grid-cols-2'
-      }`}>
+        }`}
+      >
         {[...Array(8)].map((_, index) => (
-          <div
-            key={index}
-            className="bg-card rounded-lg overflow-hidden shadow-warm animate-pulse"
-          >
+          <div key={index} className="bg-card rounded-lg overflow-hidden shadow-warm animate-pulse">
             <div className="aspect-square bg-muted" />
             <div className="p-4 space-y-3">
               <div className="h-4 bg-muted rounded w-1/3" />
@@ -79,17 +78,19 @@ const ProductGrid = ({
         <h3 className="font-heading text-2xl font-semibold text-foreground mb-2">
           No products found
         </h3>
-        <p className="text-muted-foreground mb-6">
-          Try adjusting your filters or search criteria
-        </p>
+        <p className="text-muted-foreground mb-6">Try adjusting your filters or search criteria</p>
       </div>
     );
   }
 
   return (
-    <div className={`grid gap-6 ${
-      viewMode === 'grid' ?'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' :'grid-cols-2'
-    }`}>
+    <div
+      className={`grid gap-6 ${
+        viewMode === 'grid'
+          ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          : 'grid-cols-2'
+      }`}
+    >
       {products.map((product) => (
         <ProductCard
           key={product.id}

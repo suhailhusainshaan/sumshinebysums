@@ -54,9 +54,7 @@ const ProductCard = ({
       <Link href={`/product-detail?id=${id}`} className="block">
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-muted">
-          {!imageLoaded && (
-            <div className="absolute inset-0 animate-pulse bg-muted" />
-          )}
+          {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
           <AppImage
             src={image}
             alt={alt}
@@ -97,9 +95,7 @@ const ProductCard = ({
         {/* Product Info */}
         <div className="p-4">
           <p className="text-caption text-muted-foreground mb-1">{category}</p>
-          <p className="font-medium text-foreground mb-2 line-clamp-3 min-h-[3rem]">
-            {name}
-          </p>
+          <p className="font-medium text-foreground mb-2 line-clamp-3 min-h-[3rem]">{name}</p>
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-3">
@@ -114,9 +110,7 @@ const ProductCard = ({
                 />
               ))}
             </div>
-            <span className="text-caption text-muted-foreground">
-              ({reviewCount})
-            </span>
+            <span className="text-caption text-muted-foreground">({reviewCount})</span>
           </div>
 
           {/* Price */}

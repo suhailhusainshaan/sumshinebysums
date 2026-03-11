@@ -1,6 +1,6 @@
-"use client";
-import { useTheme } from "@/context/admin/ThemeContext";
-import React from "react";
+'use client';
+import { useTheme } from '@/context/admin/ThemeContext';
+import React from 'react';
 
 export default function ThemeTogglerTwo() {
   const { toggleTheme } = useTheme();

@@ -65,8 +65,8 @@ const AddToCartSection = ({
                   selectedSize === size.id
                     ? 'border-primary bg-primary text-primary-foreground'
                     : size.available
-                    ? 'border-border hover:border-primary text-foreground'
-                    : 'border-border text-muted-foreground opacity-50 cursor-not-allowed'
+                      ? 'border-border hover:border-primary text-foreground'
+                      : 'border-border text-muted-foreground opacity-50 cursor-not-allowed'
                 }`}
               >
                 {size.label}
@@ -130,9 +130,7 @@ const AddToCartSection = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-border flex items-center justify-between">
-              <h2 className="font-heading text-2xl font-semibold text-foreground">
-                Size Guide
-              </h2>
+              <h2 className="font-heading text-2xl font-semibold text-foreground">Size Guide</h2>
               <button
                 onClick={() => setShowSizeGuideModal(false)}
                 className="p-2 hover:bg-muted rounded-full transition-luxe"
@@ -147,12 +145,8 @@ const AddToCartSection = ({
                   <thead>
                     <tr className="border-b border-border">
                       <th className="py-3 px-4 text-foreground font-medium">Size</th>
-                      <th className="py-3 px-4 text-foreground font-medium">
-                        Diameter (mm)
-                      </th>
-                      <th className="py-3 px-4 text-foreground font-medium">
-                        Circumference (mm)
-                      </th>
+                      <th className="py-3 px-4 text-foreground font-medium">Diameter (mm)</th>
+                      <th className="py-3 px-4 text-foreground font-medium">Circumference (mm)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -173,8 +167,8 @@ const AddToCartSection = ({
               <div className="bg-muted p-4 rounded-md">
                 <h3 className="font-medium text-foreground mb-2">How to Measure:</h3>
                 <p className="text-caption text-muted-foreground">
-                  Wrap a string around your finger and mark where it overlaps. Measure the
-                  length in millimeters and compare with the circumference column above.
+                  Wrap a string around your finger and mark where it overlaps. Measure the length in
+                  millimeters and compare with the circumference column above.
                 </p>
               </div>
             </div>

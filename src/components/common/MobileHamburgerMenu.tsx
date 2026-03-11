@@ -17,11 +17,7 @@ interface MobileHamburgerMenuProps {
   cartItemCount?: number;
 }
 
-const MobileHamburgerMenu = ({
-  isOpen,
-  onClose,
-  cartItemCount = 0,
-}: MobileHamburgerMenuProps) => {
+const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHamburgerMenuProps) => {
   const menuItems: MenuItem[] = [
     {
       label: 'Shop',
@@ -42,7 +38,7 @@ const MobileHamburgerMenu = ({
     },
     {
       label: 'Account',
-      path: '/homepage',
+      path: '/',
       icon: 'UserIcon',
     },
     {

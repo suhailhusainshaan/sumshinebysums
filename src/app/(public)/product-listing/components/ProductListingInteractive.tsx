@@ -213,9 +213,7 @@ const ProductListingInteractive = () => {
     let filtered = [...mockProducts];
 
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((p) =>
-        selectedCategories.includes(p.category.toLowerCase())
-      );
+      filtered = filtered.filter((p) => selectedCategories.includes(p.category.toLowerCase()));
     }
 
     if (selectedMaterials.length > 0) {
@@ -225,9 +223,7 @@ const ProductListingInteractive = () => {
     }
 
     if (selectedColors.length > 0) {
-      filtered = filtered.filter((p) =>
-        selectedColors.includes(p.color.toLowerCase())
-      );
+      filtered = filtered.filter((p) => selectedColors.includes(p.color.toLowerCase()));
     }
 
     filtered = filtered.filter(
@@ -285,25 +281,19 @@ const ProductListingInteractive = () => {
 
   const handleCategoryToggle = (categoryId: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(categoryId)
-        ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId]
+      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
     );
   };
 
   const handleMaterialToggle = (materialId: string) => {
     setSelectedMaterials((prev) =>
-      prev.includes(materialId)
-        ? prev.filter((id) => id !== materialId)
-        : [...prev, materialId]
+      prev.includes(materialId) ? prev.filter((id) => id !== materialId) : [...prev, materialId]
     );
   };
 
   const handleColorToggle = (colorId: string) => {
     setSelectedColors((prev) =>
-      prev.includes(colorId)
-        ? prev.filter((id) => id !== colorId)
-        : [...prev, colorId]
+      prev.includes(colorId) ? prev.filter((id) => id !== colorId) : [...prev, colorId]
     );
   };
 
@@ -344,19 +334,14 @@ const ProductListingInteractive = () => {
 
   const handleWishlistToggle = (productId: string) => {
     setWishlistItems((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
     );
   };
 
   const filteredProducts = getFilteredProducts();
   const activeFilters = getActiveFilters();
 
-  const breadcrumbItems = [
-    { label: 'Shop', path: '/product-listing' },
-    { label: 'All Products' },
-  ];
+  const breadcrumbItems = [{ label: 'Shop', path: '/product-listing' }, { label: 'All Products' }];
 
   if (!isHydrated) {
     return (
@@ -391,10 +376,7 @@ const ProductListingInteractive = () => {
         cartItemCount={cartItemCount}
       />
 
-      <SearchComponent
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
+      <SearchComponent isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       <main className="pt-20 lg:pt-22 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import '../../styles/index.css';
+import AuthGuard from '@/lib/AuthGuard';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -21,12 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-        <script type="module" />
-        <script type="module" />
-      </body>
-    </html>
+    <body>
+      <AuthGuard>{children}</AuthGuard>
+      <script type="module" />
+      <script type="module" />
+    </body>
   );
 }
