@@ -3,7 +3,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import UserDropdown from '@/components/common/UserDropdown';
 import { useRouter } from 'next/navigation';
+import useAuth from '@/hooks/useAuth';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -13,6 +15,7 @@ interface HeaderProps {
 
 const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isLoggedIn, isLoading, logout } = useAuth();
   const router = useRouter();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -37,6 +40,10 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
       onCartClick();
     }
   };
+
+  if (isLoading) {
+    return <nav>Loading...</nav>; // Prevents flicker
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-card shadow-warm z-header">
@@ -112,13 +119,18 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                 </span>
               )}
             </button>
-            <button
-              onClick={handleLoginClick}
-              className="p-2 text-foreground hover:text-primary transition-luxe flex items-center justify-center"
-              aria-label="Login"
-            >
-              <Icon name="UserIcon" size={24} />
-            </button>
+
+            {isLoggedIn ? (
+              <UserDropdown />
+            ) : (
+              <button
+                onClick={handleLoginClick}
+                className="p-2 text-foreground hover:text-primary transition-luxe flex items-center justify-center"
+                aria-label="Login"
+              >
+                <Icon name="UserIcon" size={24} />
+              </button>
+            )}
           </div>
 
           {/* Mobile Actions */}
