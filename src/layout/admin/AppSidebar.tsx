@@ -16,6 +16,7 @@ import {
   PlugInIcon,
   TableIcon,
   UserCircleIcon,
+  FileIcon,
 } from '@/icons/admin/index';
 
 type NavItem = {
@@ -30,6 +31,16 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: 'Dashboard',
     path: '/admin',
+  },
+  {
+    icon: <FileIcon />,
+    name: 'Category',
+    path: '/admin/category',
+  },
+  {
+    icon: <FileIcon />,
+    name: 'Product',
+    path: '/admin/product',
   },
   {
     icon: <CalenderIcon />,

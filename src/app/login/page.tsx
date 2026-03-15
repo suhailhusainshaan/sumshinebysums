@@ -5,7 +5,6 @@ import Icon from '@/components/ui/AppIcon';
 import { useRouter } from 'next/navigation'; // For redirection
 import { authService } from '@/service/auth.service';
 import Link from 'next/link';
-import Cookies from 'js-cookie';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,11 +12,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
-  // const handleSubmit = (e: any) => {
-  //   e.preventDefault();
-  //   console.log(email, password);
-  // };
 
   const handleRegisterClick = () => {
     router.push('/register');
