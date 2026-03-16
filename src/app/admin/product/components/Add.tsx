@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from '@/lib/axios';
 import ComponentCard from '@/components/admin/common/ComponentCard';
 import Label from '@/components/admin/form/Label';
 import Input from '@/components/admin/form/input/InputField';
@@ -13,11 +15,14 @@ import { Category } from '@/types/category';
 interface DefaultInputsProps {
   categories?: Category[];
   brands?: { id: number; name: string }[];
-  onSubmit?: (data: any) => void;
 }
 
-export default function Add({ categories = [], brands = [], onSubmit }: DefaultInputsProps) {
-  // Form state
+export default function Add({ categories = [], brands = [] }: DefaultInputsProps) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -30,9 +35,10 @@ export default function Add({ categories = [], brands = [], onSubmit }: DefaultI
       hypoallergenic: false,
     },
     specifications: {
-      diameter: '',
-      thickness: '',
-      clasp_type: '',
+      material: '',
+      purity: '',
+      stone_type: '',
+      hypoallergenic: false,
     },
     sku: '',
     variantName: '',
@@ -47,553 +53,307 @@ export default function Add({ categories = [], brands = [], onSubmit }: DefaultI
       height: '',
       unit: 'cm',
     },
-    imageUrl: '',
     altText: '',
   });
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  // Helper to handle changes in nested objects
+  const handleNestedChange = (
+    category: 'features' | 'specifications' | 'dimensions',
+    field: string,
+    value: any
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [field]: value,
+      },
+    }));
+  };
 
-  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
+    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
 
-    // Handle nested objects (features, specifications, dimensions)
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-
-      setFormData((prev) => {
-        // Create a safe copy of the parent object
-        const parentObject = { ...(prev[parent as keyof typeof prev] as object) };
-
-        return {
-          ...prev,
-          [parent]: {
-            ...parentObject,
-            [child]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
-          },
-        };
-      });
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-
-    // Clear error for this field
-    if (errors[name]) {
+    setFormData((prev) => ({ ...prev, [name]: val }));
+    if (errors[name])
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
+        const newErr = { ...prev };
+        delete newErr[name];
+        return newErr;
       });
-    }
-  };
-
-  const handleSelectChange = (name: string) => (value: string) => {
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData((prev) => ({
-        ...prev,
-        [parent]: {
-          ...(prev[parent as keyof typeof prev] as object),
-          [child]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-
-  // Generate slug from name
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      name,
-      slug: generateSlug(name),
-    }));
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    setFormData((prev) => ({ ...prev, name, slug }));
   };
 
-  // File upload handlers
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      // In a real app, you'd upload to cloud storage and get URL
-      setFormData((prev) => ({
-        ...prev,
-        imageUrl: URL.createObjectURL(file), // Temporary URL
-      }));
-    }
+    if (file) setImageFile(file);
   };
 
   const onDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles[0]) {
-      setImageFile(acceptedFiles[0]);
-      setFormData((prev) => ({
-        ...prev,
-        imageUrl: URL.createObjectURL(acceptedFiles[0]),
-      }));
-    }
+    if (acceptedFiles[0]) setImageFile(acceptedFiles[0]);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/png': [],
-      'image/jpeg': [],
-      'image/webp': [],
-      'image/svg+xml': [],
-    },
+    accept: { 'image/png': [], 'image/jpeg': [], 'image/webp': [], 'image/svg+xml': [] },
     maxFiles: 1,
   });
 
-  // Form validation
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.name) newErrors.name = 'Product name is required';
-    if (!formData.sku) newErrors.sku = 'SKU is required';
-    if (!formData.price) newErrors.price = 'Price is required';
-    if (!formData.categoryId) newErrors.categoryId = 'Category is required';
-    if (!formData.brandId) newErrors.brandId = 'Brand is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (validateForm() && onSubmit) {
-      // Convert string numbers to actual numbers
-      const submitData = {
+    // if (!imageFile) return alert('Please upload an image');
+    setLoading(true);
+    try {
+      const data = new FormData();
+      // Construct the JSON blob for the 'request' part
+      const jsonRequest = JSON.stringify({
         ...formData,
-        brandId: parseInt(formData.brandId),
-        categoryId: parseInt(formData.categoryId),
-        price: parseFloat(formData.price),
-        compareAtPrice: parseFloat(formData.compareAtPrice) || null,
-        costPrice: parseFloat(formData.costPrice) || null,
-        stockQuantity: parseInt(formData.stockQuantity) || 0,
-        weight: parseFloat(formData.weight) || null,
-        dimensions: {
-          ...formData.dimensions,
-          length: parseFloat(formData.dimensions.length) || null,
-          width: parseFloat(formData.dimensions.width) || null,
-          height: parseFloat(formData.dimensions.height) || null,
-        },
-      };
+        brandId: Number(formData.brandId),
+        categoryId: Number(formData.categoryId),
+        price: Number(formData.price),
+        compareAtPrice: formData.compareAtPrice ? Number(formData.compareAtPrice) : null,
+        costPrice: formData.costPrice ? Number(formData.costPrice) : null,
+        stockQuantity: Number(formData.stockQuantity),
+        weight: Number(formData.weight),
+      });
+      data.append('request', new Blob([jsonRequest], { type: 'application/json' }));
+      if (imageFile) {
+        data.append('image', imageFile); // Matches @RequestPart("image")
+      }
+      await axios.post('/admin/products', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
-      onSubmit(submitData);
+      router.push('/admin/product');
+      router.refresh();
+    } catch (error: any) {
+      setErrors(error.response?.data?.errors || { global: 'Something went wrong' });
+    } finally {
+      setLoading(false);
     }
   };
-
-  // Options for selects
-  const brandOptions = brands.map((brand) => ({
-    value: brand.id.toString(),
-    label: brand.name,
-  }));
-
-  const categoryOptions = categories.map((category) => ({
-    value: category.id.toString(),
-    label: category.name,
-  }));
 
   return (
     <form onSubmit={handleSubmit}>
       <ComponentCard title="Add New Product">
         <div className="space-y-8">
-          {/* Basic Information Section */}
+          {/* Basic Info */}
           <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Basic Information
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label htmlFor="name">Product Name *</Label>
                 <Input
                   id="name"
                   name="name"
-                  type="text"
                   value={formData.name}
                   onChange={handleNameChange}
-                  placeholder="e.g., Classic Silver Hoop Earrings"
                   error={!!errors.name}
                   hint={errors.name}
                 />
               </div>
-
               <div>
                 <Label htmlFor="slug">Slug</Label>
-                <Input
-                  id="slug"
-                  name="slug"
-                  type="text"
-                  value={formData.slug}
-                  onChange={handleChange}
-                  placeholder="auto-generated-from-name"
-                  hint="URL-friendly version of the name"
-                />
+                <Input id="slug" name="slug" value={formData.slug} onChange={handleChange} />
               </div>
-
               <div className="md:col-span-2">
                 <Label htmlFor="description">Description</Label>
                 <TextArea
                   id="description"
                   name="description"
                   value={formData.description}
-                  onChange={(value) =>
-                    handleChange({ target: { name: 'description', value } } as any)
-                  }
-                  rows={4}
-                  placeholder="Enter product description..."
+                  onChange={(v) => setFormData((p) => ({ ...p, description: v }))}
                 />
               </div>
-
               <div>
                 <Label htmlFor="categoryId">Category *</Label>
-                <div className="relative">
-                  <Select
-                    id="categoryId"
-                    name="categoryId"
-                    options={categoryOptions}
-                    value={formData.categoryId}
-                    onChange={handleSelectChange('categoryId')}
-                    placeholder="Select category"
-                    className="dark:bg-dark-900"
-                  />
-                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                    <ChevronDownIcon />
-                  </span>
-                </div>
-                {errors.categoryId && (
-                  <p className="text-error-500 text-sm mt-1">{errors.categoryId}</p>
-                )}
+                <Select
+                  id="categoryId"
+                  name="categoryId"
+                  options={categories.map((c) => ({ value: c.id.toString(), label: c.name }))}
+                  value={formData.categoryId}
+                  onChange={(v) => setFormData((p) => ({ ...p, categoryId: v }))}
+                />
               </div>
-
               <div>
                 <Label htmlFor="brandId">Brand *</Label>
-                <div className="relative">
-                  <Select
-                    id="brandId"
-                    name="brandId"
-                    options={brandOptions}
-                    value={formData.brandId}
-                    onChange={handleSelectChange('brandId')}
-                    placeholder="Select brand"
-                    className="dark:bg-dark-900"
-                  />
-                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                    <ChevronDownIcon />
-                  </span>
-                </div>
-                {errors.brandId && <p className="text-error-500 text-sm mt-1">{errors.brandId}</p>}
+                <Select
+                  id="brandId"
+                  name="brandId"
+                  options={brands.map((b) => ({ value: b.id.toString(), label: b.name }))}
+                  value={formData.brandId}
+                  onChange={(v) => setFormData((p) => ({ ...p, brandId: v }))}
+                />
               </div>
             </div>
           </div>
 
-          {/* Features Section */}
+          {/* Jewelry Details */}
           <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Features</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h3 className="text-lg font-semibold mb-4">Jewelry Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
-                <Label htmlFor="features.material">Material</Label>
+                <Label htmlFor="material">Material</Label>
                 <Input
-                  id="features.material"
-                  name="features.material"
-                  type="text"
-                  value={formData.features.material}
+                  id="specifications.material"
+                  name="specifications.material"
+                  value={formData.specifications.material}
                   onChange={handleChange}
-                  placeholder="e.g., 925 Sterling Silver"
                 />
               </div>
-
               <div>
-                <Label htmlFor="features.finish">Finish</Label>
+                <Label htmlFor="purity">Purity</Label>
                 <Input
-                  id="features.finish"
-                  name="features.finish"
-                  type="text"
-                  value={formData.features.finish}
+                  id="purity"
+                  name="specifications.purity"
+                  value={formData.specifications.purity}
                   onChange={handleChange}
-                  placeholder="e.g., High Polish"
                 />
               </div>
-
+              <div>
+                <Label htmlFor="stone_type">Stone</Label>
+                <Input
+                  id="stone_type"
+                  name="specifications.stone_type"
+                  value={formData.specifications.stone_type}
+                  onChange={handleChange}
+                />
+              </div>
               <div className="flex items-center mt-8">
                 <input
                   type="checkbox"
-                  id="features.hypoallergenic"
-                  name="features.hypoallergenic"
-                  checked={formData.features.hypoallergenic}
+                  id="hypoallergenic"
+                  name="specifications.hypoallergenic"
+                  checked={formData.specifications.hypoallergenic}
                   onChange={handleChange}
-                  className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
+                  className="w-4 h-4 text-brand-500 rounded"
                 />
-                <Label htmlFor="features.hypoallergenic" className="ml-2 mb-0">
+                <Label htmlFor="hypoallergenic" className="ml-2 mb-0">
                   Hypoallergenic
                 </Label>
               </div>
             </div>
           </div>
 
-          {/* Specifications Section */}
+          {/* Pricing & Inventory */}
           <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Specifications
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">Inventory & Variant</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <Label htmlFor="specifications.diameter">Diameter</Label>
+                <Label htmlFor="variantName">Variant Name (e.g. Small, Gold)</Label>
                 <Input
-                  id="specifications.diameter"
-                  name="specifications.diameter"
-                  type="text"
-                  value={formData.specifications.diameter}
+                  id="variantName"
+                  name="variantName"
+                  value={formData.variantName}
                   onChange={handleChange}
-                  placeholder="e.g., 20mm"
+                  placeholder="Medium Silver Hoops"
                 />
               </div>
-
-              <div>
-                <Label htmlFor="specifications.thickness">Thickness</Label>
-                <Input
-                  id="specifications.thickness"
-                  name="specifications.thickness"
-                  type="text"
-                  value={formData.specifications.thickness}
-                  onChange={handleChange}
-                  placeholder="e.g., 2mm"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="specifications.clasp_type">Clasp Type</Label>
-                <Input
-                  id="specifications.clasp_type"
-                  name="specifications.clasp_type"
-                  type="text"
-                  value={formData.specifications.clasp_type}
-                  onChange={handleChange}
-                  placeholder="e.g., Latch Back"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Inventory Section */}
-          <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Inventory</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
                 <Label htmlFor="sku">SKU *</Label>
                 <Input
                   id="sku"
                   name="sku"
-                  type="text"
                   value={formData.sku}
                   onChange={handleChange}
-                  placeholder="e.g., SLV-HOOP-001-MED"
                   error={!!errors.sku}
                   hint={errors.sku}
                 />
               </div>
-
-              <div>
-                <Label htmlFor="variantName">Variant Name</Label>
-                <Input
-                  id="variantName"
-                  name="variantName"
-                  type="text"
-                  value={formData.variantName}
-                  onChange={handleChange}
-                  placeholder="e.g., Medium Silver Hoops"
-                />
-              </div>
-
               <div>
                 <Label htmlFor="price">Price ($) *</Label>
                 <Input
                   id="price"
                   name="price"
                   type="number"
-                  step="0.01"
                   value={formData.price}
                   onChange={handleChange}
-                  placeholder="0.00"
-                  error={!!errors.price}
-                  hint={errors.price}
                 />
               </div>
-
               <div>
-                <Label htmlFor="compareAtPrice">Compare at Price ($)</Label>
+                <Label htmlFor="compareAtPrice">Compare at Price (Original Price)</Label>
                 <Input
                   id="compareAtPrice"
                   name="compareAtPrice"
                   type="number"
-                  step="0.01"
                   value={formData.compareAtPrice}
                   onChange={handleChange}
-                  placeholder="0.00"
                 />
               </div>
-
               <div>
-                <Label htmlFor="costPrice">Cost Price ($)</Label>
-                <Input
-                  id="costPrice"
-                  name="costPrice"
-                  type="number"
-                  step="0.01"
-                  value={formData.costPrice}
-                  onChange={handleChange}
-                  placeholder="0.00"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="stockQuantity">Stock Quantity</Label>
+                <Label htmlFor="stockQuantity">Stock</Label>
                 <Input
                   id="stockQuantity"
                   name="stockQuantity"
                   type="number"
                   value={formData.stockQuantity}
                   onChange={handleChange}
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="weight">Weight (g)</Label>
-                <Input
-                  id="weight"
-                  name="weight"
-                  type="number"
-                  step="0.01"
-                  value={formData.weight}
-                  onChange={handleChange}
-                  placeholder="0.00"
                 />
               </div>
             </div>
           </div>
 
-          {/* Dimensions Section */}
-          <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Dimensions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <Label htmlFor="dimensions.length">Length (cm)</Label>
-                <Input
-                  id="dimensions.length"
-                  name="dimensions.length"
-                  type="number"
-                  step="0.1"
-                  value={formData.dimensions.length}
-                  onChange={handleChange}
-                  placeholder="0.0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="dimensions.width">Width (cm)</Label>
-                <Input
-                  id="dimensions.width"
-                  name="dimensions.width"
-                  type="number"
-                  step="0.1"
-                  value={formData.dimensions.width}
-                  onChange={handleChange}
-                  placeholder="0.0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="dimensions.height">Height (cm)</Label>
-                <Input
-                  id="dimensions.height"
-                  name="dimensions.height"
-                  type="number"
-                  step="0.1"
-                  value={formData.dimensions.height}
-                  onChange={handleChange}
-                  placeholder="0.0"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="dimensions.unit">Unit</Label>
-                <div className="relative">
-                  <Select
-                    id="dimensions.unit"
-                    name="dimensions.unit"
-                    options={[
-                      { value: 'cm', label: 'Centimeters (cm)' },
-                      { value: 'mm', label: 'Millimeters (mm)' },
-                      { value: 'in', label: 'Inches (in)' },
-                    ]}
-                    value={formData.dimensions.unit}
-                    onChange={handleSelectChange('dimensions.unit')}
-                    className="dark:bg-dark-900"
-                  />
-                  <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-                    <ChevronDownIcon />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Images Section */}
-          <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
+          {/* Your Custom Drag & Drop Section */}
+          <div className="pb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Product Images
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label>Upload Image</Label>
-                <FileInput onChange={handleFileChange} className="custom-class" />
-                {imageFile && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                    Selected: {imageFile.name}
-                  </p>
-                )}
+                <FileInput onChange={handleFileChange} />
+                {imageFile && <p className="text-sm text-brand-500 mt-2">File: {imageFile.name}</p>}
               </div>
-
               <div>
                 <Label htmlFor="altText">Alt Text</Label>
                 <Input
                   id="altText"
                   name="altText"
-                  type="text"
                   value={formData.altText}
                   onChange={handleChange}
-                  placeholder="Describe the image for accessibility"
+                  placeholder="Image description"
                 />
               </div>
+              {/* Images Section */}
+              {/*<div className="pb-6">*/}
+              {/*  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">*/}
+              {/*    Product Images*/}
+              {/*  </h3>*/}
+              {/*  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">*/}
+              {/*    <div>*/}
+              {/*      <Label>Upload Image</Label>*/}
+              {/*      <FileInput onChange={handleFileChange} />*/}
+              {/*      {imageFile && (*/}
+              {/*        <p className="text-sm text-brand-500 mt-2">File: {imageFile.name}</p>*/}
+              {/*      )}*/}
+              {/*    </div>*/}
+              {/*    <div className="md:col-span-2">*/}
+              {/*      <Label>Drag & Drop Upload</Label>*/}
+              {/*      <div*/}
+              {/*        {...getRootProps()}*/}
+              {/*        className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition ${isDragActive ? 'border-brand-500 bg-gray-50' : 'border-gray-300'}`}*/}
+              {/*      >*/}
+              {/*        <input {...getInputProps()} />*/}
+              {/*        <p className="text-gray-500">*/}
+              {/*          {isDragActive*/}
+              {/*            ? 'Drop files here'*/}
+              {/*            : 'Drag & drop image here, or click to browse'}*/}
+              {/*        </p>*/}
+              {/*      </div>*/}
+              {/*    </div>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
               <div className="md:col-span-2">
                 <Label>Drag & Drop Upload</Label>
@@ -601,11 +361,7 @@ export default function Add({ categories = [], brands = [], onSubmit }: DefaultI
                   <div
                     {...getRootProps()}
                     className={`dropzone rounded-xl border-dashed border-gray-300 p-7 lg:p-10
-                      ${
-                        isDragActive
-                          ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
-                          : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
-                      }
+                      ${isDragActive ? 'border-brand-500 bg-gray-100 dark:bg-gray-800' : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'}
                     `}
                   >
                     <input {...getInputProps()} />
@@ -631,7 +387,7 @@ export default function Add({ categories = [], brands = [], onSubmit }: DefaultI
                         {isDragActive ? 'Drop Files Here' : 'Drag & Drop Files Here'}
                       </h4>
                       <span className="text-center mb-5 block w-full max-w-[290px] text-sm text-gray-700 dark:text-gray-400">
-                        Drag and drop your PNG, JPG, WebP, SVG images here or browse
+                        Drag and drop your images here or browse
                       </span>
                       <span className="font-medium underline text-theme-sm text-brand-500">
                         Browse File
@@ -643,19 +399,20 @@ export default function Add({ categories = [], brands = [], onSubmit }: DefaultI
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <button
               type="button"
-              className="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 dark:hover:bg-gray-700"
+              onClick={() => router.back()}
+              className="px-6 py-2 border rounded-lg hover:bg-gray-50 dark:text-white"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+              disabled={loading}
+              className="px-6 py-2 text-white bg-brand-500 rounded-lg hover:bg-brand-600 disabled:opacity-50"
             >
-              Add Product
+              {loading ? 'Processing...' : 'Add Product'}
             </button>
           </div>
         </div>
