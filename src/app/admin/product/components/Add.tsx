@@ -11,6 +11,7 @@ import TextArea from '@/components/form/input/TextArea';
 import FileInput from '@/components/form/input/FileInput';
 import { useDropzone } from 'react-dropzone';
 import { Category } from '@/types/category';
+import toast from 'react-hot-toast';
 
 interface DefaultInputsProps {
   categories?: Category[];
@@ -77,7 +78,20 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
     const { name, value, type } = e.target;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
 
-    setFormData((prev) => ({ ...prev, [name]: val }));
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+
+      setFormData((prev) => ({
+        ...prev,
+        [parent]: {
+          ...(prev[parent as keyof typeof prev] as object), // Keep existing nested fields
+          [child]: val, // Update only the specific field
+        },
+      }));
+    } else {
+      // Normal flat update for name, slug, etc.
+      setFormData((prev) => ({ ...prev, [name]: val }));
+    }
     if (errors[name])
       setErrors((prev) => {
         const newErr = { ...prev };
@@ -110,9 +124,28 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
     maxFiles: 1,
   });
 
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.name) newErrors.name = 'Product name is required';
+    if (!formData.categoryId) newErrors.categoryId = 'Please select a category';
+    if (!formData.description) newErrors.description = 'Please select a description';
+    if (!formData.brandId) newErrors.brandId = 'Please select a brand';
+    if (!formData.sku) newErrors.sku = 'SKU is required';
+    if (!formData.price || Number(formData.price) <= 0) newErrors.price = 'Valid price is required';
+    if (!imageFile) newErrors.image = 'Product image is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // if (!imageFile) return alert('Please upload an image');
+    setErrors({});
+    if (!validateForm()) {
+      const firstError = document.getElementById(Object.keys(errors)[0]);
+      firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     setLoading(true);
     try {
       const data = new FormData();
@@ -135,10 +168,26 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      router.push('/admin/product');
-      router.refresh();
+      toast.success('Product created successfully!');
+
+      // Wait a bit before navigating
+      setTimeout(() => {
+        router.push('/admin/product');
+        router.refresh();
+      }, 1500);
     } catch (error: any) {
-      setErrors(error.response?.data?.errors || { global: 'Something went wrong' });
+      // 2. Handle Server Errors
+      if (error.response && error.response.data) {
+        // If server returns field-specific errors { name: "Too short", sku: "Duplicate" }
+        if (error.response.data.errors) {
+          setErrors(error.response.data.errors);
+        } else {
+          // Fallback for general message from server
+          setErrors({ global: error.response.data.message || 'Server validation failed' });
+        }
+      } else {
+        setErrors({ global: 'Unable to connect to server. Please try again.' });
+      }
     } finally {
       setLoading(false);
     }
@@ -146,6 +195,11 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
 
   return (
     <form onSubmit={handleSubmit}>
+      {errors.global && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+          {errors.global}
+        </div>
+      )}
       <ComponentCard title="Add New Product">
         <div className="space-y-8">
           {/* Basic Info */}
@@ -174,6 +228,8 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
                   name="description"
                   value={formData.description}
                   onChange={(v) => setFormData((p) => ({ ...p, description: v }))}
+                  error={!!errors.description}
+                  hint={errors.description}
                 />
               </div>
               <div>
@@ -184,6 +240,8 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
                   options={categories.map((c) => ({ value: c.id.toString(), label: c.name }))}
                   value={formData.categoryId}
                   onChange={(v) => setFormData((p) => ({ ...p, categoryId: v }))}
+                  error={!!errors.categoryId}
+                  hint={errors.categoryId}
                 />
               </div>
               <div>
@@ -194,6 +252,8 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
                   options={brands.map((b) => ({ value: b.id.toString(), label: b.name }))}
                   value={formData.brandId}
                   onChange={(v) => setFormData((p) => ({ ...p, brandId: v }))}
+                  error={!!errors.brandId}
+                  hint={errors.brandId}
                 />
               </div>
             </div>
@@ -325,35 +385,6 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
                   placeholder="Image description"
                 />
               </div>
-              {/* Images Section */}
-              {/*<div className="pb-6">*/}
-              {/*  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">*/}
-              {/*    Product Images*/}
-              {/*  </h3>*/}
-              {/*  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">*/}
-              {/*    <div>*/}
-              {/*      <Label>Upload Image</Label>*/}
-              {/*      <FileInput onChange={handleFileChange} />*/}
-              {/*      {imageFile && (*/}
-              {/*        <p className="text-sm text-brand-500 mt-2">File: {imageFile.name}</p>*/}
-              {/*      )}*/}
-              {/*    </div>*/}
-              {/*    <div className="md:col-span-2">*/}
-              {/*      <Label>Drag & Drop Upload</Label>*/}
-              {/*      <div*/}
-              {/*        {...getRootProps()}*/}
-              {/*        className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition ${isDragActive ? 'border-brand-500 bg-gray-50' : 'border-gray-300'}`}*/}
-              {/*      >*/}
-              {/*        <input {...getInputProps()} />*/}
-              {/*        <p className="text-gray-500">*/}
-              {/*          {isDragActive*/}
-              {/*            ? 'Drop files here'*/}
-              {/*            : 'Drag & drop image here, or click to browse'}*/}
-              {/*        </p>*/}
-              {/*      </div>*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
 
               <div className="md:col-span-2">
                 <Label>Drag & Drop Upload</Label>
