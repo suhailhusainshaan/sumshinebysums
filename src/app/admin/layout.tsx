@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/context/admin/ThemeContext';
 import AdminLayoutClient from './AdminLayoutClient';
 import React from 'react';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 const outfit = Outfit({ subsets: ['latin'] });
 
@@ -26,7 +27,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     // since this is the "Root" for the Admin section
     <ThemeProvider>
       <SidebarProvider>
-        <AdminLayoutClient>{children}</AdminLayoutClient>
+        <AdminLayoutClient>
+          {children}
+
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+                zIndex: 9999,
+              },
+              success: {
+                duration: 3000,
+                icon: '✅',
+              },
+            }}
+            containerStyle={{
+              zIndex: 9999, // Also set on container
+            }}
+          />
+        </AdminLayoutClient>
       </SidebarProvider>
     </ThemeProvider>
   );

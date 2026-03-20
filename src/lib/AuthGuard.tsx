@@ -7,7 +7,18 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [authorized, setAuthorized] = useState(false);
 
+  function validExpiry(expiryTime: string | null) {
+    if (expiryTime && Date.now() >= parseInt(expiryTime)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/';
+      return;
+    }
+  }
   useEffect(() => {
+    const expiryTime = localStorage.getItem('expiry_time');
+    validExpiry(expiryTime);
+
     const rawUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     const user = rawUser ? JSON.parse(rawUser) : null;

@@ -27,8 +27,10 @@ export default function LoginPage() {
       const res = await authService.login({ username: email, password });
 
       if (res.status === 200) {
+        const expiryTime = Date.now() + res.data.tokenExpiry;
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
+        localStorage.setItem('expiry_time', expiryTime);
         const redirectUrl = res.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';
         router.push(redirectUrl);
       }
