@@ -11,6 +11,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     if (expiryTime && Date.now() >= parseInt(expiryTime)) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('expiry_time');
       window.location.href = '/';
       return;
     }

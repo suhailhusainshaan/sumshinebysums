@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import ListProducts from '@/app/admin/product/components/ListProducts';
 import Pagination from '@/components/tables/Pagination';
+import Button from '@/components/ui/button/Button';
 
 export default function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -21,7 +22,7 @@ export default function ProductManagement() {
         params: {
           page: currentPage,
           size: 10,
-          search: search,
+          searchTerm: search,
         },
       });
       setProducts(response.data.data.content);
@@ -45,35 +46,93 @@ export default function ProductManagement() {
     <div>
       <PageBreadcrumb pageTitle="Product Management" />
       <div className="space-y-6">
-        <ComponentCard title="All Products" hasButton={true} buttonText="Add Product">
-          <div className="p-5 border-b border-gray-100 dark:border-white/[0.05]">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="px-4 py-2 border rounded-lg dark:bg-white/[0.03] dark:border-white/[0.05]"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && fetchProducts()}
-            />
+        <div
+          className={`rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]`}
+        >
+          {/* Card Header */}
+          <div className="px-6 py-5 border-b border-gray-100 bg-gray-50/70 dark:border-gray-800/70 dark:bg-white/[0.02]">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+                  Catalog
+                </p>
+                <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
+                  All Products
+                </h3>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Manage your product inventory and updates.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M21 21l-4.35-4.35m1.85-5.4a7.25 7.25 0 11-14.5 0 7.25 7.25 0 0114.5 0z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="h-10 w-full min-w-[220px] rounded-full border border-gray-200 bg-gray-50 pl-9 pr-4 text-sm text-gray-700 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-white/[0.03] dark:text-gray-200"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && fetchProducts()}
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  buttonAction="/admin/product/add"
+                  className="flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03] dark:hover:text-gray-100"
+                >
+                  Add Product
+                </Button>
+              </div>
+            </div>
           </div>
 
-          {loading ? (
-            <p className="p-5">Loading products...</p>
-          ) : (
-            <>
-              <ListProducts products={products} />
+          {/* Card Body */}
+          <div className="p-4 sm:p-6">
+            <div className="space-y-6">
+              {loading ? (
+                <div className="space-y-4 animate-pulse">
+                  <div className="h-10 rounded-xl bg-gray-100 dark:bg-white/[0.05]" />
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <div
+                      key={`skeleton-row-${index}`}
+                      className="h-12 rounded-xl bg-gray-100 dark:bg-white/[0.05]"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <ListProducts products={products} />
 
-              {/* Simple Pagination Footer */}
-              <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
-              </div>
-            </>
-          )}
-        </ComponentCard>
+                  {/* Simple Pagination Footer */}
+                  <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

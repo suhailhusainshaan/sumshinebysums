@@ -11,7 +11,7 @@ const nextConfig = {
     },
   },
   reactStrictMode: true,
-  output: 'export',
+  //output: 'export',
   productionBrowserSourceMaps: true,
   distDir: process.env.DIST_DIR || '.next',
   typescript: {
