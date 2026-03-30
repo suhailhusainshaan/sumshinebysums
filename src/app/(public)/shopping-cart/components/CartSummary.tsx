@@ -31,7 +31,7 @@ const CartSummary = ({
   };
 
   return (
-    <div className="bg-card border border-border rounded-md p-6 sticky top-20">
+    <div className="bg-card border border-border rounded-md p-6 top-20">
       <h2 className="font-heading text-xl font-semibold text-foreground mb-6">Order Summary</h2>
 
       {/* Promo Code Input */}
@@ -68,12 +68,12 @@ const CartSummary = ({
       <div className="space-y-3 mb-6 pb-6 border-b border-border">
         <div className="flex items-center justify-between">
           <span className="text-foreground">Subtotal</span>
-          <span className="text-data font-medium text-foreground">${subtotal.toFixed(2)}</span>
+          <span className="text-data font-medium text-foreground">₹{subtotal.toFixed(2)}</span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-foreground">Shipping</span>
           <span className="text-data font-medium text-foreground">
-            {shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}
+            {shippingCost === 0 ? 'FREE' : `₹${shippingCost.toFixed(2)}`}
           </span>
         </div>
         {discount > 0 && (
@@ -87,7 +87,7 @@ const CartSummary = ({
       {/* Total */}
       <div className="flex items-center justify-between mb-6">
         <span className="font-heading text-lg font-semibold text-foreground">Total</span>
-        <span className="text-data text-2xl font-bold text-primary">${total.toFixed(2)}</span>
+        <span className="text-data text-2xl font-bold text-primary">₹{total.toFixed(2)}</span>
       </div>
 
       {/* Checkout Button */}
@@ -107,7 +107,7 @@ const CartSummary = ({
         </div>
         <div className="flex items-center gap-2 text-caption text-muted-foreground">
           <Icon name="TruckIcon" size={16} className="text-success" />
-          <span>Free shipping on orders over $50</span>
+          <span>Free shipping on orders over ₹50</span>
         </div>
         <div className="flex items-center gap-2 text-caption text-muted-foreground">
           <Icon name="ArrowPathIcon" size={16} className="text-success" />
