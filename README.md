@@ -1,12 +1,13 @@
-# Next.js
+# Sumshine Admin (Next.js)
 
-A modern Next.js 15 application built with TypeScript and Tailwind CSS.
+A modern Next.js 15 admin dashboard for managing products, variants, and catalog data. Built with TypeScript and Tailwind CSS.
 
-## 🚀 Features
+## 🚀 Highlights
 
-- **Next.js 15** - Latest version with improved performance and features
-- **React 19** - Latest React version with enhanced capabilities
-- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- Product management (list, view, edit)
+- Variant management UI (edit route, image grid, local uploads/removals)
+- Category-driven product editing
+- Polished admin UI (tinted headers, skeleton loaders, summary strips)
 
 ## 🛠️ Installation
 
@@ -23,31 +24,51 @@ A modern Next.js 15 application built with TypeScript and Tailwind CSS.
   # or
   yarn dev
   ```
-3. Open [http://localhost:4028](http://localhost:4028) with your browser to see the result.
+3. Open [http://localhost:4028](http://localhost:4028) to view the app.
+
+## 📍 Key Routes
+
+- Product list: `/admin/product`
+- Product view: `/admin/product/[id]`
+- Product edit: `/admin/product/[id]/edit`
+- Variant edit: `/admin/product/variant/[id]/edit`
 
 ## 📁 Project Structure
 
 ```
-nextjs/
+.
 ├── public/             # Static assets
 ├── src/
-│   ├── app/            # App router components
-│   │   ├── layout.tsx  # Root layout component
-│   │   └── page.tsx    # Main page component
+│   ├── app/            # App router pages (admin lives here)
 │   ├── components/     # Reusable UI components
-│   ├── styles/         # Global styles and Tailwind configuration
+│   ├── hooks/          # Custom hooks
+│   ├── icons/          # Icon sets
+│   ├── lib/            # Shared utilities (axios client, etc.)
+│   └── types/          # TypeScript types
+├── docs/               # API and project docs
 ├── next.config.mjs     # Next.js configuration
 ├── package.json        # Project dependencies and scripts
 ├── postcss.config.js   # PostCSS configuration
 └── tailwind.config.js  # Tailwind CSS configuration
-
 ```
 
-## 🧩 Page Editing
+## 🔌 API Base
 
-You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+The frontend expects APIs at:
+```
+http://localhost:8080/api
+```
 
-## 🎨 Styling
+## 📄 API Contract
+
+The backend contract for product + variant APIs is documented here:
+- `docs/product-admin-api.md`
+
+## 🧩 Editing Pages
+
+Admin pages live under `src/app/admin`. Edits hot-reload during development.
+
+## 🎨 Styling & UI
 
 This project uses Tailwind CSS for styling with the following features:
 - Utility-first approach for rapid development

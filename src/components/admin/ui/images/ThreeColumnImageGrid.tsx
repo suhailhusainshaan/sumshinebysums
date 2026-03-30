@@ -33,6 +33,66 @@ export default function ThreeColumnImageGrid() {
           height={192}
         />
       </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
+
+      <div>
+        <Image
+          src="/images/grid-image/image-06.png"
+          alt=" grid"
+          className="w-full border border-gray-200 rounded-xl dark:border-gray-800"
+          width={338}
+          height={192}
+        />
+      </div>
     </div>
   );
 }

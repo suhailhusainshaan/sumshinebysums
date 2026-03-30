@@ -2,6 +2,7 @@ import React from 'react';
 import { Product } from '@/types/product-list';
 import Image from 'next/image';
 import Badge from '@/components/ui/badge/Badge';
+import { useRouter } from 'next/navigation';
 
 interface ListProductsProps {
   products: Product[]; // Use the Product interface we defined earlier
@@ -17,27 +18,40 @@ const formatDate = (dateString: string) => {
 };
 
 const ListProducts = ({ products }: { products: any[] }) => {
-  console.log(process.env.NEXT_PUBLIC_IMG_URL + '/uploads/MUxSUy1fMTlfX0MuanBn');
+  const router = useRouter();
+
+  const handleEdit = (id: string) => {
+    if (id) {
+      router.push('/admin/product/' + id + '/edit/');
+    }
+  };
+
+  const handleView = (id: string) => {
+    if (id) {
+      router.push('/admin/product/' + id);
+    }
+  };
+
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <table className="w-full table-auto">
-            <thead className="border-b border-gray-100 dark:border-white/[0.05]">
+            <thead className="border-b border-gray-100 bg-gray-50/70 dark:border-white/[0.05] dark:bg-white/[0.02]">
               <tr>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Product
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Category
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Status
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Added On
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Actions
                 </th>
               </tr>
@@ -83,7 +97,20 @@ const ListProducts = ({ products }: { products: any[] }) => {
                       {formatDate(product.createdAt).date}
                     </td>
                     <td className="px-4 py-3 text-theme-sm">
-                      <button className="text-primary hover:underline">Edit</button>
+                      <div className="flex items-center gap-4">
+                        <button
+                          className="text-primary hover:underline"
+                          onClick={() => handleView(product.id)}
+                        >
+                          View
+                        </button>
+                        <button
+                          className="text-primary hover:underline"
+                          onClick={() => handleEdit(product.id)}
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
