@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import { useRouter } from 'next/navigation'; // For redirection
+import api from '@/lib/axios';
+import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -14,15 +16,57 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    setError('');
+
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+      setError('Please fill all required fields.');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const payload: Record<string, any> = {
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        gender: formData.gender || undefined,
+        mobile: formData.phone || undefined,
+      };
+
+      const res = await api.post('/auth/register', payload);
+
+      if (res.data?.status === 200) {
+        const expiryTime = Date.now() + (res.data.data?.tokenExpiry || 0);
+        localStorage.setItem('token', res.data.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.data.user));
+        localStorage.setItem('expiry_time', String(expiryTime));
+        toast.success(res.data?.message || 'Registration successful!');
+        const redirectUrl =
+          res.data?.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';
+        router.push(redirectUrl);
+      }
+    } catch (err: any) {
+      const msg = err.response?.data?.message || 'Registration failed. Please try again.';
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLoginClick = () => {
@@ -38,6 +82,11 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="rounded-md border border-error-200 bg-error-50 px-3 py-2 text-sm text-error-600">
+              {error}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
@@ -78,8 +127,9 @@ export default function RegisterPage() {
             onChange={(e) => handleChange('gender', e.target.value)}
           >
             <option value="">Select Gender</option>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Non-binary">Non-binary</option>
           </select>
 
           <input
@@ -100,9 +150,10 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="w-full bg-primary text-primary-foreground py-3 rounded-md font-medium hover:shadow-warm-md transition-luxe flex items-center justify-center space-x-2"
+            disabled={isLoading}
+            className="w-full bg-primary text-primary-foreground py-3 rounded-md font-medium hover:shadow-warm-md transition-luxe flex items-center justify-center space-x-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <span>Create Account</span>
+            <span>{isLoading ? 'Creating...' : 'Create Account'}</span>
             <Icon name="ArrowRightIcon" size={18} />
           </button>
         </form>
