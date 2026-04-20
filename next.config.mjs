@@ -1,6 +1,8 @@
 const isProd = process.env.NODE_ENV === 'production';
 /** @type {import('next').NextConfig} */
+// Updated by Codex
 
+// This file is updated by Codex or open AI
 const nextConfig = {
   turbopack: {
     rules: {
