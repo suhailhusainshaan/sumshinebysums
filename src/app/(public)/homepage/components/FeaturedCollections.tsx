@@ -2,115 +2,104 @@ import React from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
+import { HomepageFeaturedProduct } from '../types';
 
-interface Collection {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  alt: string;
-  category: string;
-  itemCount: number;
+interface FeaturedProductsProps {
+  products: HomepageFeaturedProduct[];
 }
 
-const FeaturedCollections = () => {
-  const collections: Collection[] = [
-    {
-      id: '1',
-      name: 'Necklaces',
-      description: 'Statement pieces that elevate any outfit',
-      image: 'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg',
-      alt: 'Gold layered necklace with delicate chains displayed on white fabric background',
-      category: 'necklaces',
-      itemCount: 156,
-    },
-    {
-      id: '2',
-      name: 'Earrings',
-      description: 'From subtle studs to dramatic drops',
-      image: 'https://images.pexels.com/photos/3532540/pexels-photo-3532540.jpeg',
-      alt: 'Rose gold chandelier earrings with crystal details on velvet display',
-      category: 'earrings',
-      itemCount: 203,
-    },
-    {
-      id: '3',
-      name: 'Bracelets',
-      description: 'Elegant wrist adornments for every occasion',
-      image: 'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg',
-      alt: 'Silver charm bracelet with multiple decorative pendants on marble surface',
-      category: 'bracelets',
-      itemCount: 128,
-    },
-    {
-      id: '4',
-      name: 'Rings',
-      description: 'Timeless designs that make a statement',
-      image: 'https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg',
-      alt: 'Gold stackable rings with gemstone accents arranged on white background',
-      category: 'rings',
-      itemCount: 187,
-    },
-    {
-      id: '5',
-      name: 'Sets',
-      description: 'Perfectly coordinated jewelry collections',
-      image: 'https://images.pexels.com/photos/1454171/pexels-photo-1454171.jpeg',
-      alt: 'Complete jewelry set with matching necklace earrings and bracelet in gold finish',
-      category: 'sets',
-      itemCount: 94,
-    },
-  ];
+const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+
+const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
+  // console.log('FeaturedCollections rendered with products:', products);
+  const isEmpty = products && Array.isArray(products) ? products.length === 0 : true;
 
   return (
-    <section className="py-16 lg:py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-4">
-            Featured Collections
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore our curated selection of jewelry categories, each designed to complement your
-            unique style
-          </p>
+    <section className="bg-muted/30 py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 flex items-center justify-between">
+          <div>
+            <h2 className="mb-2 font-heading text-3xl font-bold text-foreground lg:text-4xl">
+              Featured Products
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Explore our curated selection of featured jewelry, each designed to complement your
+              unique style
+            </p>
+          </div>
+          <Link
+            href="/product-listing"
+            className="hidden items-center space-x-2 font-medium text-primary transition-luxe hover:text-accent sm:flex"
+          >
+            <span>View All</span>
+            <Icon name="ArrowRightIcon" size={20} />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {collections.map((collection) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {isEmpty &&
+            [...Array(4)].map((_, index) => (
+              <div
+                key={`featured-product-skeleton-${index}`}
+                className="overflow-hidden rounded-lg border border-border bg-card"
+              >
+                <div className="h-80 animate-pulse bg-muted" />
+                <div className="space-y-3 p-4">
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-muted" />
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
+                  <div className="h-5 w-1/2 animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+
+          {Array.isArray(products) && products.map((product) => (
             <Link
-              key={collection.id}
-              href={`/product-listing?category=${collection.category}`}
-              className="group relative overflow-hidden rounded-lg bg-card border border-border hover:shadow-warm-lg transition-luxe"
+              key={product.id}
+              href={`/product-detail?id=${product.id}`}
+              className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
             >
-              <div className="relative h-80 overflow-hidden">
+              <div className="relative h-80 overflow-hidden bg-muted">
                 <AppImage
-                  src={collection.image}
-                  alt={collection.alt}
+                  src={
+                    product.thumbnailUrl
+                      ? IMG_BASE_URL + product.thumbnailUrl
+                      : '/assets/images/no_image.png'
+                  }
+                  alt={product.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-spring duration-500"
+                  className="object-cover transition-spring duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                {product.featured && (
+                  <div className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-caption font-medium text-accent-foreground">
+                    Featured
+                  </div>
+                )}
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-heading text-2xl font-semibold text-foreground">
-                    {collection.name}
+              <div className="p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="line-clamp-1 font-medium text-foreground">
+                    {product.name}
                   </h3>
                   <Icon
                     name="ArrowRightIcon"
-                    size={20}
-                    className="text-primary group-hover:translate-x-1 transition-spring"
+                    size={18}
+                    className="text-primary transition-spring group-hover:translate-x-1"
                   />
                 </div>
-                <p className="text-muted-foreground mb-2">{collection.description}</p>
-                <p className="text-caption text-primary font-medium">
-                  {collection.itemCount} items
+                <p className="text-data font-semibold text-primary text-lg">
+                  ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
                 </p>
               </div>
             </Link>
           ))}
         </div>
+
+        {isEmpty && (
+          <div className="mt-8 text-center text-muted-foreground">
+            Featured products will appear here.
+          </div>
+        )}
       </div>
     </section>
   );
