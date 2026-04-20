@@ -7,9 +7,10 @@ import api from '@/lib/axios';
 import ListProducts from '@/app/admin/product/components/ListProducts';
 import Pagination from '@/components/tables/Pagination';
 import Button from '@/components/ui/button/Button';
+import toast from 'react-hot-toast';
 
 export default function ProductManagement() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -40,6 +41,70 @@ export default function ProductManagement() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleDelete = async (id: string) => {
+    const ok = window.confirm('Are you sure you want to delete this product?');
+    if (!ok) return;
+    try {
+      const response = await api.delete(`/admin/products/${id}`);
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Product deleted');
+        fetchProducts();
+      } else {
+        toast.error(response.data?.message || 'Unable to delete product');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Unable to delete product');
+    }
+  };
+
+  const handleToggleFeatured = async (id: string, isFeatured: boolean) => {
+    try {
+      const response = await api.patch(`/admin/products/${id}/featured`, { isFeatured });
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Featured status updated');
+        setProducts((prev) =>
+          prev.map((p) => (p.id.toString() === id ? { ...p, featured: isFeatured } : p))
+        );
+      } else {
+        toast.error(response.data?.message || 'Unable to update featured status');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Unable to update featured status');
+    }
+  };
+
+  const handleToggleActive = async (id: string, isActive: boolean) => {
+    try {
+      const response = await api.patch(`/admin/products/${id}/active`, { isActive });
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Active status updated');
+        setProducts((prev) =>
+          prev.map((p) => (p.id.toString() === id ? { ...p, active: isActive } : p))
+        );
+      } else {
+        toast.error(response.data?.message || 'Unable to update active status');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Unable to update active status');
+    }
+  };
+
+  const handleTogglePublished = async (id: string, isPublished: boolean) => {
+    try {
+      const response = await api.patch(`/admin/products/${id}/published`, { isPublished });
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Published status updated');
+        setProducts((prev) =>
+          prev.map((p) => (p.id.toString() === id ? { ...p, published: isPublished } : p))
+        );
+      } else {
+        toast.error(response.data?.message || 'Unable to update published status');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Unable to update published status');
+    }
   };
 
   return (
@@ -118,7 +183,7 @@ export default function ProductManagement() {
                 </div>
               ) : (
                 <>
-                  <ListProducts products={products} />
+                  <ListProducts products={products} onDelete={handleDelete} onToggleFeatured={handleToggleFeatured} onToggleActive={handleToggleActive} onTogglePublished={handleTogglePublished} />
 
                   {/* Simple Pagination Footer */}
                   <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">

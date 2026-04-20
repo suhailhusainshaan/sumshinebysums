@@ -133,20 +133,6 @@ export default function EditProductPage() {
     return [...variants].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   }, [variants]);
 
-  const storeVariantForEdit = (variant: Variant) => {
-    try {
-      sessionStorage.setItem(
-        `variant:${variant.id}`,
-        JSON.stringify({
-          ...variant,
-          images: variant.images || [],
-        })
-      );
-    } catch (error) {
-      console.warn('Unable to store variant locally', error);
-    }
-  };
-
   useEffect(() => {
     if (saveStatus !== 'saved') return;
     const timer = setTimeout(() => setSaveStatus('idle'), 2500);
@@ -275,8 +261,40 @@ export default function EditProductPage() {
         },
       };
 
-      await api.put(`/admin/products/${productId}`, payload);
-      toast.success('Product updated successfully!');
+      const response = await api.put(`/admin/products/${productId}`, payload);
+      const updated = response.data?.data;
+      if (updated) {
+        setFormData((prev) => ({
+          ...prev,
+          name: updated.name ?? prev.name,
+          slug: updated.slug ?? prev.slug,
+          description: updated.description ?? prev.description,
+          categoryId: updated.category?.id ? String(updated.category.id) : prev.categoryId,
+          brandId: updated.brand?.id ? String(updated.brand.id) : prev.brandId,
+          published: Boolean(updated.published ?? prev.published),
+          displayOrder:
+            updated.displayOrder !== null && updated.displayOrder !== undefined
+              ? String(updated.displayOrder)
+              : prev.displayOrder,
+          features: {
+            material: updated.features?.material ?? prev.features.material,
+            finish: updated.features?.finish ?? prev.features.finish,
+            hypoallergenic:
+              updated.features?.hypoallergenic ?? prev.features.hypoallergenic,
+          },
+          specifications: {
+            material: updated.specifications?.material ?? prev.specifications.material,
+            purity: updated.specifications?.purity ?? prev.specifications.purity,
+            stone_type: updated.specifications?.stone_type ?? prev.specifications.stone_type,
+            hypoallergenic:
+              updated.specifications?.hypoallergenic ?? prev.specifications.hypoallergenic,
+          },
+        }));
+        if (Array.isArray(updated.variants)) {
+          setVariants(updated.variants);
+        }
+      }
+      toast.success(response.data?.message || 'Product updated successfully!');
       setSaveStatus('saved');
       router.refresh();
     } catch (error: any) {
@@ -338,7 +356,6 @@ export default function EditProductPage() {
                 <Link
                   key={variant.id}
                   href={`/admin/product/variant/${variant.id}/edit`}
-                  onClick={() => storeVariantForEdit(variant)}
                   className="group rounded-xl border border-gray-200 bg-white p-4 shadow-theme-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]"
                 >
                   <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
@@ -478,118 +495,118 @@ export default function EditProductPage() {
                   </div>
                 </div>
 
-              <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold">Visibility & Ordering</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                  <div>
-                    <Label htmlFor="displayOrder">Display Order</Label>
-                    <Input
-                      id="displayOrder"
-                      name="displayOrder"
-                      type="number"
-                      value={formData.displayOrder}
-                      onChange={handleChange}
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className="flex items-center gap-3 pt-7">
-                    <input
-                      type="checkbox"
-                      id="published"
-                      name="published"
-                      checked={formData.published}
-                      onChange={handleChange}
-                      className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                    />
-                    <Label htmlFor="published" className="mb-0">
-                      Published
-                    </Label>
+                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                  <h3 className="mb-4 text-lg font-semibold">Visibility & Ordering</h3>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div>
+                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Input
+                        id="displayOrder"
+                        name="displayOrder"
+                        type="number"
+                        value={formData.displayOrder}
+                        onChange={handleChange}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 pt-7">
+                      <input
+                        type="checkbox"
+                        id="published"
+                        name="published"
+                        checked={formData.published}
+                        onChange={handleChange}
+                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                      />
+                      <Label htmlFor="published" className="mb-0">
+                        Published
+                      </Label>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold">Features</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                  <div>
-                    <Label htmlFor="features.material">Material</Label>
-                    <Input
-                      id="features.material"
-                      name="features.material"
-                      value={formData.features.material}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="features.finish">Finish</Label>
-                    <Input
-                      id="features.finish"
-                      name="features.finish"
-                      value={formData.features.finish}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="flex items-center gap-3 pt-7">
-                    <input
-                      type="checkbox"
-                      id="features.hypoallergenic"
-                      name="features.hypoallergenic"
-                      checked={formData.features.hypoallergenic}
-                      onChange={handleChange}
-                      className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                    />
-                    <Label htmlFor="features.hypoallergenic" className="mb-0">
-                      Hypoallergenic
-                    </Label>
+                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                  <h3 className="mb-4 text-lg font-semibold">Features</h3>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+                    <div>
+                      <Label htmlFor="features.material">Material</Label>
+                      <Input
+                        id="features.material"
+                        name="features.material"
+                        value={formData.features.material}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="features.finish">Finish</Label>
+                      <Input
+                        id="features.finish"
+                        name="features.finish"
+                        value={formData.features.finish}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 pt-7">
+                      <input
+                        type="checkbox"
+                        id="features.hypoallergenic"
+                        name="features.hypoallergenic"
+                        checked={formData.features.hypoallergenic}
+                        onChange={handleChange}
+                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                      />
+                      <Label htmlFor="features.hypoallergenic" className="mb-0">
+                        Hypoallergenic
+                      </Label>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold">Specifications</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                  <div>
-                    <Label htmlFor="specifications.material">Material</Label>
-                    <Input
-                      id="specifications.material"
-                      name="specifications.material"
-                      value={formData.specifications.material}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="specifications.purity">Purity</Label>
-                    <Input
-                      id="specifications.purity"
-                      name="specifications.purity"
-                      value={formData.specifications.purity}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="specifications.stone_type">Stone Type</Label>
-                    <Input
-                      id="specifications.stone_type"
-                      name="specifications.stone_type"
-                      value={formData.specifications.stone_type}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="flex items-center gap-3 pt-7">
-                    <input
-                      type="checkbox"
-                      id="specifications.hypoallergenic"
-                      name="specifications.hypoallergenic"
-                      checked={formData.specifications.hypoallergenic}
-                      onChange={handleChange}
-                      className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                    />
-                    <Label htmlFor="specifications.hypoallergenic" className="mb-0">
-                      Hypoallergenic
-                    </Label>
+                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                  <h3 className="mb-4 text-lg font-semibold">Specifications</h3>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+                    <div>
+                      <Label htmlFor="specifications.material">Material</Label>
+                      <Input
+                        id="specifications.material"
+                        name="specifications.material"
+                        value={formData.specifications.material}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="specifications.purity">Purity</Label>
+                      <Input
+                        id="specifications.purity"
+                        name="specifications.purity"
+                        value={formData.specifications.purity}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="specifications.stone_type">Stone Type</Label>
+                      <Input
+                        id="specifications.stone_type"
+                        name="specifications.stone_type"
+                        value={formData.specifications.stone_type}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 pt-7">
+                      <input
+                        type="checkbox"
+                        id="specifications.hypoallergenic"
+                        name="specifications.hypoallergenic"
+                        checked={formData.specifications.hypoallergenic}
+                        onChange={handleChange}
+                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                      />
+                      <Label htmlFor="specifications.hypoallergenic" className="mb-0">
+                        Hypoallergenic
+                      </Label>
+                    </div>
                   </div>
                 </div>
-              </div>
 
                 <div className="flex flex-wrap justify-end gap-4">
                   <button

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
 
 interface Review {
@@ -17,6 +17,8 @@ interface ProductTabsProps {
   careInstructions: string[];
   reviews: Review[];
   shippingInfo: string;
+  specifications: Record<string, unknown>;
+  features: Record<string, unknown>;
 }
 
 const ProductTabs = ({
@@ -24,17 +26,32 @@ const ProductTabs = ({
   careInstructions,
   reviews,
   shippingInfo,
+  specifications,
+  features,
 }: ProductTabsProps) => {
+  const tabs: {
+    id: 'description' | 'care' | 'reviews' | 'shipping';
+    label: string;
+    icon: string;
+  }[] = [
+    { id: 'description', label: 'Description', icon: 'DocumentTextIcon' },
+    { id: 'care', label: 'Details', icon: 'SparklesIcon' },
+    { id: 'reviews', label: `Reviews (${reviews.length})`, icon: 'StarIcon' },
+    { id: 'shipping', label: 'Shipping', icon: 'TruckIcon' },
+  ];
+
   const [activeTab, setActiveTab] = useState<'description' | 'care' | 'reviews' | 'shipping'>(
     'description'
   );
 
-  const tabs = [
-    { id: 'description' as const, label: 'Description', icon: 'DocumentTextIcon' },
-    { id: 'care' as const, label: 'Care Instructions', icon: 'SparklesIcon' },
-    { id: 'reviews' as const, label: `Reviews (${reviews.length})`, icon: 'StarIcon' },
-    { id: 'shipping' as const, label: 'Shipping', icon: 'TruckIcon' },
-  ];
+  const specEntries = useMemo(
+    () =>
+      Object.entries({ ...features, ...specifications }).filter(
+        ([, value]) =>
+          typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+      ),
+    [features, specifications]
+  );
 
   const averageRating =
     reviews.length > 0
@@ -43,62 +60,80 @@ const ProductTabs = ({
 
   return (
     <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="border-b border-border overflow-x-auto">
-        <div className="flex space-x-1 min-w-max">
+      <div className="overflow-x-auto border-b border-border">
+        <div className="flex min-w-max space-x-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-4 font-medium transition-luxe border-b-2 ${
+              className={`flex items-center space-x-2 border-b-2 px-6 py-4 font-medium transition-luxe ${
                 activeTab === tab.id
                   ? 'border-primary text-primary'
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon name={tab.icon as any} size={20} />
+              <Icon name={tab.icon} size={20} />
               <span>{tab.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Tab Content */}
       <div className="py-6">
         {activeTab === 'description' && (
           <div className="prose prose-lg max-w-none">
-            <p className="text-foreground leading-relaxed">{description}</p>
+            <p className="whitespace-pre-line leading-relaxed text-foreground">{description}</p>
           </div>
         )}
 
         {activeTab === 'care' && (
-          <div className="space-y-4">
-            <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
-              Care Instructions
-            </h3>
-            <ul className="space-y-3">
-              {careInstructions.map((instruction, index) => (
-                <li key={index} className="flex items-start space-x-3">
-                  <Icon
-                    name="CheckCircleIcon"
-                    size={20}
-                    variant="solid"
-                    className="text-success flex-shrink-0 mt-1"
-                  />
-                  <span className="text-foreground">{instruction}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="space-y-6">
+            {careInstructions.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="mb-4 font-heading text-xl font-semibold text-foreground">
+                  Care Instructions
+                </h3>
+                <ul className="space-y-3">
+                  {careInstructions.map((instruction, index) => (
+                    <li key={index} className="flex items-start space-x-3">
+                      <Icon
+                        name="CheckCircleIcon"
+                        size={20}
+                        variant="solid"
+                        className="mt-1 flex-shrink-0 text-success"
+                      />
+                      <span className="text-foreground">{instruction}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {specEntries.length > 0 && (
+              <div className="grid gap-4 md:grid-cols-2">
+                {specEntries.map(([key, value]) => (
+                  <div key={key} className="rounded-lg bg-muted p-4">
+                    <p className="mb-1 text-caption uppercase tracking-wide text-muted-foreground">
+                      {key}
+                    </p>
+                    <p className="font-medium text-foreground">{String(value)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {careInstructions.length === 0 && specEntries.length === 0 && (
+              <p className="text-muted-foreground">No additional product details available.</p>
+            )}
           </div>
         )}
 
         {activeTab === 'reviews' && (
           <div className="space-y-6">
-            {/* Review Summary */}
-            <div className="bg-muted p-6 rounded-lg">
-              <div className="flex items-center justify-between mb-4">
+            <div className="rounded-lg bg-muted p-6">
+              <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <div className="flex items-center space-x-2 mb-2">
+                  <div className="mb-2 flex items-center space-x-2">
                     <span className="text-data text-4xl font-semibold text-foreground">
                       {averageRating.toFixed(1)}
                     </span>
@@ -122,71 +157,60 @@ const ProductTabs = ({
                     Based on {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
                   </p>
                 </div>
-                <button className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:scale-102 transition-luxe">
-                  Write a Review
-                </button>
               </div>
             </div>
 
-            {/* Individual Reviews */}
-            <div className="space-y-6">
-              {reviews.map((review) => (
-                <div key={review.id} className="border-b border-border pb-6 last:border-0">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-medium text-foreground">{review.author}</span>
-                        {review.verified && (
-                          <span className="flex items-center space-x-1 text-caption text-success">
-                            <Icon name="CheckBadgeIcon" size={16} variant="solid" />
-                            <span>Verified Purchase</span>
-                          </span>
-                        )}
+            {reviews.length === 0 ? (
+              <p className="text-muted-foreground">No reviews available for this product yet.</p>
+            ) : (
+              <div className="space-y-6">
+                {reviews.map((review) => (
+                  <div key={review.id} className="border-b border-border pb-6 last:border-0">
+                    <div className="mb-3 flex items-start justify-between">
+                      <div>
+                        <div className="mb-1 flex items-center space-x-2">
+                          <span className="font-medium text-foreground">{review.author}</span>
+                          {review.verified && (
+                            <span className="flex items-center space-x-1 text-caption text-success">
+                              <Icon name="CheckBadgeIcon" size={16} variant="solid" />
+                              <span>Verified Purchase</span>
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-caption text-muted-foreground">{review.date}</p>
                       </div>
-                      <p className="text-caption text-muted-foreground">{review.date}</p>
                     </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, index) => (
-                        <Icon
-                          key={index}
-                          name="StarIcon"
-                          size={16}
-                          variant={index < review.rating ? 'solid' : 'outline'}
-                          className={
-                            index < review.rating ? 'text-warning' : 'text-muted-foreground'
-                          }
-                        />
-                      ))}
-                    </div>
+                    <p className="text-foreground">{review.comment}</p>
                   </div>
-                  <p className="text-foreground">{review.comment}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {activeTab === 'shipping' && (
           <div className="space-y-6">
             <div className="prose prose-lg max-w-none">
-              <p className="text-foreground leading-relaxed">{shippingInfo}</p>
+              <p className="leading-relaxed text-foreground">{shippingInfo}</p>
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-muted p-6 rounded-lg">
-                <div className="flex items-center space-x-3 mb-3">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg bg-muted p-6">
+                <div className="mb-3 flex items-center space-x-3">
                   <Icon name="TruckIcon" size={24} className="text-primary" />
                   <h4 className="font-medium text-foreground">Standard Shipping</h4>
                 </div>
                 <p className="text-caption text-muted-foreground">
-                  Free on orders over $50 • 5-7 business days
+                  Shipping cost and ETA depend on delivery address and checkout selection.
                 </p>
               </div>
-              <div className="bg-muted p-6 rounded-lg">
-                <div className="flex items-center space-x-3 mb-3">
+              <div className="rounded-lg bg-muted p-6">
+                <div className="mb-3 flex items-center space-x-3">
                   <Icon name="BoltIcon" size={24} className="text-primary" />
                   <h4 className="font-medium text-foreground">Express Shipping</h4>
                 </div>
-                <p className="text-caption text-muted-foreground">$12.99 • 2-3 business days</p>
+                <p className="text-caption text-muted-foreground">
+                  Faster delivery options may appear during checkout when available.
+                </p>
               </div>
             </div>
           </div>

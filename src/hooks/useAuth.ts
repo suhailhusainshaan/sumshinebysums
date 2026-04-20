@@ -1,18 +1,21 @@
 // hooks/useAuth.ts
 import { useState, useEffect } from 'react';
+import { authService } from '@/service/auth.service';
 
 // Define the shape of your user object (customize as needed)
 interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  avatar: string;
+  id: number | string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  gender?: string;
+  avatar?: string | null;
   email?: string;
-  roleName: string;
-  roleCode: string;
-  theme: string;
-  userName: string;
+  roleName?: string;
+  role?: string;
+  roleCode?: string;
+  theme?: string | null;
+  userName?: string;
 }
 
 interface UseAuthReturn {
@@ -29,16 +32,36 @@ export default function useAuth(): UseAuthReturn {
 
   useEffect(() => {
     // This code runs only on the client after the first render
-    try {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+    let isMounted = true;
+    const fetchUser = async () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setIsLoading(false);
+          return;
+        }
+
+        const res = await authService.me();
+        if (isMounted && res?.status === 200 && res?.data) {
+          setUser(res.data);
+          localStorage.setItem('user', JSON.stringify(res.data));
+        }
+      } catch (error) {
+        console.error('Failed to fetch current user', error);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to read user from localStorage', error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    fetchUser();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = (userData: User) => {

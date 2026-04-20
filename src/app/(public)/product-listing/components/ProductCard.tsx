@@ -7,15 +7,15 @@ import Icon from '@/components/ui/AppIcon';
 
 interface ProductCardProps {
   id: string;
+  slug: string;
   name: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   image: string;
   alt: string;
-  rating: number;
-  reviewCount: number;
-  category: string;
-  isNew?: boolean;
+  category?: string;
+  brand?: string;
+  isFeatured?: boolean;
   onQuickAdd: (productId: string) => void;
   onWishlistToggle: (productId: string) => void;
   isInWishlist: boolean;
@@ -23,15 +23,15 @@ interface ProductCardProps {
 
 const ProductCard = ({
   id,
+  slug,
   name,
   price,
   originalPrice,
   image,
   alt,
-  rating,
-  reviewCount,
   category,
-  isNew = false,
+  brand,
+  isFeatured = false,
   onQuickAdd,
   onWishlistToggle,
   isInWishlist,
@@ -50,37 +50,34 @@ const ProductCard = ({
   };
 
   return (
-    <div className="group relative bg-card rounded-lg overflow-hidden shadow-warm hover:shadow-warm-md transition-luxe">
+    <div className="group relative overflow-hidden rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md">
       <Link href={`/product-detail?id=${id}`} className="block">
-        {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-muted">
           {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
           <AppImage
             src={image}
             alt={alt}
-            className="w-full h-full object-cover group-hover:scale-105 transition-luxe"
-            width={400}
-            height={400}
-            onClick={() => setImageLoaded(true)}
+            className="h-full w-full object-cover transition-luxe group-hover:scale-105"
+            // width={400}
+            // height={400}
+            onLoad={() => setImageLoaded(true)}
           />
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {isNew && (
-              <span className="bg-accent text-accent-foreground text-xs font-medium px-3 py-1 rounded-full">
-                New
+          <div className="absolute left-3 top-3 flex flex-col gap-2">
+            {isFeatured && (
+              <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
+                Featured
               </span>
             )}
             {discount > 0 && (
-              <span className="bg-error text-error-foreground text-xs font-medium px-3 py-1 rounded-full">
+              <span className="rounded-full bg-error px-3 py-1 text-xs font-medium text-error-foreground">
                 -{discount}%
               </span>
             )}
           </div>
 
-          {/* Wishlist Button */}
           <button
             onClick={handleWishlistToggle}
-            className="absolute top-3 right-3 p-2 bg-card rounded-full shadow-warm opacity-0 group-hover:opacity-100 transition-luxe hover:scale-110"
+            className="absolute right-3 top-3 rounded-full bg-card p-2 shadow-warm opacity-0 transition-luxe hover:scale-110 group-hover:opacity-100"
             aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
           >
             <Icon
@@ -92,29 +89,13 @@ const ProductCard = ({
           </button>
         </div>
 
-        {/* Product Info */}
         <div className="p-4">
-          <p className="text-caption text-muted-foreground mb-1">{category}</p>
-          <p className="font-medium text-foreground mb-2 line-clamp-3 min-h-[3rem]">{name}</p>
+          <p className="mb-1 text-caption text-muted-foreground">
+            {[brand, category].filter(Boolean).join(' • ') || slug}
+          </p>
+          <p className="mb-2 line-clamp-3 min-h-[3rem] font-medium text-foreground">{name}</p>
 
-          {/* Rating */}
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, index) => (
-                <Icon
-                  key={index}
-                  name="StarIcon"
-                  size={14}
-                  variant={index < Math.floor(rating) ? 'solid' : 'outline'}
-                  className={index < Math.floor(rating) ? 'text-warning' : 'text-muted-foreground'}
-                />
-              ))}
-            </div>
-            <span className="text-caption text-muted-foreground">({reviewCount})</span>
-          </div>
-
-          {/* Price */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4 flex items-center gap-2">
             <span className="text-data text-lg font-semibold text-primary">
               ${price.toFixed(2)}
             </span>
@@ -127,11 +108,10 @@ const ProductCard = ({
         </div>
       </Link>
 
-      {/* Quick Add Button */}
       <div className="px-4 pb-4">
         <button
           onClick={handleQuickAdd}
-          className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 font-medium text-primary-foreground transition-luxe hover:scale-102 hover:shadow-warm-md"
         >
           <Icon name="ShoppingBagIcon" size={18} />
           Quick Add

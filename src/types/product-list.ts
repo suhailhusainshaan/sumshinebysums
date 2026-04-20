@@ -20,6 +20,8 @@ export interface Product {
   category: Category;
   images: ProductImage[];
   published: boolean;
+  featured?: boolean;
+  active?: boolean;
   features: Record<string, any>;
   specifications: Record<string, any>;
 }

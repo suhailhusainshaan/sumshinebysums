@@ -2,18 +2,20 @@
 
 import React from 'react';
 import ProductCard from './ProductCard';
+import { ProductListingVariant } from '../types';
 
 interface Product {
   id: string;
+  slug: string;
   name: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   image: string;
   alt: string;
-  rating: number;
-  reviewCount: number;
-  category: string;
-  isNew?: boolean;
+  category?: string;
+  brand?: string;
+  isFeatured?: boolean;
+  variants: ProductListingVariant[];
 }
 
 interface ProductGridProps {
@@ -43,13 +45,13 @@ const ProductGrid = ({
         }`}
       >
         {[...Array(8)].map((_, index) => (
-          <div key={index} className="bg-card rounded-lg overflow-hidden shadow-warm animate-pulse">
+          <div key={index} className="animate-pulse overflow-hidden rounded-lg bg-card shadow-warm">
             <div className="aspect-square bg-muted" />
-            <div className="p-4 space-y-3">
-              <div className="h-4 bg-muted rounded w-1/3" />
-              <div className="h-5 bg-muted rounded w-3/4" />
-              <div className="h-4 bg-muted rounded w-1/2" />
-              <div className="h-10 bg-muted rounded" />
+            <div className="space-y-3 p-4">
+              <div className="h-4 w-1/3 rounded bg-muted" />
+              <div className="h-5 w-3/4 rounded bg-muted" />
+              <div className="h-4 w-1/2 rounded bg-muted" />
+              <div className="h-10 rounded bg-muted" />
             </div>
           </div>
         ))}
@@ -59,10 +61,10 @@ const ProductGrid = ({
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-16">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-muted rounded-full mb-6">
+      <div className="py-16 text-center">
+        <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-muted">
           <svg
-            className="w-10 h-10 text-muted-foreground"
+            className="h-10 w-10 text-muted-foreground"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -75,10 +77,10 @@ const ProductGrid = ({
             />
           </svg>
         </div>
-        <h3 className="font-heading text-2xl font-semibold text-foreground mb-2">
+        <h3 className="mb-2 font-heading text-2xl font-semibold text-foreground">
           No products found
         </h3>
-        <p className="text-muted-foreground mb-6">Try adjusting your filters or search criteria</p>
+        <p className="text-muted-foreground">Try adjusting your filters or search criteria</p>
       </div>
     );
   }

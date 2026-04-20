@@ -5,6 +5,8 @@ import Badge from '@/components/ui/badge/Badge';
 
 interface BasicTableOneProps {
   categories: Category[];
+  onEdit?: (category: Category) => void;
+  onDelete?: (categoryId: number) => void;
 }
 
 const formatDate = (dateString: string) => {
@@ -16,27 +18,27 @@ const formatDate = (dateString: string) => {
   };
 };
 
-const ListCategories = ({ categories }: BasicTableOneProps) => {
+const ListCategories = ({ categories, onEdit, onDelete }: BasicTableOneProps) => {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <table className="w-full table-auto">
-            <thead className="border-b border-gray-100 dark:border-white/[0.05]">
+            <thead className="border-b border-gray-100 bg-gray-50/70 dark:border-white/[0.05] dark:bg-white/[0.02]">
               <tr>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Name
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Slug
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Status
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Added On
                 </th>
-                <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Actions
                 </th>
               </tr>
@@ -79,7 +81,20 @@ const ListCategories = ({ categories }: BasicTableOneProps) => {
                     {formatDate(category.createdAt).date}
                   </td>
                   <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <button className="hover:text-primary">Edit</button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        className="text-primary hover:underline"
+                        onClick={() => onEdit?.(category)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="text-error-500 hover:underline"
+                        onClick={() => onDelete?.(category.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

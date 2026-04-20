@@ -9,10 +9,9 @@ interface RelatedProduct {
   id: string;
   name: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   image: string;
   alt: string;
-  rating: number;
   category: string;
 }
 
@@ -25,33 +24,34 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 300;
-      const newScrollLeft =
-        scrollContainerRef.current.scrollLeft +
-        (direction === 'left' ? -scrollAmount : scrollAmount);
-      scrollContainerRef.current.scrollTo({
-        left: newScrollLeft,
-        behavior: 'smooth',
-      });
+    if (!scrollContainerRef.current) {
+      return;
     }
+
+    const scrollAmount = 300;
+    scrollContainerRef.current.scrollTo({
+      left:
+        scrollContainerRef.current.scrollLeft +
+        (direction === 'left' ? -scrollAmount : scrollAmount),
+      behavior: 'smooth',
+    });
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-heading text-2xl lg:text-3xl font-semibold text-foreground">{title}</h2>
+        <h2 className="font-heading text-2xl font-semibold text-foreground lg:text-3xl">{title}</h2>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => scroll('left')}
-            className="p-2 bg-muted hover:bg-primary hover:text-primary-foreground rounded-full transition-luxe"
+            className="rounded-full bg-muted p-2 transition-luxe hover:bg-primary hover:text-primary-foreground"
             aria-label="Scroll left"
           >
             <Icon name="ChevronLeftIcon" size={20} />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="p-2 bg-muted hover:bg-primary hover:text-primary-foreground rounded-full transition-luxe"
+            className="rounded-full bg-muted p-2 transition-luxe hover:bg-primary hover:text-primary-foreground"
             aria-label="Scroll right"
           >
             <Icon name="ChevronRightIcon" size={20} />
@@ -61,7 +61,7 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
 
       <div
         ref={scrollContainerRef}
-        className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+        className="flex space-x-4 overflow-x-auto scroll-smooth pb-4 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {products.map((product) => {
@@ -73,43 +73,25 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
             <Link
               key={product.id}
               href={`/product-detail?id=${product.id}`}
-              className="flex-shrink-0 w-64 bg-card rounded-lg shadow-warm hover:shadow-warm-md transition-luxe group"
+              className="group w-64 flex-shrink-0 rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md"
             >
               <div className="relative aspect-square overflow-hidden rounded-t-lg">
                 <AppImage
                   src={product.image}
                   alt={product.alt}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 {discount > 0 && (
-                  <div className="absolute top-3 right-3 bg-error text-error-foreground px-2 py-1 rounded-md text-sm font-medium">
+                  <div className="absolute right-3 top-3 rounded-md bg-error px-2 py-1 text-sm font-medium text-error-foreground">
                     {discount}% OFF
                   </div>
                 )}
               </div>
-              <div className="p-4 space-y-2">
+              <div className="space-y-2 p-4">
                 <p className="text-caption text-muted-foreground">{product.category}</p>
-                <h3 className="font-medium text-foreground line-clamp-2 group-hover:text-primary transition-luxe">
+                <h3 className="line-clamp-2 font-medium text-foreground transition-luxe group-hover:text-primary">
                   {product.name}
                 </h3>
-                <div className="flex items-center space-x-1">
-                  {[...Array(5)].map((_, index) => (
-                    <Icon
-                      key={index}
-                      name="StarIcon"
-                      size={14}
-                      variant={index < Math.floor(product.rating) ? 'solid' : 'outline'}
-                      className={
-                        index < Math.floor(product.rating)
-                          ? 'text-warning'
-                          : 'text-muted-foreground'
-                      }
-                    />
-                  ))}
-                  <span className="text-caption text-muted-foreground ml-1">
-                    ({product.rating})
-                  </span>
-                </div>
                 <div className="flex items-baseline space-x-2">
                   <span className="text-data text-lg font-semibold text-primary">
                     ${product.price.toFixed(2)}

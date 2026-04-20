@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 
 interface ListProductsProps {
   products: Product[]; // Use the Product interface we defined earlier
+  onDelete?: (id: string) => void;
+  onToggleFeatured?: (id: string, isFeatured: boolean) => void;
+  onToggleActive?: (id: string, isActive: boolean) => void;
+  onTogglePublished?: (id: string, isPublished: boolean) => void;
 }
 
 const formatDate = (dateString: string) => {
@@ -17,7 +21,7 @@ const formatDate = (dateString: string) => {
   };
 };
 
-const ListProducts = ({ products }: { products: any[] }) => {
+const ListProducts = ({ products, onDelete, onToggleFeatured, onToggleActive, onTogglePublished }: ListProductsProps) => {
   const router = useRouter();
 
   const handleEdit = (id: string) => {
@@ -45,8 +49,14 @@ const ListProducts = ({ products }: { products: any[] }) => {
                 <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Category
                 </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
-                  Status
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-center dark:text-gray-400">
+                  Published
+                </th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-center dark:text-gray-400">
+                  Featured
+                </th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-center dark:text-gray-400">
+                  Active
                 </th>
                 <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 text-start dark:text-gray-400">
                   Added On
@@ -63,7 +73,11 @@ const ListProducts = ({ products }: { products: any[] }) => {
                   '/images/fallbacks/no_product.jpg';
 
                 return (
-                  <tr key={product.id}>
+                  <tr
+                    key={product.id}
+                    onClick={() => handleView(product.id.toString())}
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                  >
                     <td className="px-5 py-4 sm:px-6 text-start">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 overflow-hidden rounded-lg border">
@@ -88,10 +102,50 @@ const ListProducts = ({ products }: { products: any[] }) => {
                         {product.category?.name || 'N/A'}
                       </Badge>
                     </td>
-                    <td>
-                      <Badge size="sm" color={product.published ? 'success' : 'warning'}>
-                        {product.published ? 'Published' : 'Draft'}
-                      </Badge>
+                    <td className="px-5 py-3 text-center">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onTogglePublished?.(product.id.toString(), !product.published);
+                        }}
+                        className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 ${product.published ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'}`}
+                      >
+                        <span className="sr-only">Toggle published</span>
+                        <span
+                          className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${product.published ? 'translate-x-4' : 'translate-x-0'}`}
+                        />
+                      </button>
+                    </td>
+                    <td className="px-5 py-3 text-center">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleFeatured?.(product.id.toString(), !product.featured);
+                        }}
+                        className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 ${product.featured ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'}`}
+                      >
+                        <span className="sr-only">Toggle featured</span>
+                        <span
+                          className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${product.featured ? 'translate-x-4' : 'translate-x-0'}`}
+                        />
+                      </button>
+                    </td>
+                    <td className="px-5 py-3 text-center">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleActive?.(product.id.toString(), !product.active);
+                        }}
+                        className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 ${product.active ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'}`}
+                      >
+                        <span className="sr-only">Toggle active</span>
+                        <span
+                          className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${product.active ? 'translate-x-4' : 'translate-x-0'}`}
+                        />
+                      </button>
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-theme-sm">
                       {formatDate(product.createdAt).date}
@@ -100,15 +154,27 @@ const ListProducts = ({ products }: { products: any[] }) => {
                       <div className="flex items-center gap-4">
                         <button
                           className="text-primary hover:underline"
-                          onClick={() => handleView(product.id)}
+                          onClick={() => handleView(product.id.toString())}
                         >
                           View
                         </button>
                         <button
                           className="text-primary hover:underline"
-                          onClick={() => handleEdit(product.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(product.id.toString());
+                          }}
                         >
                           Edit
+                        </button>
+                        <button
+                          className="text-error-500 hover:underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete?.(product.id.toString());
+                          }}
+                        >
+                          Delete
                         </button>
                       </div>
                     </td>

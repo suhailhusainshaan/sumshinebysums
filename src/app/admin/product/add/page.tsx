@@ -1,65 +1,34 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import Add from '@/app/admin/product/components/Add';
-import { Category } from '@/types/category';
+import { Category, CategoryResponse } from '@/types/category';
+import api from '@/lib/axios';
+import toast from 'react-hot-toast';
 
-// Mock data - You can eventually replace these with a useEffect that fetches from your API
-const mockCategories: Category[] = [
-  {
-    id: 1,
-    name: 'Earrings',
-    slug: 'earrings',
-    description: '',
-    logoUrl: '',
-    active: true,
-    createdAt: '',
-    updatedAt: '',
-    parent: null,
-  },
-  {
-    id: 2,
-    name: 'Necklaces',
-    slug: 'necklaces',
-    description: '',
-    logoUrl: '',
-    active: true,
-    createdAt: '',
-    updatedAt: '',
-    parent: null,
-  },
-  {
-    id: 3,
-    name: 'Rings',
-    slug: 'rings',
-    description: '',
-    logoUrl: '',
-    active: true,
-    createdAt: '',
-    updatedAt: '',
-    parent: null,
-  },
-  {
-    id: 4,
-    name: 'Bracelets',
-    slug: 'bracelets',
-    description: '',
-    logoUrl: '',
-    active: true,
-    createdAt: '',
-    updatedAt: '',
-    parent: null,
-  },
-];
-
-const mockBrands = [
-  { id: 1, name: 'Sumshine' },
-  { id: 2, name: 'Pandora' },
-  { id: 3, name: 'Swarovski' },
-  { id: 4, name: 'Local Artisan' },
-];
+const mockBrands = [{ id: 1, name: 'Sumshine' }];
 
 const AddProduct = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get<CategoryResponse>('/categories');
+        if (response.data?.status === 200) {
+          setCategories(response.data.data || []);
+        }
+      } catch (error: any) {
+        toast.error(error.response?.data?.message || 'Unable to load categories.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <div className="p-4 md:p-6">
       {/* 1. Breadcrumb navigation */}
@@ -70,7 +39,13 @@ const AddProduct = () => {
         {/* We only pass the data. The 'Add' component handles its own
             submission, loading UI, and error messaging now.
         */}
-        <Add categories={mockCategories} brands={mockBrands} />
+        {loading ? (
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-500 dark:border-gray-800 dark:bg-white/[0.03]">
+            Loading categories...
+          </div>
+        ) : (
+          <Add categories={categories} brands={mockBrands} />
+        )}
       </div>
     </div>
   );
