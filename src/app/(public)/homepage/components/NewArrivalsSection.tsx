@@ -2,95 +2,71 @@ import React from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
+import { ProductListingItem } from '@/app/(public)/product-listing/types';
 
-interface NewArrival {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  alt: string;
-  category: string;
-  isNew: boolean;
+interface NewArrivalsSectionProps {
+  products: ProductListingItem[];
 }
 
-const NewArrivalsSection = () => {
-  const newArrivals: NewArrival[] = [
-    {
-      id: '9',
-      name: 'Moonstone Pendant Necklace',
-      price: 79.99,
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f',
-      alt: 'Silver necklace with oval moonstone pendant and delicate chain',
-      category: 'necklaces',
-      isNew: true,
-    },
-    {
-      id: '10',
-      name: 'Geometric Hoop Earrings',
-      price: 42.99,
-      image: 'https://images.pixabay.com/photo/2017/11/22/19/00/jewelry-2971103_1280.jpg',
-      alt: 'Modern geometric gold hoop earrings with angular design',
-      category: 'earrings',
-      isNew: true,
-    },
-    {
-      id: '11',
-      name: 'Tennis Bracelet',
-      price: 94.99,
-      image: 'https://images.pexels.com/photos/1454171/pexels-photo-1454171.jpeg',
-      alt: 'Classic tennis bracelet with continuous line of cubic zirconia stones',
-      category: 'bracelets',
-      isNew: true,
-    },
-    {
-      id: '12',
-      name: 'Stackable Ring Trio',
-      price: 49.99,
-      image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e',
-      alt: 'Three stackable gold rings with different textures and finishes',
-      category: 'rings',
-      isNew: true,
-    },
-  ];
+const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+
+const NewArrivalsSection = ({ products = [] }: NewArrivalsSectionProps) => {
+  const isEmpty = products.length === 0;
 
   return (
-    <section className="py-16 lg:py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-block mb-4 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full">
-            <p className="text-caption text-accent font-medium">Just Arrived</p>
+    <section className="bg-background py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <div className="mb-4 inline-block rounded-full border border-accent/20 bg-accent/10 px-4 py-2">
+            <p className="text-caption font-medium text-accent">Just Arrived</p>
           </div>
-          <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-4">
+          <h2 className="mb-4 font-heading text-3xl font-bold text-foreground lg:text-4xl">
             New Arrivals
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Be the first to discover our latest jewelry designs
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {newArrivals.map((item) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {isEmpty &&
+            [...Array(4)].map((_, index) => (
+              <div
+                key={`new-arrival-skeleton-${index}`}
+                className="overflow-hidden rounded-lg border border-border bg-card"
+              >
+                <div className="h-80 animate-pulse bg-muted" />
+                <div className="space-y-3 p-4">
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
+                  <div className="h-5 w-1/2 animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+
+          {products.map((item) => (
             <Link
               key={item.id}
               href={`/product-detail?id=${item.id}`}
-              className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-warm-lg transition-luxe"
+              className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
             >
               <div className="relative h-80 overflow-hidden bg-muted">
                 <AppImage
-                  src={item.image}
-                  alt={item.alt}
+                  src={
+                    item.thumbnail
+                      ? `${IMG_BASE_URL}${item.thumbnail}`
+                      : '/assets/images/no_image.png'
+                  }
+                  alt={item.images[0]?.altText || item.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-spring duration-500"
+                  className="object-cover transition-spring duration-500 group-hover:scale-110"
                 />
-                {item.isNew && (
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-success text-success-foreground text-caption font-medium rounded-full">
-                    New
-                  </div>
-                )}
+                <div className="absolute left-4 top-4 rounded-full bg-success px-3 py-1 text-caption font-medium text-success-foreground">
+                  New
+                </div>
               </div>
 
               <div className="p-4">
-                <h3 className="font-medium text-foreground mb-2 line-clamp-1">{item.name}</h3>
+                <h3 className="mb-2 line-clamp-1 font-medium text-foreground">{item.name}</h3>
                 <div className="flex items-center justify-between">
                   <span className="text-data text-lg font-semibold text-primary">
                     ${item.price.toFixed(2)}
@@ -98,7 +74,7 @@ const NewArrivalsSection = () => {
                   <Icon
                     name="ArrowRightIcon"
                     size={20}
-                    className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-spring"
+                    className="text-muted-foreground transition-spring group-hover:translate-x-1 group-hover:text-primary"
                   />
                 </div>
               </div>
@@ -106,10 +82,16 @@ const NewArrivalsSection = () => {
           ))}
         </div>
 
+        {isEmpty && (
+          <div className="mt-8 text-center text-muted-foreground">
+            New arrivals will show here when recent published products are added.
+          </div>
+        )}
+
         <div className="mt-12 text-center">
           <Link
-            href="/product-listing?category=new-arrivals"
-            className="inline-flex items-center space-x-2 px-8 py-4 bg-primary text-primary-foreground rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-spring"
+            href="/product-listing?sort=latest"
+            className="inline-flex items-center space-x-2 rounded-md bg-primary px-8 py-4 font-medium text-primary-foreground transition-spring hover:scale-102 hover:shadow-warm-md"
           >
             <span>Explore All New Arrivals</span>
             <Icon name="ArrowRightIcon" size={20} />
