@@ -1,7 +1,8 @@
 import React from 'react';
 import { Category } from '@/types/category';
-import Image from 'next/image';
+import AppImage from '@/components/ui/AppImage';
 import Badge from '@/components/ui/badge/Badge';
+import { resolveCategoryImageSrc } from '@/lib/category-image';
 
 interface BasicTableOneProps {
   categories: Category[];
@@ -49,10 +50,10 @@ const ListCategories = ({ categories, onEdit, onDelete }: BasicTableOneProps) =>
                   <td className=" px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
+                        <AppImage
                           width={40}
                           height={40}
-                          src={category.logoUrl || '/images/fallbacks/no_category.jpg'}
+                          src={resolveCategoryImageSrc(category.logoUrl)}
                           alt={category.name}
                         />
                       </div>

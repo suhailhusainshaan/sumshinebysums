@@ -4,6 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
+import WishlistButton from '@/components/wishlist/WishlistButton';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 interface ProductCardProps {
   id: string;
@@ -12,6 +17,7 @@ interface ProductCardProps {
   price: number;
   originalPrice?: number | null;
   image: string;
+  images?: string[];
   alt: string;
   category?: string;
   brand?: string;
@@ -28,6 +34,7 @@ const ProductCard = ({
   price,
   originalPrice,
   image,
+  images,
   alt,
   category,
   brand,
@@ -52,22 +59,65 @@ const ProductCard = ({
   return (
     <div className="group relative overflow-hidden rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md">
       <Link href={`/product-detail?id=${id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        <div className="relative aspect-square overflow-hidden bg-muted group/image">
           {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
-          <AppImage
-            src={image}
-            alt={alt}
-            className="h-full w-full object-cover transition-luxe group-hover:scale-105"
-            // width={400}
-            // height={400}
-            onLoad={() => setImageLoaded(true)}
-          />
-          <div className="absolute left-3 top-3 flex flex-col gap-2">
-            {isFeatured && (
+          
+          {images && images.length > 1 ? (
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              navigation={{
+                prevEl: `.swiper-prev-${id}`,
+                nextEl: `.swiper-next-${id}`,
+              }}
+              autoplay={{ delay: 3000, disableOnInteraction: true }}
+              className="h-full w-full"
+            >
+              {images.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <AppImage
+                    src={img}
+                    alt={`${alt} ${index + 1}`}
+                    className="h-full w-full object-cover transition-luxe group-hover:scale-105"
+                    onLoad={() => setImageLoaded(true)}
+                  />
+                </SwiperSlide>
+              ))}
+              <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-between px-2">
+                <button
+                  className={`swiper-prev-${id} pointer-events-auto bg-card/60 backdrop-blur-md hover:bg-card p-1.5 rounded-full shadow-warm transition-all opacity-0 group-hover/image:opacity-100`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <Icon name="ChevronLeftIcon" size={16} className="text-foreground" />
+                </button>
+                <button
+                  className={`swiper-next-${id} pointer-events-auto bg-card/60 backdrop-blur-md hover:bg-card p-1.5 rounded-full shadow-warm transition-all opacity-0 group-hover/image:opacity-100`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <Icon name="ChevronRightIcon" size={16} className="text-foreground" />
+                </button>
+              </div>
+            </Swiper>
+          ) : (
+            <AppImage
+              src={image}
+              alt={alt}
+              className="h-full w-full object-cover transition-luxe group-hover:scale-105"
+              onLoad={() => setImageLoaded(true)}
+            />
+          )}
+
+          <div className="absolute left-3 top-3 flex flex-col gap-2 z-20 pointer-events-none">
+            {/* {isFeatured && (
               <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
                 Featured
               </span>
-            )}
+            )} */}
             {discount > 0 && (
               <span className="rounded-full bg-error px-3 py-1 text-xs font-medium text-error-foreground">
                 -{discount}%
@@ -75,18 +125,10 @@ const ProductCard = ({
             )}
           </div>
 
-          <button
-            onClick={handleWishlistToggle}
-            className="absolute right-3 top-3 rounded-full bg-card p-2 shadow-warm opacity-0 transition-luxe hover:scale-110 group-hover:opacity-100"
-            aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <Icon
-              name="HeartIcon"
-              size={20}
-              variant={isInWishlist ? 'solid' : 'outline'}
-              className={isInWishlist ? 'text-error' : 'text-foreground'}
-            />
-          </button>
+          <WishlistButton
+            productId={Number(id)}
+            className="absolute right-3 top-3 rounded-full bg-card p-2 shadow-warm opacity-0 transition-luxe hover:scale-110 group-hover:opacity-100 z-20"
+          />
         </div>
 
         <div className="p-4">
@@ -97,11 +139,11 @@ const ProductCard = ({
 
           <div className="mb-4 flex items-center gap-2">
             <span className="text-data text-lg font-semibold text-primary">
-              ${price.toFixed(2)}
+              ₹{price.toFixed(2)}
             </span>
             {originalPrice && (
               <span className="text-data text-sm text-muted-foreground line-through">
-                ${originalPrice.toFixed(2)}
+                ₹{originalPrice.toFixed(2)}
               </span>
             )}
           </div>

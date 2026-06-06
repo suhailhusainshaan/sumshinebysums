@@ -21,9 +21,9 @@ const ContactInfo = () => {
     {
       icon: 'EnvelopeIcon',
       title: 'Email Support',
-      content: 'support@jewelcraft.com',
+      content: 'support@sumshinebysums.com',
       action: 'Send email',
-      href: 'mailto:support@jewelcraft.com',
+      href: 'mailto:support@sumshinebysums.com',
     },
     {
       icon: 'ClockIcon',

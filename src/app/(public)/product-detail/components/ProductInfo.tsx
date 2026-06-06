@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
+import WishlistButton from '@/components/wishlist/WishlistButton';
 
 interface ProductInfoProps {
+  productId: number;
+  variantId?: number;
   name: string;
   price: number;
   originalPrice?: number | null;
@@ -16,6 +19,8 @@ interface ProductInfoProps {
 }
 
 const ProductInfo = ({
+  productId,
+  variantId,
   name,
   price,
   originalPrice,
@@ -26,8 +31,6 @@ const ProductInfo = ({
   category,
   featured = false,
 }: ProductInfoProps) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
-
   const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   return (
@@ -51,26 +54,20 @@ const ProductInfo = ({
           </h1>
         </div>
 
-        <button
-          onClick={() => setIsWishlisted((prev) => !prev)}
+        <WishlistButton
+          productId={productId}
+          variantId={variantId}
+          size={28}
           className="flex-shrink-0 rounded-full p-2 transition-luxe hover:bg-muted"
-          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-        >
-          <Icon
-            name="HeartIcon"
-            size={28}
-            variant={isWishlisted ? 'solid' : 'outline'}
-            className={isWishlisted ? 'text-error' : 'text-foreground'}
-          />
-        </button>
+        />
       </div>
 
       <div className="flex items-baseline space-x-3">
-        <span className="text-data text-4xl font-semibold text-primary">${price.toFixed(2)}</span>
+        <span className="text-data text-4xl font-semibold text-primary">₹{price.toFixed(2)}</span>
         {originalPrice && (
           <>
             <span className="text-data text-2xl text-muted-foreground line-through">
-              ${originalPrice.toFixed(2)}
+              ₹{originalPrice.toFixed(2)}
             </span>
             <span className="rounded-md bg-error px-3 py-1 text-sm font-medium text-error-foreground">
               {discount}% OFF

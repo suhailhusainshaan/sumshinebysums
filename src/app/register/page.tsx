@@ -5,6 +5,8 @@ import Icon from '@/components/ui/AppIcon';
 import { useRouter } from 'next/navigation'; // For redirection
 import api from '@/lib/axios';
 import toast from 'react-hot-toast';
+import { getGuestToken } from '@/lib/wishlistCookie';
+import { useWishlistStore } from '@/store/wishlistStore';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -56,6 +58,18 @@ export default function RegisterPage() {
         localStorage.setItem('user', JSON.stringify(res.data.data.user));
         localStorage.setItem('expiry_time', String(expiryTime));
         toast.success(res.data?.message || 'Registration successful!');
+
+        const guestToken = getGuestToken();
+        if (guestToken) {
+          try {
+            await useWishlistStore.getState().mergeGuestWishlist(guestToken);
+          } catch (e) {
+            console.error('Failed to merge wishlist:', e);
+          }
+        } else {
+          await useWishlistStore.getState().fetchWishlist();
+        }
+
         const redirectUrl =
           res.data?.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';
         router.push(redirectUrl);

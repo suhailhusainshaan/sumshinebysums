@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Option {
   value: string;
@@ -32,14 +32,12 @@ const Select: React.FC<SelectProps> = ({
   hint,
   success = false,
 }) => {
-  // Manage the selected value
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
-
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setSelectedValue(value);
     onChange(value); // Trigger parent handler
   };
+
+  const selectedValue = value || defaultValue;
 
   return (
     <>

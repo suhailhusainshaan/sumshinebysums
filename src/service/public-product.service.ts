@@ -4,7 +4,11 @@ import {
   ProductListingResponse,
 } from '@/app/(public)/product-listing/types';
 import { ProductDetailResponse, RelatedProductResponse } from '@/app/(public)/product-detail/types';
-import { HomepageFeaturedProduct } from '@/app/(public)/homepage/types';
+import {
+  HomepageCategory,
+  HomepageFeaturedProduct,
+  HomepageHeroMediaAsset,
+} from '@/app/(public)/homepage/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
 
@@ -98,7 +102,9 @@ async function fetchJson<T>(path: string): Promise<T> {
 
   // If the response represents direct array (backend hasn't fully updated or cache issue)
   if (Array.isArray(rawJson)) {
-    console.warn(`[fetchJson API WARNING] Expected ApiResponse wrapper but got Array for path: ${path}. Using raw array.`);
+    console.warn(
+      `[fetchJson API WARNING] Expected ApiResponse wrapper but got Array for path: ${path}. Using raw array.`
+    );
     return rawJson as unknown as T;
   }
 
@@ -122,6 +128,14 @@ export async function getRelatedProducts(id: string | number, limit = 8) {
   return fetchJson<RelatedProductResponse[]>(`/products/id/${id}/related?limit=${limit}`);
 }
 
-export async function getFeaturedProducts(limit = 6) {
+export async function getFeaturedProducts(_limit = 6) {
   return fetchJson<HomepageFeaturedProduct[]>(`/products/featured`);
+}
+
+export async function getCategories() {
+  return fetchJson<HomepageCategory[]>('/categories');
+}
+
+export async function getMediaAssetByKey(key: string) {
+  return fetchJson<HomepageHeroMediaAsset>(`/media-assets/${encodeURIComponent(key)}`);
 }

@@ -92,13 +92,13 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
                 <h3 className="line-clamp-2 font-medium text-foreground transition-luxe group-hover:text-primary">
                   {product.name}
                 </h3>
-                <div className="flex items-baseline space-x-2">
+                <div className="mb-4 flex items-center gap-2">
                   <span className="text-data text-lg font-semibold text-primary">
-                    ${product.price.toFixed(2)}
+                    ₹{product.price.toFixed(2)}
                   </span>
                   {product.originalPrice && (
                     <span className="text-data text-sm text-muted-foreground line-through">
-                      ${product.originalPrice.toFixed(2)}
+                      ₹{product.originalPrice.toFixed(2)}
                     </span>
                   )}
                 </div>

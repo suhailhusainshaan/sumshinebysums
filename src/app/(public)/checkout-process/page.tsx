@@ -4,7 +4,7 @@ import Breadcrumb from '@/components/common/Breadcrumb';
 import CheckoutInteractive from './components/CheckoutInteractive';
 
 export const metadata: Metadata = {
-  title: 'Checkout - JewelCraft',
+  title: 'Checkout - Sumshine By Sums',
   description:
     'Complete your purchase securely with our streamlined checkout process. Enter shipping details, select delivery options, and finalize payment for your artificial jewelry order.',
 };

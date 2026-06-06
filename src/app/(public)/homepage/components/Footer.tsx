@@ -1,23 +1,39 @@
 import React from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { HomepageCategory } from '../types';
 
-const Footer = () => {
+interface FooterProps {
+  categories?: HomepageCategory[];
+}
+
+const Footer = ({ categories = [] }: FooterProps) => {
   const currentYear = new Date()?.getFullYear();
 
+  const shopLinks = categories
+    .filter((category) => category.active ?? category.isActive ?? true)
+    .sort((left, right) => (left.displayOrder ?? 0) - (right.displayOrder ?? 0))
+    .slice(0, 5)
+    .map((category) => ({
+      label: category.name,
+      path: `/product-listing?category_id=${category.id}`,
+    }));
+
+  // If we don't have categories yet, provide fallbacks
+  const finalShopLinks =
+    shopLinks.length > 0
+      ? shopLinks
+      : [
+        { label: 'Necklaces', path: '/product-listing?category=necklaces' },
+        { label: 'Earrings', path: '/product-listing?category=earrings' },
+        { label: 'Bracelets', path: '/product-listing?category=bracelets' },
+        { label: 'Rings', path: '/product-listing?category=rings' },
+        { label: 'Sets', path: '/product-listing?category=sets' },
+      ];
+
   const footerLinks = {
-    shop: [
-      { label: 'Necklaces', path: '/product-listing?category=necklaces' },
-      { label: 'Earrings', path: '/product-listing?category=earrings' },
-      { label: 'Bracelets', path: '/product-listing?category=bracelets' },
-      { label: 'Rings', path: '/product-listing?category=rings' },
-      { label: 'Sets', path: '/product-listing?category=sets' },
-    ],
     help: [
       { label: 'Contact Us', path: '/contact-support' },
-      { label: 'Shipping Info', path: '/contact-support' },
-      { label: 'Returns', path: '/contact-support' },
-      { label: 'Size Guide', path: '/contact-support' },
       { label: 'FAQ', path: '/contact-support' },
     ],
     company: [
@@ -29,10 +45,7 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: 'facebook', label: 'Facebook', url: '#' },
-    { icon: 'instagram', label: 'Instagram', url: '#' },
-    { icon: 'pinterest', label: 'Pinterest', url: '#' },
-    { icon: 'twitter', label: 'Twitter', url: '#' },
+    { icon: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/sumshinebysums' },
   ];
 
   return (
@@ -54,20 +67,37 @@ const Footer = () => {
                 <path d="M16 14L12 18L16 22L20 18L16 14Z" fill="currentColor" opacity="0.7" />
                 <circle cx="16" cy="16" r="2" fill="currentColor" />
               </svg>
-              <span className="font-heading text-xl font-semibold text-foreground">JewelCraft</span>
+              <span className="font-heading text-xl font-semibold text-foreground">
+                Sumshine By Sums
+              </span>
             </div>
-            <p className="text-muted-foreground mb-4">
-              Elegant artificial jewelry that captures the essence of luxury at accessible prices.
-            </p>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center space-x-3 mt-4">
               {socialLinks?.map((social) => (
                 <a
                   key={social?.icon}
                   href={social?.url}
                   aria-label={social?.label}
-                  className="w-10 h-10 flex items-center justify-center bg-muted rounded-full text-foreground hover:bg-primary hover:text-primary-foreground transition-luxe"
+                  className="w-14 h-14 flex items-center justify-center bg-muted rounded-full text-foreground hover:bg-primary hover:text-primary-foreground transition-luxe"
                 >
-                  <Icon name="ShareIcon" size={20} />
+                  {social?.icon === 'instagram' ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="50"
+                      height="50"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                  ) : (
+                    <Icon name="ShareIcon" size={28} />
+                  )}
                 </a>
               ))}
             </div>
@@ -77,7 +107,7 @@ const Footer = () => {
           <div>
             <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Shop</h3>
             <ul className="space-y-3">
-              {footerLinks?.shop?.map((link) => (
+              {finalShopLinks?.map((link) => (
                 <li key={link?.label}>
                   <Link
                     href={link?.path}
@@ -108,28 +138,28 @@ const Footer = () => {
           </div>
 
           {/* Company Links */}
-          <div>
-            <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks?.company?.map((link) => (
-                <li key={link?.label}>
-                  <Link
-                    href={link?.path}
-                    className="text-muted-foreground hover:text-primary transition-luxe"
-                  >
-                    {link?.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/*<div>*/}
+          {/*  <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Company</h3>*/}
+          {/*  <ul className="space-y-3">*/}
+          {/*    {footerLinks?.company?.map((link) => (*/}
+          {/*      <li key={link?.label}>*/}
+          {/*        <Link*/}
+          {/*          href={link?.path}*/}
+          {/*          className="text-muted-foreground hover:text-primary transition-luxe"*/}
+          {/*        >*/}
+          {/*          {link?.label}*/}
+          {/*        </Link>*/}
+          {/*      </li>*/}
+          {/*    ))}*/}
+          {/*  </ul>*/}
+          {/*</div>*/}
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
             <p className="text-caption text-muted-foreground text-center sm:text-left">
-              © {currentYear} JewelCraft. All rights reserved.
+              © {currentYear} Sumshine By Sums. All rights reserved.
             </p>
             <div className="flex items-center space-x-4">
               <Icon name="CreditCardIcon" size={32} className="text-muted-foreground" />

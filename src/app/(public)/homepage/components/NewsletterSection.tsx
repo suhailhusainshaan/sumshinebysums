@@ -86,29 +86,29 @@ const NewsletterSection = () => {
           </form>
         )}
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          <div className="flex flex-col items-center">
-            <Icon name="SparklesIcon" size={32} className="text-primary mb-3" />
-            <h3 className="font-medium text-foreground mb-1">Exclusive Offers</h3>
-            <p className="text-caption text-muted-foreground text-center">
-              Get 15% off your first order
-            </p>
-          </div>
-          <div className="flex flex-col items-center">
-            <Icon name="BellIcon" size={32} className="text-primary mb-3" />
-            <h3 className="font-medium text-foreground mb-1">Early Access</h3>
-            <p className="text-caption text-muted-foreground text-center">
-              Shop new collections first
-            </p>
-          </div>
-          <div className="flex flex-col items-center">
-            <Icon name="GiftIcon" size={32} className="text-primary mb-3" />
-            <h3 className="font-medium text-foreground mb-1">Special Gifts</h3>
-            <p className="text-caption text-muted-foreground text-center">
-              Birthday surprises & more
-            </p>
-          </div>
-        </div>
+        {/*<div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">*/}
+        {/*  <div className="flex flex-col items-center">*/}
+        {/*    <Icon name="SparklesIcon" size={32} className="text-primary mb-3" />*/}
+        {/*    <h3 className="font-medium text-foreground mb-1">Exclusive Offers</h3>*/}
+        {/*    <p className="text-caption text-muted-foreground text-center">*/}
+        {/*      Get 15% off your first order*/}
+        {/*    </p>*/}
+        {/*  </div>*/}
+        {/*  <div className="flex flex-col items-center">*/}
+        {/*    <Icon name="BellIcon" size={32} className="text-primary mb-3" />*/}
+        {/*    <h3 className="font-medium text-foreground mb-1">Early Access</h3>*/}
+        {/*    <p className="text-caption text-muted-foreground text-center">*/}
+        {/*      Shop new collections first*/}
+        {/*    </p>*/}
+        {/*  </div>*/}
+        {/*  <div className="flex flex-col items-center">*/}
+        {/*    <Icon name="GiftIcon" size={32} className="text-primary mb-3" />*/}
+        {/*    <h3 className="font-medium text-foreground mb-1">Special Gifts</h3>*/}
+        {/*    <p className="text-caption text-muted-foreground text-center">*/}
+        {/*      Birthday surprises & more*/}
+        {/*    </p>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </section>
   );

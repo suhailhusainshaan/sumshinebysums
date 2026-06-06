@@ -5,6 +5,8 @@ import Icon from '@/components/ui/AppIcon';
 import { useRouter } from 'next/navigation'; // For redirection
 import { authService } from '@/service/auth.service';
 import Link from 'next/link';
+import { getGuestToken } from '@/lib/wishlistCookie';
+import { useWishlistStore } from '@/store/wishlistStore';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,6 +33,18 @@ export default function LoginPage() {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
         localStorage.setItem('expiry_time', expiryTime);
+
+        const guestToken = getGuestToken();
+        if (guestToken) {
+          try {
+            await useWishlistStore.getState().mergeGuestWishlist(guestToken);
+          } catch (e) {
+            console.error('Failed to merge wishlist:', e);
+          }
+        } else {
+          await useWishlistStore.getState().fetchWishlist();
+        }
+
         const redirectUrl = res.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';
         router.push(redirectUrl);
       }

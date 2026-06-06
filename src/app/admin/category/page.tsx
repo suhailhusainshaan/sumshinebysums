@@ -10,6 +10,9 @@ import Label from '@/components/admin/form/Label';
 import Input from '@/components/admin/form/input/InputField';
 import TextArea from '@/components/form/input/TextArea';
 import toast from 'react-hot-toast';
+import AppImage from '@/components/ui/AppImage';
+import { resolveCategoryImageSrc } from '@/lib/category-image';
+import axios from 'axios';
 
 export default function CategoryList() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -25,6 +28,20 @@ export default function CategoryList() {
     description: '',
     parent: '',
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data?.message || error.message || fallback;
+    }
+
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return fallback;
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,9 +52,8 @@ export default function CategoryList() {
         if (result.status === 200) {
           setCategories(result.data);
         }
-      } catch (error: any) {
-        // Axios puts the error response from Spring Boot here:
-        console.error('Failed to fetch:', error.response?.data?.message || error.message);
+      } catch (error: unknown) {
+        console.error('Failed to fetch:', getErrorMessage(error, 'Unable to load categories.'));
       } finally {
         setLoading(false);
       }
@@ -49,6 +65,8 @@ export default function CategoryList() {
   const openCreate = () => {
     setEditingCategory(null);
     setFormData({ name: '', slug: '', description: '', parent: '' });
+    setSelectedImage(null);
+    setImagePreviewUrl(null);
     setSlugTouched(false);
     setErrors({});
     setIsOpen(true);
@@ -62,6 +80,8 @@ export default function CategoryList() {
       description: category.description || '',
       parent: category.parent ? String(category.parent) : '',
     });
+    setSelectedImage(null);
+    setImagePreviewUrl(resolveCategoryImageSrc(category.logoUrl));
     setSlugTouched(true);
     setErrors({});
     setIsOpen(true);
@@ -70,6 +90,8 @@ export default function CategoryList() {
   const closeModal = () => {
     setIsOpen(false);
     setEditingCategory(null);
+    setSelectedImage(null);
+    setImagePreviewUrl(null);
   };
 
   const handleNameChange = (value: string) => {
@@ -105,11 +127,22 @@ export default function CategoryList() {
     setErrors({});
     setIsSaving(true);
     try {
+      const multipartData = new FormData();
+      multipartData.append('name', formData.name);
+      multipartData.append('slug', formData.slug);
+      multipartData.append('description', formData.description);
+      if (formData.parent) {
+        multipartData.append('parent', formData.parent);
+      }
+      if (selectedImage) {
+        multipartData.append('image', selectedImage);
+      }
+
       if (editingCategory) {
-        const response = await api.put(`/admin/categories/${editingCategory.id}`, {
-          name: formData.name,
-          slug: formData.slug,
-          description: formData.description,
+        const response = await api.put(`/admin/categories/${editingCategory.id}`, multipartData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
         if (response.data?.status === 200) {
           setCategories((prev) =>
@@ -118,11 +151,10 @@ export default function CategoryList() {
           toast.success(response.data?.message || 'Category updated');
         }
       } else {
-        const response = await api.post('/admin/categories', {
-          name: formData.name,
-          slug: formData.slug,
-          description: formData.description,
-          parent: formData.parent ? Number(formData.parent) : null,
+        const response = await api.post('/admin/categories', multipartData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
         if (response.data?.status === 200) {
           setCategories((prev) => [response.data.data, ...prev]);
@@ -130,11 +162,26 @@ export default function CategoryList() {
         }
       }
       closeModal();
-    } catch (error: any) {
-      setErrors({ submit: error.response?.data?.message || 'Unable to save category.' });
+    } catch (error: unknown) {
+      setErrors({ submit: getErrorMessage(error, 'Unable to save category.') });
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedImage(file);
+    setImagePreviewUrl((prev) => {
+      if (prev?.startsWith('blob:')) {
+        URL.revokeObjectURL(prev);
+      }
+      return file
+        ? URL.createObjectURL(file)
+        : editingCategory?.logoUrl
+          ? resolveCategoryImageSrc(editingCategory.logoUrl)
+          : null;
+    });
   };
 
   const handleDelete = async (categoryId: number) => {
@@ -146,8 +193,8 @@ export default function CategoryList() {
         setCategories((prev) => prev.filter((category) => category.id !== categoryId));
         toast.success(response.data?.message || 'Category deleted');
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Unable to delete category.');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Unable to delete category.'));
     }
   };
 
@@ -169,11 +216,7 @@ export default function CategoryList() {
           {loading ? (
             <p className="p-5">Loading categories...</p>
           ) : (
-            <ListCategories
-              categories={categories}
-              onEdit={openEdit}
-              onDelete={handleDelete}
-            />
+            <ListCategories categories={categories} onEdit={openEdit} onDelete={handleDelete} />
           )}
         </ComponentCard>
       </div>
@@ -238,6 +281,28 @@ export default function CategoryList() {
                 value={formData.description}
                 onChange={(value) => setFormData((prev) => ({ ...prev, description: value }))}
               />
+            </div>
+            <div className="space-y-3">
+              <Label htmlFor="category-image">Category Image</Label>
+              <input
+                id="category-image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="block w-full rounded-lg border border-gray-300 bg-transparent px-3 py-2.5 text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-brand-500 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-brand-600 dark:border-gray-700 dark:text-white/90"
+              />
+              {imagePreviewUrl && (
+                <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="relative h-40 w-full overflow-hidden rounded-lg">
+                    <AppImage
+                      src={imagePreviewUrl}
+                      alt={formData.name || 'Category preview'}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <Label htmlFor="category-parent">Parent (optional)</Label>

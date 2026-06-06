@@ -17,23 +17,23 @@ export async function generateMetadata({
 
   if (!rawId) {
     return {
-      title: 'Product Detail - JewelCraft',
-      description: 'View product details and discover more from JewelCraft.',
+      title: 'Product Detail - Sumshine By Sums',
+      description: 'View product details and discover more from Sumshine By Sums.',
     };
   }
 
   try {
     const product = await getProductDetailById(rawId);
     return {
-      title: `${product.name} - JewelCraft`,
+      title: `${product.name} - Sumshine By Sums`,
       description:
         product.description ||
-        `View ${product.name} details, pricing, images, and available options at JewelCraft.`,
+        `View ${product.name} details, pricing, images, and available options at Sumshine By Sums.`,
     };
   } catch {
     return {
-      title: 'Product Detail - JewelCraft',
-      description: 'View product details and discover more from JewelCraft.',
+      title: 'Product Detail - Sumshine By Sums',
+      description: 'View product details and discover more from Sumshine By Sums.',
     };
   }
 }
@@ -62,9 +62,9 @@ export default async function ProductDetailPage({ searchParams }: ProductDetailP
     { label: 'Shop', path: '/product-listing' },
     product.category
       ? {
-          label: product.category.name,
-          path: `/product-listing?category_id=${product.category.id}`,
-        }
+        label: product.category.name,
+        path: `/product-listing?category_id=${product.category.id}`,
+      }
       : null,
     { label: product.name },
   ].filter(Boolean) as { label: string; path?: string }[];

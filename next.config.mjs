@@ -5,6 +5,7 @@ const isProd = process.env.NODE_ENV === 'production';
 // This file is updated by Codex or open AI
 const nextConfig = {
   turbopack: {
+    root: './',
     rules: {
       '*.svg': {
         loaders: ['@svgr/webpack'],
@@ -18,9 +19,6 @@ const nextConfig = {
   distDir: process.env.DIST_DIR || '.next',
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   images: {
     unoptimized: true,

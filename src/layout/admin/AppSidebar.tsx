@@ -43,6 +43,11 @@ const navItems: NavItem[] = [
     path: '/admin/product',
   },
   {
+    icon: <FileIcon />,
+    name: 'Static Content',
+    path: '/admin/static-content',
+  },
+  {
     icon: <CalenderIcon />,
     name: 'Calendar',
     path: '/admin/calendar',

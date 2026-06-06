@@ -99,9 +99,9 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
                   <h3 className="mb-3 font-heading text-xl font-semibold text-foreground">
                     {product.name}
                   </h3>
-                  <p className="text-data text-2xl font-semibold text-primary">
-                    ${product.price.toFixed(2)}
-                  </p>
+                  <span className="text-data text-xl font-bold text-foreground">
+                    ₹{product.price.toFixed(2)}
+                  </span>
                 </div>
 
                 {requiresVariantSelection && (

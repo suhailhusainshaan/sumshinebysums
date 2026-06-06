@@ -56,11 +56,11 @@ const VariantShowcase = ({ productId, variants, selectedVariantId }: VariantShow
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-data text-base font-semibold text-primary">
-                    ${variant.price.toFixed(2)}
+                    ₹{variant.price.toFixed(2)}
                   </span>
-                  {variant.comparePrice && (
+                  {variant.comparePrice && variant.comparePrice > variant.price && (
                     <span className="text-caption text-muted-foreground line-through">
-                      ${variant.comparePrice.toFixed(2)}
+                      ₹{variant.comparePrice.toFixed(2)}
                     </span>
                   )}
                 </div>
