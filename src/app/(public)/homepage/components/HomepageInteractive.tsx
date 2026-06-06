@@ -6,13 +6,12 @@ import Header from '@/components/common/Header';
 import MobileHamburgerMenu from '@/components/common/MobileHamburgerMenu';
 import SearchComponent from '@/components/common/SearchComponent';
 import HeroSection from './HeroSection';
+import CategoriesSection from './CategoriesSection';
 import FeaturedCollections from './FeaturedCollections';
-import BestsellersSection from './BestsellersSection';
-import NewArrivalsSection from './NewArrivalsSection';
-import NewsletterSection from './NewsletterSection';
+import HomepageContactInfo from './HomepageContactInfo';
 import TrustBadgesSection from './TrustBadgesSection';
 import Footer from './Footer';
-import { HomepageFeaturedProduct } from '../types';
+import { HomepageCategory, HomepageFeaturedProduct, HomepageHeroMediaAsset } from '../types';
 import { ProductListingItem } from '@/app/(public)/product-listing/types';
 
 interface SearchResult {
@@ -25,15 +24,19 @@ interface SearchResult {
 }
 
 interface HomepageInteractiveProps {
+  categories: HomepageCategory[];
   featuredProducts: HomepageFeaturedProduct[];
   bestsellers: ProductListingItem[];
   newArrivals: ProductListingItem[];
+  heroMediaAsset: HomepageHeroMediaAsset | null;
 }
 
 const HomepageInteractive = ({
+  categories = [],
   featuredProducts = [],
-  bestsellers = [],
-  newArrivals = [],
+  bestsellers: _bestsellers = [],
+  newArrivals: _newArrivals = [],
+  heroMediaAsset = null,
 }: HomepageInteractiveProps) => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,15 +72,56 @@ const HomepageInteractive = ({
       />
 
       <main className="pt-16 lg:pt-18">
-        <HeroSection onShopNowClick={handleShopNowClick} />
-        <TrustBadgesSection />
-        <FeaturedCollections products={featuredProducts} />
-        <BestsellersSection products={bestsellers} />
-        <NewArrivalsSection products={newArrivals} />
-        <NewsletterSection />
+        <HeroSection onShopNowClick={handleShopNowClick} heroMediaAsset={heroMediaAsset} />
+        {/*<TrustBadgesSection />*/}
+        <CategoriesSection categories={categories} />
+        {/*<FeaturedCollections products={featuredProducts} />*/}
+        {/*<BestsellersSection products={bestsellers} />*/}
+        {/*<NewArrivalsSection products={newArrivals} />*/}
+        <section className="py-16 lg:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <HomepageContactInfo />
+          </div>
+        </section>
+        
+        {/* 
+        <section className="py-16 lg:py-24 bg-gradient-to-br from-primary/10 via-secondary/5 to-background">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
+              <Icon name="EnvelopeIcon" size={32} className="text-primary" />
+            </div>
+            <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Join Our Newsletter
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Subscribe to receive exclusive offers, style tips, and be the first to know about new
+              collections
+            </p>
+            <form className="max-w-md mx-auto">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  required
+                  className="flex-1 h-12 px-4 bg-input border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-luxe"
+                />
+                <button
+                  type="submit"
+                  className="h-12 px-8 bg-primary text-primary-foreground rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-spring whitespace-nowrap"
+                >
+                  Subscribe
+                </button>
+              </div>
+              <p className="text-caption text-muted-foreground mt-4">
+                By subscribing, you agree to our Privacy Policy and consent to receive updates
+              </p>
+            </form>
+          </div>
+        </section>
+        */}
       </main>
 
-      <Footer />
+      <Footer categories={categories} />
     </div>
   );
 };

@@ -36,7 +36,7 @@ const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
           {isEmpty &&
             [...Array(4)].map((_, index) => (
               <div
@@ -52,47 +52,46 @@ const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
               </div>
             ))}
 
-          {Array.isArray(products) && products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/product-detail?id=${product.id}`}
-              className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
-            >
-              <div className="relative h-80 overflow-hidden bg-muted">
-                <AppImage
-                  src={
-                    product.thumbnailUrl
-                      ? IMG_BASE_URL + product.thumbnailUrl
-                      : '/assets/images/no_image.png'
-                  }
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-spring duration-500 group-hover:scale-110"
-                />
-                {product.featured && (
-                  <div className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-caption font-medium text-accent-foreground">
-                    Featured
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <h3 className="line-clamp-1 font-medium text-foreground">
-                    {product.name}
-                  </h3>
-                  <Icon
-                    name="ArrowRightIcon"
-                    size={18}
-                    className="text-primary transition-spring group-hover:translate-x-1"
+          {Array.isArray(products) &&
+            products.map((product) => (
+              <Link
+                key={product.id}
+                href={`/product-detail?id=${product.id}`}
+                className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
+              >
+                <div className="relative w-full aspect-square overflow-hidden bg-muted">
+                  <AppImage
+                    src={
+                      product.thumbnailUrl
+                        ? IMG_BASE_URL + product.thumbnailUrl
+                        : '/assets/images/no_image.png'
+                    }
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-spring duration-500 group-hover:scale-110"
                   />
+                  {product.featured && (
+                    <div className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-caption font-medium text-accent-foreground">
+                      Featured
+                    </div>
+                  )}
                 </div>
-                <p className="text-data font-semibold text-primary text-lg">
-                  ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
-                </p>
-              </div>
-            </Link>
-          ))}
+
+                <div className="p-4">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="line-clamp-1 font-medium text-foreground">{product.name}</h3>
+                    <Icon
+                      name="ArrowRightIcon"
+                      size={18}
+                      className="text-primary transition-spring group-hover:translate-x-1"
+                    />
+                  </div>
+                  <p className="text-data font-semibold text-primary text-lg">
+                    ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
+                  </p>
+                </div>
+              </Link>
+            ))}
         </div>
 
         {isEmpty && (

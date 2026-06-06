@@ -6,6 +6,7 @@ import Icon from '@/components/ui/AppIcon';
 import UserDropdown from '@/components/common/UserDropdown';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
+import WishlistBadge from '@/components/wishlist/WishlistBadge';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -65,7 +66,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                 <circle cx="16" cy="16" r="2" fill="currentColor" />
               </svg>
               <span className="font-heading text-xl font-semibold text-foreground">
-                SumShineBySums
+                Sumshine By Sums
               </span>
             </div>
           </Link>
@@ -79,17 +80,17 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               Shop
             </Link>
             <Link
-              href="/shopping-cart"
+              href="/wishlist"
               className="text-foreground hover:text-primary transition-luxe font-medium"
             >
-              Cart
+              Favourites
             </Link>
-            <Link
-              href="/"
-              className="text-foreground hover:text-primary transition-luxe font-medium"
-            >
-              Account
-            </Link>
+            {/*<Link*/}
+            {/*  href="/"*/}
+            {/*  className="text-foreground hover:text-primary transition-luxe font-medium"*/}
+            {/*>*/}
+            {/*  Account*/}
+            {/*</Link>*/}
             <Link
               href="/contact-support"
               className="text-foreground hover:text-primary transition-luxe font-medium"
@@ -107,6 +108,16 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
             >
               <Icon name="MagnifyingGlassIcon" size={24} />
             </button>
+
+            <Link
+              href="/wishlist"
+              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              aria-label="Wishlist"
+            >
+              <Icon name="HeartIcon" size={24} />
+              <WishlistBadge />
+            </Link>
+
             <button
               onClick={handleCartClick}
               className="relative p-2 text-foreground hover:text-primary transition-luxe"
@@ -142,6 +153,14 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
             >
               <Icon name="MagnifyingGlassIcon" size={24} />
             </button>
+            <Link
+              href="/wishlist"
+              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              aria-label="Wishlist"
+            >
+              <Icon name="HeartIcon" size={24} />
+              <WishlistBadge />
+            </Link>
             <button
               onClick={handleCartClick}
               className="relative p-2 text-foreground hover:text-primary transition-luxe"
@@ -177,19 +196,19 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               Shop
             </Link>
             <Link
-              href="/shopping-cart"
+              href="/wishlist"
               className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
               onClick={closeMobileMenu}
             >
-              Cart
+              Favourite
             </Link>
-            <Link
-              href="/"
-              className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
-              onClick={closeMobileMenu}
-            >
-              Account
-            </Link>
+            {/*<Link*/}
+            {/*  href="/"*/}
+            {/*  className="block text-foreground hover:text-primary transition-luxe font-medium py-2"*/}
+            {/*  onClick={closeMobileMenu}*/}
+            {/*>*/}
+            {/*  Account*/}
+            {/*</Link>*/}
             <Link
               href="/contact-support"
               className="block text-foreground hover:text-primary transition-luxe font-medium py-2"

@@ -1,21 +1,39 @@
 import type { Metadata } from 'next';
 import HomepageInteractive from './homepage/components/HomepageInteractive';
-import { getFeaturedProducts, getProductListing } from '@/service/public-product.service';
-import { HomepageFeaturedProduct } from './homepage/types';
+import {
+  getCategories,
+  getFeaturedProducts,
+  getMediaAssetByKey,
+  getProductListing,
+} from '@/service/public-product.service';
+import {
+  HomepageCategory,
+  HomepageFeaturedProduct,
+  HomepageHeroMediaAsset,
+} from './homepage/types';
 import { ProductListingItem } from '@/app/(public)/product-listing/types';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'SumShineBySums',
+  title: 'Sumshine By Sums',
   description:
-    'Discover exquisite handcrafted artificial jewelry at JewelCraft. Shop necklaces, earrings, bracelets, rings, and sets with premium quality designs at accessible prices.',
+    'Discover exquisite handcrafted artificial jewelry at Sumshine By Sums. Shop necklaces, earrings, bracelets, rings, and sets with premium quality designs at accessible prices.',
 };
 
 export default async function Homepage() {
+  let categories: HomepageCategory[] = [];
   let featuredProducts: HomepageFeaturedProduct[] = [];
   let bestsellers: ProductListingItem[] = [];
   let newArrivals: ProductListingItem[] = [];
+  let heroMediaAsset: HomepageHeroMediaAsset | null = null;
+
+  try {
+    const categoriesResponse = await getCategories();
+    categories = categoriesResponse || [];
+  } catch (error) {
+    console.error('[root page] ERROR fetching categories:', error);
+  }
 
   try {
     const featuredResponse = await getFeaturedProducts(6);
@@ -26,8 +44,14 @@ export default async function Homepage() {
 
   try {
     const bestsellersResponse = await getProductListing({
-      page: 1, limit: 8, sort: 'popular',
-      categoryId: null, brandId: null, minPrice: null, maxPrice: null, q: null,
+      page: 1,
+      limit: 8,
+      sort: 'popular',
+      categoryId: null,
+      brandId: null,
+      minPrice: null,
+      maxPrice: null,
+      q: null,
     });
     bestsellers = bestsellersResponse?.content || [];
   } catch (error) {
@@ -36,20 +60,33 @@ export default async function Homepage() {
 
   try {
     const newArrivalsResponse = await getProductListing({
-      page: 1, limit: 4, sort: 'latest',
-      categoryId: null, brandId: null, minPrice: null, maxPrice: null, q: null,
+      page: 1,
+      limit: 4,
+      sort: 'latest',
+      categoryId: null,
+      brandId: null,
+      minPrice: null,
+      maxPrice: null,
+      q: null,
     });
     newArrivals = newArrivalsResponse?.content || [];
   } catch (error) {
     console.error('[root page] ERROR fetching new arrivals:', error);
   }
 
+  try {
+    heroMediaAsset = await getMediaAssetByKey('home.hero.image');
+  } catch (error) {
+    console.error('[root page] ERROR fetching homepage hero media asset:', error);
+  }
+
   return (
     <HomepageInteractive
+      categories={categories}
       featuredProducts={featuredProducts}
       bestsellers={bestsellers}
       newArrivals={newArrivals}
+      heroMediaAsset={heroMediaAsset}
     />
   );
 }
-

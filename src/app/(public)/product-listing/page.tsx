@@ -8,7 +8,7 @@ import {
 import { ProductFiltersResponse, ProductListingResponse } from './types';
 
 export const metadata: Metadata = {
-  title: 'Shop All Products - JewelCraft',
+  title: 'Shop All Products - Sumshine By Sums',
   description:
     'Browse our complete collection of elegant artificial jewelry including necklaces, earrings, bracelets, rings, and sets. Filter by category, material, color, and price to find your perfect piece.',
 };

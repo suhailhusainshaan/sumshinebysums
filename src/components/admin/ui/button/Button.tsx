@@ -9,6 +9,7 @@ interface ButtonProps {
   startIcon?: ReactNode; // Icon before the text
   endIcon?: ReactNode; // Icon after the text
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; // Click handler
+  type?: 'button' | 'submit' | 'reset';
   disabled?: boolean; // Disabled state
   className?: string; // Disabled state
   buttonAction?: string;
@@ -21,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   startIcon,
   endIcon,
   onClick,
+  type = 'button',
   className = '',
   disabled = false,
   buttonAction = '/admin',
@@ -56,6 +58,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
       className={`inline-flex items-center justify-center font-medium gap-2 rounded-lg transition ${className} ${
         sizeClasses[size]
       } ${variantClasses[variant]} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}

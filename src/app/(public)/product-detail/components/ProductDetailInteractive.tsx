@@ -133,6 +133,8 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
 
         <div className="space-y-8">
           <ProductInfo
+            productId={product.id}
+            variantId={selectedVariant?.id}
             name={product.name}
             price={selectedVariant?.price ?? product.price}
             originalPrice={selectedVariant?.comparePrice ?? product.comparePrice}

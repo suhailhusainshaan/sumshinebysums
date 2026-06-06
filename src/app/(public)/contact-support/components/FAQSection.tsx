@@ -238,7 +238,7 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
                 <span>Call Us</span>
               </a>
               <a
-                href="mailto:support@jewelcraft.com"
+                href="mailto:support@sumshinebysums.com"
                 className="inline-flex items-center space-x-2 text-sm font-medium text-primary hover:text-accent transition-luxe"
               >
                 <Icon name="EnvelopeIcon" size={16} />

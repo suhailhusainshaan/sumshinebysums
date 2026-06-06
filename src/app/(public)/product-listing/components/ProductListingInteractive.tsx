@@ -111,20 +111,26 @@ const ProductListingInteractive = ({
         image: product.thumbnail
           ? `${IMG_BASE_URL}${product.thumbnail}`
           : '/assets/images/no_image.png',
-        alt: product.images[0]?.altText || product.name,
+        alt: product.images?.[0]?.altText || product.name,
         category: product.category?.name,
         brand: product.brand?.name,
         isFeatured: product.isFeatured,
         variants: product.variants,
+        images: product.images?.length > 0 
+          ? product.images.map((img: any) => `${IMG_BASE_URL}${img.url}`)
+          : product.thumbnail 
+            ? [`${IMG_BASE_URL}${product.thumbnail}`]
+            : ['/assets/images/no_image.png'],
       })),
     [products.content]
   );
 
   const sortOptions = [
-    { id: 'popular', label: 'Most Popular' },
-    { id: 'price_asc', label: 'Price: Low to High' },
-    { id: 'price_desc', label: 'Price: High to Low' },
-    { id: 'latest', label: 'Newest First' },
+    { id: 'price_desc', label: 'By Price (Highest/Lowest)' },
+    { id: 'price_asc', label: 'By Price (Lowest/Highest)' },
+    { id: 'rating_desc', label: 'By Rating (High/Low)' },
+    { id: 'rating_asc', label: 'By Rating (Low/High)' },
+    { id: 'latest', label: 'By New Products' },
   ];
 
   const updateQuery = (updates: Partial<ProductListingQuery>) => {
@@ -192,7 +198,7 @@ const ProductListingInteractive = ({
       activeFilters.push({
         id: 'price',
         type: 'price',
-        label: `$${selectedPriceRange.min} - $${selectedPriceRange.max}`,
+        label: `₹${selectedPriceRange.min} - ₹${selectedPriceRange.max}`,
       });
     }
 
@@ -279,7 +285,7 @@ const ProductListingInteractive = ({
       <Header
         cartItemCount={cartItemCount}
         onSearchClick={() => setIsSearchOpen(true)}
-        onCartClick={() => {}}
+        onCartClick={() => { }}
       />
 
       <MobileHamburgerMenu
@@ -294,13 +300,13 @@ const ProductListingInteractive = ({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
 
-          <div className="mb-8 flex items-center justify-between">
-            <h1 className="font-heading text-3xl font-bold text-foreground lg:text-4xl">
+          <div className="mb-8 flex items-center justify-center relative">
+            <h1 className="font-heading text-3xl font-bold text-foreground lg:text-4xl text-center">
               All Products
             </h1>
             <button
               onClick={() => setIsFilterPanelOpen(true)}
-              className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-luxe hover:scale-102 lg:hidden"
+              className="absolute right-0 flex items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-luxe hover:scale-102 lg:hidden"
             >
               <Icon name="AdjustmentsHorizontalIcon" size={20} />
               Filters

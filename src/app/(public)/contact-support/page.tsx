@@ -4,9 +4,9 @@ import Breadcrumb from '@/components/common/Breadcrumb';
 import ContactSupportInteractive from './components/ContactSupportInteractive';
 
 export const metadata: Metadata = {
-  title: 'Contact Support - JewelCraft',
+  title: 'Contact Support - Sumshine By Sums',
   description:
-    'Get in touch with JewelCraft customer support team. We offer multiple communication channels including live chat, email, and phone support with comprehensive FAQ resources to help you with orders, shipping, returns, and product inquiries.',
+    'Get in touch with Sumshine By Sums customer support team. We offer multiple communication channels including live chat, email, and phone support with comprehensive FAQ resources to help you with orders, shipping, returns, and product inquiries.',
 };
 
 export default function ContactSupportPage() {
@@ -28,7 +28,7 @@ export default function ContactSupportPage() {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Our dedicated support team is here to assist you with any questions or concerns about
-              your JewelCraft experience.
+              your Sumshine By Sums experience.
             </p>
           </div>
 
@@ -50,7 +50,7 @@ export default function ContactSupportPage() {
                 <span>Call Now: +1 (555) 123-4567</span>
               </a>
               <a
-                href="mailto:support@jewelcraft.com"
+                href="mailto:support@sumshinebysums.com"
                 className="inline-flex items-center space-x-2 bg-card text-foreground border border-border px-6 py-3 rounded-md font-medium hover:bg-muted transition-luxe"
               >
                 <span>Email Support</span>

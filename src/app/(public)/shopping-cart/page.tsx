@@ -3,7 +3,7 @@ import Header from '@/components/common/Header';
 import ShoppingCartInteractive from './components/ShoppingCartInteractive';
 
 export const metadata: Metadata = {
-  title: 'Shopping Cart - JewelCraft',
+  title: 'Shopping Cart - Sumshine By Sums',
   description:
     'Review your selected jewelry items, manage quantities, and proceed to secure checkout with free shipping on orders over $50.',
 };

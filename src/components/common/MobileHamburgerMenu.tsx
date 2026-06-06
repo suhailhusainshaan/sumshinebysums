@@ -101,9 +101,8 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
                     <Icon
                       name="ChevronDownIcon"
                       size={20}
-                      className={`transform transition-transform ${
-                        expandedItem === item.label ? 'rotate-180' : ''
-                      }`}
+                      className={`transform transition-transform ${expandedItem === item.label ? 'rotate-180' : ''
+                        }`}
                     />
                   </button>
                   {expandedItem === item.label && (
@@ -145,7 +144,7 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
         {/* Footer */}
         <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border bg-card">
           <p className="text-caption text-muted-foreground text-center">
-            © 2026 JewelCraft. All rights reserved.
+            © 2026 Sumshine By Sums. All rights reserved.
           </p>
         </div>
       </div>

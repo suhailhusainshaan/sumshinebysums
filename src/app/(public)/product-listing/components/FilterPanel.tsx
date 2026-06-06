@@ -139,8 +139,8 @@ const FilterPanel = ({
               </div>
             </div>
             <div className="flex items-center justify-between text-caption text-muted-foreground">
-              <span>${priceRange.min}</span>
-              <span>${priceRange.max}</span>
+              <span>₹{priceRange.min}</span>
+              <span>₹{priceRange.max}</span>
             </div>
           </div>
         </div>
