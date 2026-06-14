@@ -16,13 +16,10 @@ interface PriceRange {
 
 interface FilterPanelProps {
   categories: FilterOption[];
-  brands: FilterOption[];
   priceRange: PriceRange;
   selectedCategories: string[];
-  selectedBrands: string[];
   selectedPriceRange: PriceRange;
   onCategoryToggle: (categoryId: string) => void;
-  onBrandToggle: (brandId: string) => void;
   onPriceRangeChange: (range: PriceRange) => void;
   onClearAll: () => void;
   isMobile?: boolean;
@@ -31,13 +28,10 @@ interface FilterPanelProps {
 
 const FilterPanel = ({
   categories,
-  brands,
   priceRange,
   selectedCategories,
-  selectedBrands,
   selectedPriceRange,
   onCategoryToggle,
-  onBrandToggle,
   onPriceRangeChange,
   onClearAll,
   isMobile = false,
@@ -45,7 +39,6 @@ const FilterPanel = ({
 }: FilterPanelProps) => {
   const hasActiveFilters =
     selectedCategories.length > 0 ||
-    selectedBrands.length > 0 ||
     selectedPriceRange.min !== priceRange.min ||
     selectedPriceRange.max !== priceRange.max;
 
@@ -142,31 +135,6 @@ const FilterPanel = ({
               <span>₹{priceRange.min}</span>
               <span>₹{priceRange.max}</span>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="mb-4 font-medium text-foreground">Brand</h3>
-          <div className="space-y-3">
-            {brands.map((brand) => (
-              <label
-                key={brand.id}
-                className="group flex cursor-pointer items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={selectedBrands.includes(brand.id)}
-                    onChange={() => onBrandToggle(brand.id)}
-                    className="h-5 w-5 cursor-pointer rounded border-border text-primary transition-luxe focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  />
-                  <span className="text-foreground transition-luxe group-hover:text-primary">
-                    {brand.label}
-                  </span>
-                </div>
-                <span className="text-caption text-muted-foreground">({brand.count})</span>
-              </label>
-            ))}
           </div>
         </div>
       </div>
