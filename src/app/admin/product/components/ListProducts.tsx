@@ -3,6 +3,7 @@ import { Product } from '@/types/product-list';
 import Image from 'next/image';
 import Badge from '@/components/ui/badge/Badge';
 import { useRouter } from 'next/navigation';
+import { resolveImageSrc } from '@/lib/image';
 
 interface ListProductsProps {
   products: Product[]; // Use the Product interface we defined earlier
@@ -84,7 +85,7 @@ const ListProducts = ({ products, onDelete, onToggleFeatured, onToggleActive, on
                           <Image
                             width={48}
                             height={48}
-                            src={process.env.NEXT_PUBLIC_IMG_URL + displayImage}
+                            src={resolveImageSrc(displayImage)}
                             alt={product.name}
                             className="object-cover"
                           />

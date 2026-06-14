@@ -8,7 +8,7 @@ import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
 import toast from 'react-hot-toast';
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 function WishlistSkeleton() {
   return (
@@ -117,7 +117,7 @@ export default function WishlistPage() {
                           src={
                             image.startsWith('http')
                               ? image
-                              : `${IMG_BASE_URL}${image}`
+                              : resolveImageSrc(image)
                           }
                           alt={
                             item.productImages.find((img) => img.isFeatureImage)

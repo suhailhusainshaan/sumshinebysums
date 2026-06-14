@@ -12,6 +12,7 @@ import TextArea from '@/components/admin/form/input/TextArea';
 import Button from '@/components/admin/ui/button/Button';
 import AppImage from '@/components/ui/AppImage';
 import { ApiResponse, StaticContentItem } from '@/types/static-content';
+import { resolveImageSrc } from '@/lib/image';
 
 interface FormState {
   key: string;
@@ -70,11 +71,7 @@ export default function EditStaticContentPage() {
           metadata: JSON.stringify(item.metadata || {}, null, 2),
           isActive: Boolean(item.isActive),
         });
-        setCurrentImageUrl(
-          item.url.startsWith('http://') || item.url.startsWith('https://')
-            ? item.url
-            : `${process.env.NEXT_PUBLIC_IMG_URL || ''}${item.url}`
-        );
+        setCurrentImageUrl(resolveImageSrc(item.url));
       } catch (error) {
         console.error('Failed to load static content item', error);
         toast.error('Unable to load static content item.');
@@ -185,11 +182,7 @@ export default function EditStaticContentPage() {
         `/admin/static-content/${itemId}`
       );
       const item = refreshed.data.data;
-      setCurrentImageUrl(
-        item.url.startsWith('http://') || item.url.startsWith('https://')
-          ? item.url
-          : `${process.env.NEXT_PUBLIC_IMG_URL || ''}${item.url}`
-      );
+      setCurrentImageUrl(resolveImageSrc(item.url));
       setImageFile(null);
       setFormData({
         key: item.key || '',

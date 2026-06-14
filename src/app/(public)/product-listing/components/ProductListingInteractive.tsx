@@ -38,7 +38,7 @@ interface ProductListingInteractiveProps {
   errorMessage: string | null;
 }
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 const toNumberOrFallback = (value: string | null, fallback: number) => {
   if (!value) {
@@ -102,7 +102,7 @@ const ProductListingInteractive = ({
         price: product.price,
         originalPrice: product.comparePrice,
         image: product.thumbnail
-          ? `${IMG_BASE_URL}${product.thumbnail}`
+          ? resolveImageSrc(product.thumbnail)
           : '/assets/images/no_image.png',
         alt: product.images?.[0]?.altText || product.name,
         category: product.category?.name,
@@ -110,9 +110,9 @@ const ProductListingInteractive = ({
         isFeatured: product.isFeatured,
         variants: product.variants,
         images: product.images?.length > 0 
-          ? product.images.map((img: any) => `${IMG_BASE_URL}${img.url}`)
+          ? product.images.map((img: any) => resolveImageSrc(img.url))
           : product.thumbnail 
-            ? [`${IMG_BASE_URL}${product.thumbnail}`]
+            ? [resolveImageSrc(product.thumbnail)]
             : ['/assets/images/no_image.png'],
       })),
     [products.content]

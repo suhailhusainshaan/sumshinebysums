@@ -8,7 +8,7 @@ interface NewArrivalsSectionProps {
   products: ProductListingItem[];
 }
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 const NewArrivalsSection = ({ products = [] }: NewArrivalsSectionProps) => {
   const isEmpty = products.length === 0;
@@ -53,7 +53,7 @@ const NewArrivalsSection = ({ products = [] }: NewArrivalsSectionProps) => {
                 <AppImage
                   src={
                     item.thumbnail
-                      ? `${IMG_BASE_URL}${item.thumbnail}`
+                      ? resolveImageSrc(item.thumbnail)
                       : '/assets/images/no_image.png'
                   }
                   alt={item.images[0]?.altText || item.name}

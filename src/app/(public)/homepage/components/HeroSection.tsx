@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import { HomepageHeroMediaAsset } from '../types';
+import { resolveImageSrc } from '@/lib/image';
 
 interface HeroSectionProps {
   onShopNowClick: () => void;
@@ -16,7 +17,7 @@ const HeroSection = ({ onShopNowClick, heroMediaAsset = null }: HeroSectionProps
   const heroImageUrl = heroMediaAsset?.url
     ? heroMediaAsset.url.startsWith('http://') || heroMediaAsset.url.startsWith('https://')
       ? heroMediaAsset.url
-      : `${process.env.NEXT_PUBLIC_IMG_URL || ''}${heroMediaAsset.url}`
+      : resolveImageSrc(heroMediaAsset.url)
     : DEFAULT_HERO_IMAGE;
   const heroImageAlt = heroMediaAsset?.altText || DEFAULT_HERO_ALT;
 

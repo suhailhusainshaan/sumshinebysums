@@ -9,6 +9,7 @@ import ComponentCard from '@/components/admin/common/ComponentCard';
 import Badge from '@/components/ui/badge/Badge';
 import api from '@/lib/axios';
 import toast from 'react-hot-toast';
+import { resolveImageSrc } from '@/lib/image';
 
 interface VariantImage {
   id: number;
@@ -145,7 +146,7 @@ export default function ViewProductPage() {
 
   const getImageSrc = (imageUrl?: string) => {
     if (!imageUrl) return FALLBACK_IMAGE;
-    return `${process.env.NEXT_PUBLIC_IMG_URL || ''}${imageUrl}`;
+    return resolveImageSrc(imageUrl);
   };
 
   return (

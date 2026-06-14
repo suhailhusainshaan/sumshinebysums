@@ -8,7 +8,7 @@ interface FeaturedProductsProps {
   products: HomepageFeaturedProduct[];
 }
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
   // console.log('FeaturedCollections rendered with products:', products);
@@ -63,7 +63,7 @@ const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
                   <AppImage
                     src={
                       product.thumbnailUrl
-                        ? IMG_BASE_URL + product.thumbnailUrl
+                        ? resolveImageSrc(product.thumbnailUrl)
                         : '/assets/images/no_image.png'
                     }
                     alt={product.name}

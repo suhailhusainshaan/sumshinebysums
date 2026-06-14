@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/badge/Badge';
 import AppImage from '@/components/ui/AppImage';
 import { StaticContentItem } from '@/types/static-content';
+import { resolveImageSrc } from '@/lib/image';
 
 interface ListStaticContentProps {
   items: StaticContentItem[];
@@ -24,7 +25,7 @@ export default function ListStaticContent({ items }: ListStaticContentProps) {
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-    return `${process.env.NEXT_PUBLIC_IMG_URL || ''}${url}`;
+    return resolveImageSrc(url);
   };
 
   if (!items.length) {

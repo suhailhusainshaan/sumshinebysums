@@ -16,7 +16,7 @@ interface ProductDetailInteractiveProps {
   relatedProducts: RelatedProductResponse[];
 }
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 const asString = (value: unknown) => (typeof value === 'string' ? value : '');
 const asStringArray = (value: unknown) =>
@@ -41,7 +41,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
     () =>
       product.images.map((image) => ({
         id: String(image.id),
-        url: image.url ? `${IMG_BASE_URL}${image.url}` : '/assets/images/no_image.png',
+        url: image.url ? resolveImageSrc(image.url) : '/assets/images/no_image.png',
         alt: image.altText || product.name,
       })),
     [product.images, product.name]
@@ -51,7 +51,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
     () =>
       (selectedVariant?.images || []).map((image) => ({
         id: String(image.id),
-        url: image.url ? `${IMG_BASE_URL}${image.url}` : '/assets/images/no_image.png',
+        url: image.url ? resolveImageSrc(image.url) : '/assets/images/no_image.png',
         alt: image.altText || product.name,
       })),
     [product.name, selectedVariant?.images]
@@ -88,7 +88,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
     price: related.price,
     originalPrice: related.comparePrice,
     image: related.thumbnail
-      ? `${IMG_BASE_URL}${related.thumbnail}`
+      ? resolveImageSrc(related.thumbnail)
       : '/assets/images/no_image.png',
     alt: related.images[0]?.altText || related.name,
     category: related.category?.name || 'Product',
@@ -159,13 +159,13 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
           variants={product.variants.map((variant) => ({
             ...variant,
             thumbnail: variant.thumbnail
-              ? `${IMG_BASE_URL}${variant.thumbnail}`
+              ? resolveImageSrc(variant.thumbnail)
               : variant.images[0]?.url
-                ? `${IMG_BASE_URL}${variant.images[0].url}`
+                ? resolveImageSrc(variant.images[0].url)
                 : null,
             images: variant.images.map((image) => ({
               ...image,
-              url: image.url ? `${IMG_BASE_URL}${image.url}` : '/assets/images/no_image.png',
+              url: image.url ? resolveImageSrc(image.url) : '/assets/images/no_image.png',
             })),
           }))}
           selectedVariantId={selectedVariant?.id ?? null}

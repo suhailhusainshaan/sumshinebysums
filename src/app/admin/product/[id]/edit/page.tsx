@@ -14,6 +14,7 @@ import Badge from '@/components/ui/badge/Badge';
 import api from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { Category } from '@/types/category';
+import { resolveImageSrc } from '@/lib/image';
 
 interface VariantImage {
   id: number;
@@ -318,7 +319,7 @@ export default function EditProductPage() {
     );
     const image = sortedImages[0];
     if (!image?.imageUrl) return FALLBACK_IMAGE;
-    return `${process.env.NEXT_PUBLIC_IMG_URL || ''}${image.imageUrl}`;
+    return resolveImageSrc(image.imageUrl);
   };
 
   return (

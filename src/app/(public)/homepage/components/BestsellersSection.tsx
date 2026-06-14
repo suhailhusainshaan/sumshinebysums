@@ -10,7 +10,7 @@ interface BestsellersSectionProps {
   products: ProductListingItem[];
 }
 
-const IMG_BASE_URL = process.env.NEXT_PUBLIC_IMG_URL || '';
+import { resolveImageSrc } from '@/lib/image';
 
 const BestsellersSection = ({ products = [] }: BestsellersSectionProps) => {
   const isEmpty = products.length === 0;
@@ -62,7 +62,7 @@ const BestsellersSection = ({ products = [] }: BestsellersSectionProps) => {
                 <AppImage
                   src={
                     product.thumbnail
-                      ? `${IMG_BASE_URL}${product.thumbnail}`
+                      ? resolveImageSrc(product.thumbnail)
                       : '/assets/images/no_image.png'
                   }
                   alt={product.images[0]?.altText || product.name}

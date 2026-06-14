@@ -12,6 +12,7 @@ import Badge from '@/components/ui/badge/Badge';
 import toast from 'react-hot-toast';
 import api from '@/lib/axios';
 import { useDropzone } from 'react-dropzone';
+import { resolveImageSrc } from '@/lib/image';
 
 interface VariantImageState {
   id: string;
@@ -104,7 +105,7 @@ export default function EditVariantPage() {
           id: `existing-${image.id ?? index}`,
           originalId: image.id,
           previewUrl: image.imageUrl
-            ? `${process.env.NEXT_PUBLIC_IMG_URL || ''}${image.imageUrl}`
+            ? resolveImageSrc(image.imageUrl)
             : FALLBACK_IMAGE,
           altText: image.altText || payload.name || `Image ${index + 1}`,
           isNew: false,
@@ -385,7 +386,7 @@ export default function EditVariantPage() {
             id: `existing-${image.id ?? index}`,
             originalId: image.id,
             previewUrl: image.imageUrl
-              ? `${process.env.NEXT_PUBLIC_IMG_URL || ''}${image.imageUrl}`
+              ? resolveImageSrc(image.imageUrl)
               : FALLBACK_IMAGE,
             altText: image.altText || updated.name || `Image ${index + 1}`,
             isNew: false,
