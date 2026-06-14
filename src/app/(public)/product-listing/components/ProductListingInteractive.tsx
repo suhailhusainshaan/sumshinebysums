@@ -27,7 +27,7 @@ interface PriceRange {
 
 interface ActiveFilter {
   id: string;
-  type: 'category' | 'brand' | 'price';
+  type: 'category' | 'price';
   label: string;
 }
 
@@ -86,18 +86,11 @@ const ProductListingInteractive = ({
   };
   const selectedSort = query.sort;
   const selectedCategories = query.categoryId ? [query.categoryId] : [];
-  const selectedBrands = query.brandId ? [query.brandId] : [];
 
   const categories = filters.categories.map((category: ProductFilterOption) => ({
     id: String(category.id),
     label: category.name,
     count: category.count,
-  }));
-
-  const brands = filters.brands.map((brand: ProductFilterOption) => ({
-    id: String(brand.id),
-    label: brand.name,
-    count: brand.count,
   }));
 
   const listingProducts = useMemo(
@@ -148,10 +141,6 @@ const ProductListingInteractive = ({
       params.set('category_id', nextQuery.categoryId);
     }
 
-    if (nextQuery.brandId) {
-      params.set('brand_id', nextQuery.brandId);
-    }
-
     if (nextQuery.minPrice) {
       params.set('min_price', nextQuery.minPrice);
     }
@@ -187,13 +176,6 @@ const ProductListingInteractive = ({
       }
     });
 
-    selectedBrands.forEach((id) => {
-      const brand = brands.find((item) => item.id === id);
-      if (brand) {
-        activeFilters.push({ id, type: 'brand', label: brand.label });
-      }
-    });
-
     if (selectedPriceRange.min !== priceRange.min || selectedPriceRange.max !== priceRange.max) {
       activeFilters.push({
         id: 'price',
@@ -212,18 +194,10 @@ const ProductListingInteractive = ({
     });
   };
 
-  const handleBrandToggle = (brandId: string) => {
-    updateQuery({
-      brandId: query.brandId === brandId ? null : brandId,
-      page: 1,
-    });
-  };
-
   const handleClearAllFilters = () => {
     updateQuery({
       page: 1,
       categoryId: null,
-      brandId: null,
       minPrice: null,
       maxPrice: null,
     });
@@ -233,9 +207,6 @@ const ProductListingInteractive = ({
     switch (filterType) {
       case 'category':
         updateQuery({ categoryId: null, page: 1 });
-        break;
-      case 'brand':
-        updateQuery({ brandId: null, page: 1 });
         break;
       case 'price':
         updateQuery({ minPrice: null, maxPrice: null, page: 1 });
@@ -318,13 +289,10 @@ const ProductListingInteractive = ({
               <div className="sticky top-24">
                 <FilterPanel
                   categories={categories}
-                  brands={brands}
                   priceRange={priceRange}
                   selectedCategories={selectedCategories}
-                  selectedBrands={selectedBrands}
                   selectedPriceRange={selectedPriceRange}
                   onCategoryToggle={handleCategoryToggle}
-                  onBrandToggle={handleBrandToggle}
                   onPriceRangeChange={handlePriceRangeChange}
                   onClearAll={handleClearAllFilters}
                 />
@@ -404,13 +372,10 @@ const ProductListingInteractive = ({
           <div className="fixed bottom-0 right-0 top-0 z-mobile-menu w-80 max-w-[85vw]">
             <FilterPanel
               categories={categories}
-              brands={brands}
               priceRange={priceRange}
               selectedCategories={selectedCategories}
-              selectedBrands={selectedBrands}
               selectedPriceRange={selectedPriceRange}
               onCategoryToggle={handleCategoryToggle}
-              onBrandToggle={handleBrandToggle}
               onPriceRangeChange={handlePriceRangeChange}
               onClearAll={handleClearAllFilters}
               isMobile={true}

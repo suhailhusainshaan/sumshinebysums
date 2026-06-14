@@ -41,8 +41,8 @@ const nextConfig = {
       },
     ],
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/sumshinebysums' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/sumshinebysums/' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
   // async redirects() {
   //   return [
   //     {
