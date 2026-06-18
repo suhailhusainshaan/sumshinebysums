@@ -33,3 +33,11 @@ export interface HomepageHeroMediaAsset {
   metadata?: Record<string, unknown> | null;
   active: boolean;
 }
+
+export interface HomepageSlider {
+  id: number;
+  imageUrl: string;
+  altText: string;
+  redirectUrl: string | null;
+  displayOrder: number;
+}

@@ -3,10 +3,16 @@ import HomepageInteractive from './components/HomepageInteractive';
 import {
   getCategories,
   getFeaturedProducts,
+  getHomepageSliders,
   getMediaAssetByKey,
   getProductListing,
 } from '@/service/public-product.service';
-import { HomepageCategory, HomepageFeaturedProduct, HomepageHeroMediaAsset } from './types';
+import {
+  HomepageCategory,
+  HomepageFeaturedProduct,
+  HomepageHeroMediaAsset,
+  HomepageSlider,
+} from './types';
 import { ProductListingItem } from '@/app/(public)/product-listing/types';
 
 // Force this page to always re-render on the server (bypass Next.js full-route cache)
@@ -24,6 +30,7 @@ export default async function Homepage() {
   let bestsellers: ProductListingItem[] = [];
   let newArrivals: ProductListingItem[] = [];
   let heroMediaAsset: HomepageHeroMediaAsset | null = null;
+  let homepageSliders: HomepageSlider[] = [];
 
   try {
     const categoriesResponse = await getCategories();
@@ -77,6 +84,13 @@ export default async function Homepage() {
     console.error('ERROR fetching homepage hero media asset:', error);
   }
 
+  try {
+    const slidersResponse = await getHomepageSliders();
+    homepageSliders = slidersResponse || [];
+  } catch (error) {
+    console.error('ERROR fetching homepage sliders:', error);
+  }
+
   return (
     <HomepageInteractive
       categories={categories}
@@ -84,6 +98,7 @@ export default async function Homepage() {
       bestsellers={bestsellers}
       newArrivals={newArrivals}
       heroMediaAsset={heroMediaAsset}
+      homepageSliders={homepageSliders}
     />
   );
 }

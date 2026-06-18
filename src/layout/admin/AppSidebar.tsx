@@ -44,8 +44,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: <FileIcon />,
-    name: 'Static Content',
-    path: '/admin/static-content',
+    name: 'CMS',
+    subItems: [
+      { name: 'Static Content', path: '/admin/static-content', pro: false },
+      { name: 'Homepage Sliders', path: '/admin/homepage-sliders', pro: false },
+    ],
   },
   {
     icon: <CalenderIcon />,
