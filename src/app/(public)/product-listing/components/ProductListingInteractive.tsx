@@ -252,7 +252,7 @@ const ProductListingInteractive = ({
   const breadcrumbItems = [{ label: 'Shop', path: '/product-listing' }, { label: 'All Products' }];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-ivory">
       <Header
         cartItemCount={cartItemCount}
         onSearchClick={() => setIsSearchOpen(true)}
@@ -272,7 +272,7 @@ const ProductListingInteractive = ({
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
 
           <div className="mb-8 flex items-center justify-center relative">
-            <h1 className="font-heading text-3xl font-bold text-foreground lg:text-4xl text-center">
+            <h1 className="font-display text-4xl lg:text-5xl tracking-wide text-ink text-center">
               All Products
             </h1>
             <button
@@ -333,18 +333,18 @@ const ProductListingInteractive = ({
               />
 
               {products.totalPages > 1 && (
-                <div className="flex items-center justify-between gap-4 rounded-lg bg-card p-4 shadow-warm">
+                <div className="flex items-center justify-between gap-4 border-t border-mist p-4 mt-8">
                   <button
                     type="button"
                     onClick={() => updateQuery({ page: Math.max(query.page - 1, 1) })}
                     disabled={products.first || isPending}
-                    className="rounded-md border border-border px-4 py-2 text-foreground transition-luxe hover:border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                    className="border border-mist px-6 py-2 uppercase tracking-widest text-xs text-ink transition-luxe hover:border-gold hover:text-gold disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Previous
                   </button>
-                  <p className="text-center text-sm text-muted-foreground">
-                    Page <span className="font-medium text-foreground">{query.page}</span> of{' '}
-                    <span className="font-medium text-foreground">{products.totalPages}</span>
+                  <p className="text-center text-sm text-ink/70">
+                    Page <span className="font-medium text-ink">{query.page}</span> of{' '}
+                    <span className="font-medium text-ink">{products.totalPages}</span>
                   </p>
                   <button
                     type="button"
@@ -352,7 +352,7 @@ const ProductListingInteractive = ({
                       updateQuery({ page: Math.min(query.page + 1, products.totalPages) })
                     }
                     disabled={products.last || isPending}
-                    className="rounded-md border border-border px-4 py-2 text-foreground transition-luxe hover:border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                    className="border border-mist px-6 py-2 uppercase tracking-widest text-xs text-ink transition-luxe hover:border-gold hover:text-gold disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Next
                   </button>

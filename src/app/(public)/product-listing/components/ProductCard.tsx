@@ -57,10 +57,10 @@ const ProductCard = ({
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md">
+    <div className="group relative overflow-hidden bg-porcelain border border-mist transition-luxe hover:border-gold/50 flex flex-col h-full">
       <Link href={`/product-detail?id=${id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-muted group/image">
-          {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
+        <div className="relative aspect-[4/5] overflow-hidden bg-mist group/image catchlight">
+          {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-mist" />}
           
           {images && images.length > 1 ? (
             <Swiper
@@ -107,7 +107,7 @@ const ProductCard = ({
             <AppImage
               src={image}
               alt={alt}
-              className="h-full w-full object-cover transition-luxe group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               onLoad={() => setImageLoaded(true)}
             />
           )}
@@ -131,18 +131,18 @@ const ProductCard = ({
           />
         </div>
 
-        <div className="p-4">
-          <p className="mb-1 text-caption text-muted-foreground">
+        <div className="p-5 flex-grow flex flex-col">
+          <p className="mb-2 text-[10px] uppercase tracking-widest text-ink/60">
             {[brand, category].filter(Boolean).join(' • ') || slug}
           </p>
-          <p className="mb-2 line-clamp-3 min-h-[3rem] font-medium text-foreground">{name}</p>
+          <p className="mb-3 line-clamp-2 font-display text-lg tracking-wide text-ink">{name}</p>
 
-          <div className="mb-4 flex items-center gap-2">
-            <span className="text-data text-lg font-semibold text-primary">
+          <div className="mt-auto flex items-center gap-3">
+            <span className="font-medium text-ink tracking-wide">
               ₹{price.toFixed(2)}
             </span>
             {originalPrice && (
-              <span className="text-data text-sm text-muted-foreground line-through">
+              <span className="text-sm text-ink/50 line-through">
                 ₹{originalPrice.toFixed(2)}
               </span>
             )}
@@ -150,12 +150,12 @@ const ProductCard = ({
         </div>
       </Link>
 
-      <div className="px-4 pb-4">
+      <div className="px-5 pb-5 mt-auto">
         <button
           onClick={handleQuickAdd}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-3 font-medium text-primary-foreground transition-luxe hover:scale-102 hover:shadow-warm-md"
+          className="flex w-full items-center justify-center gap-2 border border-mist bg-velvet px-4 py-3 text-sm tracking-widest uppercase text-porcelain transition-luxe hover:bg-gold hover:border-gold hover:text-velvet"
         >
-          <Icon name="ShoppingBagIcon" size={18} />
+          <Icon name="ShoppingBagIcon" size={16} />
           Quick Add
         </button>
       </div>

@@ -59,20 +59,20 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
   return (
     <>
       <div
-        className="fixed inset-0 z-modal-overlay bg-background"
+        className="fixed inset-0 z-modal-overlay bg-ink/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       <div className="fixed inset-0 z-modal flex items-center justify-center p-4">
-        <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-card shadow-warm-xl">
-          <div className="flex items-center justify-between border-b border-border p-6">
-            <h2 className="font-heading text-2xl font-semibold text-foreground">
+        <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto bg-ivory border border-mist shadow-warm-xl">
+          <div className="flex items-center justify-between border-b border-mist p-6">
+            <h2 className="font-display text-3xl tracking-wide text-ink">
               Quick Add to Cart
             </h2>
             <button
               onClick={onClose}
-              className="p-2 text-foreground transition-luxe hover:text-primary"
+              className="p-2 text-ink transition-luxe hover:text-gold"
               aria-label="Close modal"
             >
               <Icon name="XMarkIcon" size={24} />
@@ -82,7 +82,7 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
           <div className="p-6">
             <div className="flex flex-col gap-6 md:flex-row">
               <div className="w-full md:w-1/3">
-                <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+                <div className="aspect-[4/5] overflow-hidden bg-mist catchlight">
                   <AppImage
                     src={product.image}
                     alt={product.alt}
@@ -95,27 +95,27 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
 
               <div className="flex-1 space-y-6">
                 <div>
-                  <p className="mb-2 text-caption text-muted-foreground">{product.category}</p>
-                  <h3 className="mb-3 font-heading text-xl font-semibold text-foreground">
+                  <p className="mb-2 text-xs uppercase tracking-widest text-ink/70">{product.category}</p>
+                  <h3 className="mb-3 font-display text-2xl tracking-wide text-ink">
                     {product.name}
                   </h3>
-                  <span className="text-data text-xl font-bold text-foreground">
+                  <span className="font-medium tracking-wide text-ink">
                     ₹{product.price.toFixed(2)}
                   </span>
                 </div>
 
                 {requiresVariantSelection && (
                   <div>
-                    <label className="mb-3 block font-medium text-foreground">Select Option</label>
+                    <label className="mb-3 block text-xs uppercase tracking-widest text-ink">Select Option</label>
                     <div className="flex flex-wrap gap-3">
                       {product.variants.map((variant) => (
                         <button
                           key={variant.id}
                           onClick={() => setSelectedVariantId(variant.id)}
-                          className={`rounded-md border-2 px-4 py-3 font-medium transition-luxe ${
+                          className={`border px-4 py-3 font-medium transition-luxe ${
                             selectedVariantId === variant.id
-                              ? 'border-primary bg-primary text-primary-foreground'
-                              : 'border-border bg-card text-foreground hover:border-primary'
+                              ? 'border-gold bg-gold text-porcelain'
+                              : 'border-mist bg-porcelain text-ink hover:border-gold'
                           }`}
                         >
                           {variant.name}
@@ -126,23 +126,23 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
                 )}
 
                 <div>
-                  <label className="mb-3 block font-medium text-foreground">Quantity</label>
+                  <label className="mb-3 block text-xs uppercase tracking-widest text-ink">Quantity</label>
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= 1}
-                      className="flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card text-foreground transition-luxe hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-10 w-10 items-center justify-center border border-mist bg-porcelain text-ink transition-luxe hover:bg-mist/30 hover:border-gold disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Decrease quantity"
                     >
                       <Icon name="MinusIcon" size={20} />
                     </button>
-                    <span className="w-12 text-center text-data text-lg font-medium text-foreground">
+                    <span className="w-12 text-center font-medium text-ink">
                       {quantity}
                     </span>
                     <button
                       onClick={() => handleQuantityChange(1)}
                       disabled={quantity >= 10}
-                      className="flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card text-foreground transition-luxe hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-10 w-10 items-center justify-center border border-mist bg-porcelain text-ink transition-luxe hover:bg-mist/30 hover:border-gold disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Increase quantity"
                     >
                       <Icon name="PlusIcon" size={20} />
@@ -153,9 +153,9 @@ const QuickAddModal = ({ isOpen, onClose, product, onAddToCart }: QuickAddModalP
                 <button
                   onClick={handleAddToCart}
                   disabled={requiresVariantSelection && !resolvedVariantId}
-                  className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-6 py-4 font-medium text-primary-foreground transition-luxe hover:scale-102 hover:shadow-warm-md disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 border border-mist bg-velvet px-6 py-4 tracking-widest uppercase text-sm text-porcelain transition-luxe hover:bg-gold hover:border-gold hover:text-velvet disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon name="ShoppingBagIcon" size={20} />
+                  <Icon name="ShoppingBagIcon" size={18} />
                   Add to Cart
                 </button>
               </div>

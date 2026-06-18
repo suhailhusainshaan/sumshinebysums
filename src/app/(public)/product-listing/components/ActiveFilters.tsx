@@ -19,21 +19,21 @@ const ActiveFilters = ({ filters, onRemoveFilter, onClearAll }: ActiveFiltersPro
   if (filters.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-lg bg-muted p-4">
-      <span className="text-sm font-medium text-foreground">Active Filters:</span>
+    <div className="flex flex-wrap items-center gap-3 bg-mist/30 p-4 border border-mist">
+      <span className="text-xs uppercase tracking-widest font-medium text-ink">Active Filters:</span>
       {filters.map((filter) => (
         <button
           key={`${filter.type}-${filter.id}`}
           onClick={() => onRemoveFilter(filter.id, filter.type)}
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground transition-luxe hover:border-primary"
+          className="inline-flex items-center gap-2 border border-mist bg-ivory px-3 py-1.5 text-xs tracking-wide text-ink transition-luxe hover:border-gold hover:text-gold"
         >
           {filter.label}
-          <Icon name="XMarkIcon" size={14} />
+          <Icon name="XMarkIcon" size={12} />
         </button>
       ))}
       <button
         onClick={onClearAll}
-        className="text-sm font-medium text-primary transition-luxe hover:text-accent"
+        className="text-xs uppercase tracking-widest font-medium text-ink transition-luxe hover:text-gold ml-2"
       >
         Clear All
       </button>
