@@ -19,23 +19,21 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
 
   const content = (
     <>
-      <div className="absolute inset-0 catchlight z-0">
-        <AppImage
-          src={imageUrl}
-          alt={slide.altText || 'Homepage promotional banner'}
-          fill
-          priority={priority}
-          sizes="100vw"
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <AppImage
+        src={imageUrl}
+        alt={slide.altText || 'Homepage promotional banner'}
+        fill
+        priority={priority}
+        sizes="100vw"
+        className="h-full w-full object-cover z-0"
+      />
       <span className="absolute inset-0 bg-gradient-to-r from-velvet/40 via-velvet/10 to-transparent z-10 pointer-events-none" />
     </>
   );
 
   if (!hasRedirect) {
     return (
-      <div className="relative block h-full w-full overflow-hidden text-left cursor-default">
+      <div className="catchlight relative block h-full w-full overflow-hidden text-left cursor-default">
         {content}
       </div>
     );
@@ -45,7 +43,7 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
     return (
       <Link
         href={url}
-        className="relative block h-full w-full overflow-hidden text-left cursor-pointer"
+        className="catchlight relative block h-full w-full overflow-hidden text-left cursor-pointer"
         aria-label={`Open ${slide.altText || 'homepage promotion'}`}
       >
         {content}
@@ -56,7 +54,7 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
   return (
     <a
       href={url}
-      className="relative block h-full w-full overflow-hidden text-left cursor-pointer"
+      className="catchlight relative block h-full w-full overflow-hidden text-left cursor-pointer"
       aria-label={`Open ${slide.altText || 'homepage promotion'}`}
     >
       {content}
