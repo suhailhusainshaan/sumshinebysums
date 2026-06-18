@@ -65,19 +65,19 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-background z-mobile-menu"
+        className="fixed inset-0 bg-ink/60 backdrop-blur-sm z-mobile-menu transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide-out Panel */}
-      <div className="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-card shadow-warm-xl z-mobile-menu transform transition-transform duration-300 ease-luxe overflow-y-auto">
+      <div className="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-ivory shadow-warm-xl z-mobile-menu transform transition-transform duration-300 ease-luxe overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="font-heading text-xl font-semibold text-foreground">Menu</h2>
+        <div className="flex items-center justify-between p-6 border-b border-mist">
+          <h2 className="font-display text-2xl tracking-wide text-ink">Menu</h2>
           <button
             onClick={onClose}
-            className="p-2 text-foreground hover:text-primary transition-luxe"
+            className="p-2 text-ink hover:text-gold transition-luxe"
             aria-label="Close menu"
           >
             <Icon name="XMarkIcon" size={24} />
@@ -92,11 +92,11 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
                 <>
                   <button
                     onClick={() => toggleSubmenu(item.label)}
-                    className="w-full flex items-center justify-between p-4 text-foreground hover:bg-muted rounded-md transition-luxe"
+                    className="w-full flex items-center justify-between p-4 text-ink hover:bg-mist/30 rounded-md transition-luxe"
                   >
                     <div className="flex items-center space-x-3">
                       {item.icon && <Icon name={item.icon as any} size={20} />}
-                      <span className="font-medium">{item.label}</span>
+                      <span className="font-medium text-sm uppercase tracking-widest">{item.label}</span>
                     </div>
                     <Icon
                       name="ChevronDownIcon"
@@ -111,7 +111,7 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
                         <Link
                           key={subItem.label}
                           href={subItem.path}
-                          className="block p-3 text-muted-foreground hover:text-primary hover:bg-muted rounded-md transition-luxe"
+                          className="block p-3 text-ink/70 hover:text-gold hover:bg-mist/30 rounded-md transition-luxe text-sm uppercase tracking-widest"
                           onClick={handleLinkClick}
                         >
                           {subItem.label}
@@ -123,15 +123,15 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
               ) : (
                 <Link
                   href={item.path}
-                  className="flex items-center justify-between p-4 text-foreground hover:bg-muted rounded-md transition-luxe"
+                  className="flex items-center justify-between p-4 text-ink hover:bg-mist/30 rounded-md transition-luxe"
                   onClick={handleLinkClick}
                 >
                   <div className="flex items-center space-x-3">
                     {item.icon && <Icon name={item.icon as any} size={20} />}
-                    <span className="font-medium">{item.label}</span>
+                    <span className="font-medium text-sm uppercase tracking-widest">{item.label}</span>
                   </div>
                   {item.label === 'Cart' && cartItemCount > 0 && (
-                    <span className="bg-accent text-accent-foreground text-xs font-medium rounded-full h-6 w-6 flex items-center justify-center">
+                    <span className="bg-gold text-porcelain text-[10px] font-medium rounded-full h-5 w-5 flex items-center justify-center">
                       {cartItemCount > 9 ? '9+' : cartItemCount}
                     </span>
                   )}
@@ -142,8 +142,8 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border bg-card">
-          <p className="text-caption text-muted-foreground text-center">
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-mist bg-ivory">
+          <p className="text-xs text-ink/60 uppercase tracking-widest text-center">
             © 2026 Sumshine By Sums. All rights reserved.
           </p>
         </div>

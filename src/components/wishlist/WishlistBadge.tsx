@@ -15,9 +15,9 @@ export default function WishlistBadge({ className = '' }: WishlistBadgeProps) {
     <span
       className={`
         absolute -top-1 -right-1 
-        bg-error text-error-foreground 
-        text-xs font-medium 
-        rounded-full min-w-[18px] h-[18px] 
+        bg-gold text-porcelain 
+        text-[10px] font-medium 
+        rounded-full min-w-[16px] h-[16px] 
         flex items-center justify-center px-1
         ${className}
       `}

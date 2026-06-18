@@ -47,7 +47,7 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-card shadow-warm z-header">
+    <header className="fixed top-0 left-0 right-0 bg-ivory/95 backdrop-blur-md border-b border-mist z-header transition-luxe">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo */}
@@ -59,73 +59,67 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-gold"
               >
                 <path d="M16 4L8 12L16 20L24 12L16 4Z" fill="currentColor" opacity="0.9" />
                 <path d="M16 14L12 18L16 22L20 18L16 14Z" fill="currentColor" opacity="0.7" />
                 <circle cx="16" cy="16" r="2" fill="currentColor" />
               </svg>
-              <span className="font-heading text-xl font-semibold text-foreground">
+              <span className="font-display text-2xl tracking-wide text-ink">
                 Sumshine By Sums
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-10">
             <Link
               href="/product-listing"
-              className="text-foreground hover:text-primary transition-luxe font-medium"
+              className="text-ink hover:text-gold transition-luxe text-sm font-medium uppercase tracking-widest"
             >
               Shop
             </Link>
             <Link
               href="/wishlist"
-              className="text-foreground hover:text-primary transition-luxe font-medium"
+              className="text-ink hover:text-gold transition-luxe text-sm font-medium uppercase tracking-widest"
             >
               Favourites
             </Link>
-            {/*<Link*/}
-            {/*  href="/"*/}
-            {/*  className="text-foreground hover:text-primary transition-luxe font-medium"*/}
-            {/*>*/}
-            {/*  Account*/}
-            {/*</Link>*/}
             <Link
               href="/contact-support"
-              className="text-foreground hover:text-primary transition-luxe font-medium"
+              className="text-ink hover:text-gold transition-luxe text-sm font-medium uppercase tracking-widest"
             >
               Support
             </Link>
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-5">
             <button
               onClick={handleSearchClick}
-              className="p-2 text-foreground hover:text-primary transition-luxe"
+              className="p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Search"
             >
-              <Icon name="MagnifyingGlassIcon" size={24} />
+              <Icon name="MagnifyingGlassIcon" size={20} />
             </button>
 
             <Link
               href="/wishlist"
-              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              className="relative p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Wishlist"
             >
-              <Icon name="HeartIcon" size={24} />
+              <Icon name="HeartIcon" size={20} />
               <WishlistBadge />
             </Link>
 
             <button
               onClick={handleCartClick}
-              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              className="relative p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Shopping cart"
             >
-              <Icon name="ShoppingBagIcon" size={24} />
+              <Icon name="ShoppingBagIcon" size={20} />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute 0 right-0 bg-gold text-porcelain text-[10px] font-medium rounded-full h-4 w-4 flex items-center justify-center">
                   {cartItemCount > 9 ? '9+' : cartItemCount}
                 </span>
               )}
@@ -136,10 +130,10 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
             ) : (
               <button
                 onClick={handleLoginClick}
-                className="p-2 text-foreground hover:text-primary transition-luxe flex items-center justify-center"
+                className="p-2 text-ink hover:text-gold transition-luxe flex items-center justify-center"
                 aria-label="Login"
               >
-                <Icon name="UserIcon" size={24} />
+                <Icon name="UserIcon" size={20} />
               </button>
             )}
           </div>
@@ -148,34 +142,34 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
           <div className="flex lg:hidden items-center space-x-3">
             <button
               onClick={handleSearchClick}
-              className="p-2 text-foreground hover:text-primary transition-luxe"
+              className="p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Search"
             >
-              <Icon name="MagnifyingGlassIcon" size={24} />
+              <Icon name="MagnifyingGlassIcon" size={20} />
             </button>
             <Link
               href="/wishlist"
-              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              className="relative p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Wishlist"
             >
-              <Icon name="HeartIcon" size={24} />
+              <Icon name="HeartIcon" size={20} />
               <WishlistBadge />
             </Link>
             <button
               onClick={handleCartClick}
-              className="relative p-2 text-foreground hover:text-primary transition-luxe"
+              className="relative p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Shopping cart"
             >
-              <Icon name="ShoppingBagIcon" size={24} />
+              <Icon name="ShoppingBagIcon" size={20} />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute 0 right-0 bg-gold text-porcelain text-[10px] font-medium rounded-full h-4 w-4 flex items-center justify-center">
                   {cartItemCount > 9 ? '9+' : cartItemCount}
                 </span>
               )}
             </button>
             <button
               onClick={toggleMobileMenu}
-              className="p-2 text-foreground hover:text-primary transition-luxe"
+              className="p-2 text-ink hover:text-gold transition-luxe"
               aria-label="Menu"
             >
               <Icon name={isMobileMenuOpen ? 'XMarkIcon' : 'Bars3Icon'} size={24} />
@@ -186,32 +180,25 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-card border-t border-border">
-          <nav className="px-4 py-6 space-y-4">
+        <div className="lg:hidden bg-ivory border-t border-mist shadow-sm absolute w-full">
+          <nav className="px-4 py-6 flex flex-col space-y-2">
             <Link
               href="/product-listing"
-              className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
+              className="text-ink hover:text-gold transition-luxe font-medium uppercase tracking-widest text-sm py-3 border-b border-mist/50"
               onClick={closeMobileMenu}
             >
               Shop
             </Link>
             <Link
               href="/wishlist"
-              className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
+              className="text-ink hover:text-gold transition-luxe font-medium uppercase tracking-widest text-sm py-3 border-b border-mist/50"
               onClick={closeMobileMenu}
             >
-              Favourite
+              Favourites
             </Link>
-            {/*<Link*/}
-            {/*  href="/"*/}
-            {/*  className="block text-foreground hover:text-primary transition-luxe font-medium py-2"*/}
-            {/*  onClick={closeMobileMenu}*/}
-            {/*>*/}
-            {/*  Account*/}
-            {/*</Link>*/}
             <Link
               href="/contact-support"
-              className="block text-foreground hover:text-primary transition-luxe font-medium py-2"
+              className="text-ink hover:text-gold transition-luxe font-medium uppercase tracking-widest text-sm py-3"
               onClick={closeMobileMenu}
             >
               Support
