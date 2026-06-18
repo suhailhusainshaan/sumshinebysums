@@ -11,15 +11,23 @@ export function resolveImageSrc(
   }
 
   const decoded = tryDecodeBase64(url);
-  if (decoded) {
-    if (decoded.startsWith('data:') || decoded.startsWith('http://') || decoded.startsWith('https://')) {
-      return decoded;
-    }
-    return `${IMG_BASE_URL}/${decoded}`;
+
+  const imagePath = decoded ?? url;
+
+  if (
+    imagePath.startsWith('data:') ||
+    imagePath.startsWith('http://') ||
+    imagePath.startsWith('https://')
+  ) {
+    return imagePath;
   }
 
-  if (!IMG_BASE_URL) return url;
-  return `${IMG_BASE_URL}/${url}`;
+  if (!IMG_BASE_URL) return imagePath;
+
+  const base = IMG_BASE_URL.replace(/\/+$/, '');
+  const path = imagePath.replace(/^\/+/, '');
+
+  return `${base}/${path}`;
 }
 
 function tryDecodeBase64(value: string): string | null {
