@@ -57,60 +57,44 @@ const CategoriesSection = ({ categories = [] }: CategoriesSectionProps) => {
   }
 
   return (
-    <section className="bg-background py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
-        <div className="mx-auto mb-12 max-w-3xl text-center">
-          <h2 className="mb-3 font-heading text-3xl font-bold text-foreground lg:text-4xl">
-            Our Offerings
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Checkout our Handmade, Homemade and Heart-made Designs
-          </p>
+    <section className="bg-ivory py-16 lg:py-24">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
+        <div className="flex items-end justify-between mb-12">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-3xl lg:text-5xl text-ink tracking-wide">
+              Our Offerings
+            </h2>
+            <p className="mt-4 text-lg text-ink/70 max-w-md">
+              Checkout our Handmade, Homemade and Heart-made Designs
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-12 lg:px-12" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {visibleCategories.map((category) => (
             <Link
               key={category.id}
               href={`/product-listing?category_id=${category.id}`}
-              className="group relative block overflow-hidden rounded-[28px]"
+              className="group relative block snap-start shrink-0 min-w-[280px] w-[80vw] sm:w-[320px] aspect-[4/5]"
             >
-              <div className="relative aspect-square overflow-hidden bg-muted">
+              <div className="relative w-full h-full bg-mist overflow-hidden catchlight">
                 <AppImage
                   src={resolveCategoryImageSrc(category.logoUrl)}
                   alt={category.name}
                   fill
-                  className="object-cover transition-spring duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-velvet/80 via-velvet/20 to-transparent pointer-events-none" />
 
-                <div className="absolute inset-0 flex flex-col justify-between p-6 text-white lg:p-7">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="max-w-[75%]">
-                      {/*<p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">*/}
-                      {/*  Category*/}
-                      {/*</p>*/}
-                      {/*<h3 className="mt-2 font-heading text-3xl font-semibold text-white">*/}
-                      {/*  {category.name}*/}
-                      {/*</h3>*/}
-                    </div>
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-spring group-hover:translate-x-1">
+                <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-8">
+                  <div className="flex items-end justify-between gap-4">
+                    <h3 className="font-display text-2xl lg:text-3xl text-porcelain tracking-wide">
+                      {category.name}
+                    </h3>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-porcelain/30 bg-porcelain/10 text-porcelain backdrop-blur-sm transition-transform duration-500 group-hover:translate-x-2">
                       <Icon name="ArrowRightIcon" size={18} />
                     </span>
                   </div>
-
-                  {/*<div className="max-w-md">*/}
-                  {/*  <p className="line-clamp-2 text-sm leading-6 text-white/80 sm:text-base">*/}
-                  {/*    {category.description ||*/}
-                  {/*      `Explore handcrafted ${category.name.toLowerCase()} designed for gifting and daily styling.`}*/}
-                  {/*  </p>*/}
-                  {/*  <span className="mt-4 inline-flex items-center text-sm font-medium text-[#f4c27a]">*/}
-                  {/*    Shop collection*/}
-                  {/*  </span>*/}
-                  {/*</div>*/}
-                  <h3 className="mt-2 font-heading text-3xl font-semibold text-white">
-                    {category.name}
-                  </h3>
                 </div>
               </div>
             </Link>

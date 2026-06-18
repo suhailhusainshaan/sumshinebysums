@@ -34,7 +34,7 @@ export default function HomepageSlider({ slides }: HomepageSliderProps) {
 
 
   return (
-    <section className="relative overflow-hidden bg-gray-100">
+    <section className="relative overflow-hidden bg-ivory">
       <div className="relative h-[360px] sm:h-[460px] lg:h-[620px]">
         <Swiper
           modules={[Autoplay, Navigation, Pagination]}
@@ -57,8 +57,8 @@ export default function HomepageSlider({ slides }: HomepageSliderProps) {
             el: `.${dotsClassName}`,
             clickable: true,
             bulletClass:
-              'homepage-slider-dot block h-2.5 w-2.5 rounded-full bg-gray-900/30 transition',
-            bulletActiveClass: 'homepage-slider-dot-active !w-7 !bg-primary',
+              'homepage-slider-dot block h-2.5 w-2.5 rounded-full bg-mist/50 transition-luxe',
+            bulletActiveClass: 'homepage-slider-dot-active !w-8 !bg-gold',
           }}
           className="h-full"
         >

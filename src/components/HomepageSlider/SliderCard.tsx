@@ -19,15 +19,17 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
 
   const content = (
     <>
-      <AppImage
-        src={imageUrl}
-        alt={slide.altText || 'Homepage promotional banner'}
-        fill
-        priority={priority}
-        sizes="100vw"
-        className="h-full w-full object-cover"
-      />
-      <span className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/10 to-transparent" />
+      <div className="absolute inset-0 catchlight z-0">
+        <AppImage
+          src={imageUrl}
+          alt={slide.altText || 'Homepage promotional banner'}
+          fill
+          priority={priority}
+          sizes="100vw"
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <span className="absolute inset-0 bg-gradient-to-r from-velvet/40 via-velvet/10 to-transparent z-10 pointer-events-none" />
     </>
   );
 

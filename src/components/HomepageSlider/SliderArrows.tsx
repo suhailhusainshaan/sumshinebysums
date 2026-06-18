@@ -26,7 +26,7 @@ const ArrowIcon = ({ direction }: { direction: 'left' | 'right' }) => (
 
 export default function SliderArrows({ prevClassName, nextClassName }: SliderArrowsProps) {
   const baseClass =
-    'absolute top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-white/85 text-gray-800 shadow-lg backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white/80 md:flex';
+    'absolute top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-porcelain/60 bg-porcelain/85 text-ink shadow-lg backdrop-blur transition-luxe hover:bg-porcelain hover:scale-105 focus:outline-none focus:ring-2 focus:ring-porcelain/80 md:flex';
 
   return (
     <>
