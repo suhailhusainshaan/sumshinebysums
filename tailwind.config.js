@@ -21,6 +21,13 @@ module.exports = {
         ring: 'var(--color-ring)',
         background: 'var(--color-background)',
         foreground: 'var(--color-foreground)',
+        ivory: '#EDE7DD',
+        ink: '#1B1814',
+        gold: '#B08D57',
+        velvet: '#2B3A30',
+        porcelain: '#FFFFFF',
+        mist: '#D8D2C6',
+        blush: '#D9B7AC',
         primary: {
           DEFAULT: 'var(--color-primary)', // Warm champagne gold
           foreground: 'var(--color-primary-foreground)', // white
@@ -106,7 +113,8 @@ module.exports = {
       },
       fontFamily: {
         heading: ['Crimson Text', 'serif'],
-        body: ['Source Sans 3', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-fraunces)', 'serif'],
         caption: ['Karla', 'sans-serif'],
         data: ['JetBrains Mono', 'monospace'],
       },
