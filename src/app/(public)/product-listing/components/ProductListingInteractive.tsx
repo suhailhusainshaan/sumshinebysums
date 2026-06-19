@@ -109,11 +109,12 @@ const ProductListingInteractive = ({
         brand: product.brand?.name,
         isFeatured: product.isFeatured,
         variants: product.variants,
-        images: product.images?.length > 0 
-          ? product.images.map((img: any) => resolveImageSrc(img.url))
-          : product.thumbnail 
-            ? [resolveImageSrc(product.thumbnail)]
-            : ['/assets/images/no_image.png'],
+        images:
+          product.images?.length > 0
+            ? product.images.map((img: any) => ({ url: resolveImageSrc(img.url), variantId: img.variantId as number }))
+            : product.thumbnail
+              ? [{ url: resolveImageSrc(product.thumbnail), variantId: product.variants?.[0]?.id as number }]
+              : [{ url: '/assets/images/no_image.png', variantId: product.variants?.[0]?.id as number }],
       })),
     [products.content]
   );
@@ -256,7 +257,7 @@ const ProductListingInteractive = ({
       <Header
         cartItemCount={cartItemCount}
         onSearchClick={() => setIsSearchOpen(true)}
-        onCartClick={() => { }}
+        onCartClick={() => {}}
       />
 
       <MobileHamburgerMenu
