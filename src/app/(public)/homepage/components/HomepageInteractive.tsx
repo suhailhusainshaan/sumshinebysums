@@ -6,12 +6,16 @@ import Header from '@/components/common/Header';
 import MobileHamburgerMenu from '@/components/common/MobileHamburgerMenu';
 import SearchComponent from '@/components/common/SearchComponent';
 import HeroSection from './HeroSection';
+import HomepageSlider from '@/components/HomepageSlider/HomepageSlider';
 import CategoriesSection from './CategoriesSection';
-import FeaturedCollections from './FeaturedCollections';
 import HomepageContactInfo from './HomepageContactInfo';
-import TrustBadgesSection from './TrustBadgesSection';
 import Footer from './Footer';
-import { HomepageCategory, HomepageFeaturedProduct, HomepageHeroMediaAsset } from '../types';
+import {
+  HomepageCategory,
+  HomepageFeaturedProduct,
+  HomepageHeroMediaAsset,
+  HomepageSlider as HomepageSliderType,
+} from '../types';
 import { ProductListingItem } from '@/app/(public)/product-listing/types';
 
 interface SearchResult {
@@ -29,14 +33,16 @@ interface HomepageInteractiveProps {
   bestsellers: ProductListingItem[];
   newArrivals: ProductListingItem[];
   heroMediaAsset: HomepageHeroMediaAsset | null;
+  homepageSliders: HomepageSliderType[];
 }
 
 const HomepageInteractive = ({
   categories = [],
-  featuredProducts = [],
+  featuredProducts: _featuredProducts = [],
   bestsellers: _bestsellers = [],
   newArrivals: _newArrivals = [],
   heroMediaAsset = null,
+  homepageSliders = [],
 }: HomepageInteractiveProps) => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -72,7 +78,8 @@ const HomepageInteractive = ({
       />
 
       <main className="pt-16 lg:pt-18">
-        <HeroSection onShopNowClick={handleShopNowClick} heroMediaAsset={heroMediaAsset} />
+        <HomepageSlider slides={homepageSliders} />
+        {/*<HeroSection onShopNowClick={handleShopNowClick} heroMediaAsset={heroMediaAsset} />*/}
         {/*<TrustBadgesSection />*/}
         <CategoriesSection categories={categories} />
         {/*<FeaturedCollections products={featuredProducts} />*/}
@@ -83,7 +90,7 @@ const HomepageInteractive = ({
             <HomepageContactInfo />
           </div>
         </section>
-        
+
         {/* 
         <section className="py-16 lg:py-24 bg-gradient-to-br from-primary/10 via-secondary/5 to-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

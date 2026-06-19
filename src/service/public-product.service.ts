@@ -8,6 +8,7 @@ import {
   HomepageCategory,
   HomepageFeaturedProduct,
   HomepageHeroMediaAsset,
+  HomepageSlider,
 } from '@/app/(public)/homepage/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
@@ -138,4 +139,8 @@ export async function getCategories() {
 
 export async function getMediaAssetByKey(key: string) {
   return fetchJson<HomepageHeroMediaAsset>(`/media-assets/${encodeURIComponent(key)}`);
+}
+
+export async function getHomepageSliders() {
+  return fetchJson<HomepageSlider[]>('/public/homepage/sliders');
 }
