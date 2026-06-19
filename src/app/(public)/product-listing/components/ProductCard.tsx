@@ -17,7 +17,7 @@ interface ProductCardProps {
   price: number;
   originalPrice?: number | null;
   image: string;
-  images?: string[];
+  images?: { url: string; variantId: number }[];
   alt: string;
   category?: string;
   brand?: string;
@@ -44,6 +44,8 @@ const ProductCard = ({
   isInWishlist,
 }: ProductCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeVariantId = images?.[activeIndex]?.variantId;
   const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
@@ -70,12 +72,13 @@ const ProductCard = ({
                 nextEl: `.swiper-next-${id}`,
               }}
               autoplay={{ delay: 3000, disableOnInteraction: true }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               className="h-full w-full"
             >
               {images.map((img, index) => (
                 <SwiperSlide key={index}>
                   <AppImage
-                    src={img}
+                    src={img.url}
                     alt={`${alt} ${index + 1}`}
                     className="h-full w-full object-cover transition-luxe group-hover:scale-105"
                     onLoad={() => setImageLoaded(true)}
@@ -127,6 +130,7 @@ const ProductCard = ({
 
           <WishlistButton
             productId={Number(id)}
+            variantId={activeVariantId}
             className="absolute right-3 top-3 rounded-full bg-card p-2 shadow-warm opacity-0 transition-luxe hover:scale-110 group-hover:opacity-100 z-20"
           />
         </div>

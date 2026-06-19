@@ -11,7 +11,7 @@ interface Product {
   price: number;
   originalPrice?: number | null;
   image: string;
-  images?: string[];
+  images?: { url: string; variantId: number }[];
   alt: string;
   category?: string;
   brand?: string;
