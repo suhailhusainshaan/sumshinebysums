@@ -1,154 +1,153 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import CartItem, { CartItemData } from './CartItem';
+import toast from 'react-hot-toast';
+import CartItem from './CartItem';
 import CartSummary from './CartSummary';
 import EmptyCart from './EmptyCart';
-import ShippingCalculator from './ShippingCalculator';
 import Breadcrumb from '@/components/common/Breadcrumb';
 import Icon from '@/components/ui/AppIcon';
 import Link from 'next/link';
+import { useCartStore } from '@/store/cartStore';
+
+const breadcrumbItems = [{ label: 'Shop', path: '/product-listing' }, { label: 'Shopping Cart' }];
+
+// Items shown in the empty cart "You might like" section
+const recommendedProducts = [
+  {
+    id: '101',
+    name: 'Crystal Stud Earrings',
+    price: 2499,
+    image: 'https://images.pexels.com/photos/1454171/pexels-photo-1454171.jpeg',
+    alt: 'Sparkling crystal stud earrings on black velvet jewelry display',
+    category: 'Earrings',
+  },
+  {
+    id: '102',
+    name: 'Gold Layered Necklace Set',
+    price: 3850,
+    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f',
+    alt: 'Three layered gold necklaces of varying lengths on white background',
+    category: 'Necklaces',
+  },
+  {
+    id: '103',
+    name: 'Statement Ring Collection',
+    price: 2999,
+    image: 'https://images.pixabay.com/photo/2017/11/22/19/00/ring-2971782_1280.jpg',
+    alt: 'Set of three statement rings with colorful gemstones on marble surface',
+    category: 'Rings',
+  },
+  {
+    id: '104',
+    name: 'Charm Bracelet with Crystals',
+    price: 3475,
+    image: 'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg',
+    alt: 'Silver charm bracelet with multiple crystal charms on jewelry stand',
+    category: 'Bracelets',
+  },
+];
 
 const ShoppingCartInteractive = () => {
   const router = useRouter();
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItemData[]>([]);
-  const [discount, setDiscount] = useState(0);
-  const [shippingCost, setShippingCost] = useState(0);
+  const { cart, loading, error, fetchCart, updateItem, removeItem, clearCart } = useCartStore();
+  const [updatingItemId, setUpdatingItemId] = useState<number | null>(null);
+  const [isClearing, setIsClearing] = useState(false);
 
   useEffect(() => {
-    setIsHydrated(true);
+    fetchCart();
+  }, [fetchCart]);
 
-    // Mock cart data
-    const mockCartItems: CartItemData[] = [
-      {
-        id: '1',
-        name: 'Elegant Rose Gold Necklace with Crystal Pendant',
-        price: 45.99,
-        quantity: 1,
-        image: 'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg',
-        alt: 'Elegant rose gold necklace with teardrop crystal pendant on white marble surface',
-        category: 'Necklaces',
-        selectedOptions: {
-          size: '18 inches',
-          color: 'Rose Gold',
-        },
-        maxQuantity: 10,
-      },
-      {
-        id: '2',
-        name: 'Vintage Pearl Drop Earrings',
-        price: 32.5,
-        quantity: 2,
-        image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908',
-        alt: 'Vintage style pearl drop earrings with gold hooks on velvet display',
-        category: 'Earrings',
-        selectedOptions: {
-          color: 'Gold',
-        },
-        maxQuantity: 15,
-      },
-      {
-        id: '3',
-        name: 'Delicate Chain Bracelet with Heart Charm',
-        price: 28.75,
-        quantity: 1,
-        image: 'https://images.pixabay.com/photo/2017/08/01/00/38/jewelry-2562598_1280.jpg',
-        alt: 'Delicate gold chain bracelet with small heart charm on white background',
-        category: 'Bracelets',
-        selectedOptions: {
-          size: '7 inches',
-          color: 'Gold',
-        },
-        maxQuantity: 12,
-      },
-    ];
-
-    setCartItems(mockCartItems);
-  }, []);
-
-  const recommendedProducts = [
-    {
-      id: '101',
-      name: 'Crystal Stud Earrings',
-      price: 24.99,
-      image: 'https://images.pexels.com/photos/1454171/pexels-photo-1454171.jpeg',
-      alt: 'Sparkling crystal stud earrings on black velvet jewelry display',
-      category: 'Earrings',
-    },
-    {
-      id: '102',
-      name: 'Gold Layered Necklace Set',
-      price: 38.5,
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f',
-      alt: 'Three layered gold necklaces of varying lengths on white background',
-      category: 'Necklaces',
-    },
-    {
-      id: '103',
-      name: 'Statement Ring Collection',
-      price: 29.99,
-      image: 'https://images.pixabay.com/photo/2017/11/22/19/00/ring-2971782_1280.jpg',
-      alt: 'Set of three statement rings with colorful gemstones on marble surface',
-      category: 'Rings',
-    },
-    {
-      id: '104',
-      name: 'Charm Bracelet with Crystals',
-      price: 34.75,
-      image: 'https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg',
-      alt: 'Silver charm bracelet with multiple crystal charms on jewelry stand',
-      category: 'Bracelets',
-    },
-  ];
-
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
-    );
-  };
-
-  const handleRemoveItem = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const handleApplyPromoCode = (code: string) => {
-    // Mock promo code validation
-    if (code.toUpperCase() === 'SAVE10') {
-      const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      setDiscount(subtotal * 0.1);
+  const handleQuantityChange = async (cartItemId: number, newQuantity: number) => {
+    setUpdatingItemId(cartItemId);
+    try {
+      const message = await updateItem(cartItemId, newQuantity);
+      if (message === 'Quantity adjusted to available stock') {
+        toast('Quantity adjusted to maximum available stock', {
+          icon: 'ℹ️',
+        });
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update quantity');
+    } finally {
+      setUpdatingItemId(null);
     }
   };
 
-  const handleCalculateShipping = (country: string, state: string, zipCode: string) => {
-    // Mock shipping calculation
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    setShippingCost(subtotal >= 50 ? 0 : 5.99);
+  const handleRemoveItem = async (cartItemId: number) => {
+    setUpdatingItemId(cartItemId);
+    try {
+      await removeItem(cartItemId);
+      toast.success('Item removed from cart');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to remove item');
+    } finally {
+      setUpdatingItemId(null);
+    }
+  };
+
+  const handleClearCart = async () => {
+    setIsClearing(true);
+    try {
+      await clearCart();
+      toast.success('Cart cleared');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to clear cart');
+    } finally {
+      setIsClearing(false);
+    }
   };
 
   const handleProceedToCheckout = () => {
     router.push('/checkout-process');
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  const breadcrumbItems = [{ label: 'Shop', path: '/product-listing' }, { label: 'Shopping Cart' }];
-
-  if (!isHydrated) {
+  // --- Loading skeleton ---
+  if (loading && !cart) {
     return (
       <div className="min-h-screen bg-background pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-muted rounded w-1/4"></div>
-            <div className="h-64 bg-muted rounded"></div>
+            <div className="h-6 bg-muted rounded w-1/3 mb-8" />
+            <div className="grid lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-32 bg-muted rounded-md" />
+                ))}
+              </div>
+              <div className="h-80 bg-muted rounded-md" />
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  if (cartItems.length === 0) {
+  // --- Error state ---
+  if (error && !cart) {
+    return (
+      <div className="min-h-screen bg-background pt-20 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <Icon name="ExclamationCircleIcon" size={48} className="mx-auto text-error mb-4" />
+          <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
+            Could not load your cart
+          </h2>
+          <p className="text-muted-foreground mb-6">{error}</p>
+          <button
+            onClick={fetchCart}
+            className="inline-flex items-center gap-2 h-10 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:scale-102 transition-luxe"
+          >
+            <Icon name="ArrowPathIcon" size={18} />
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Empty cart ---
+  if (!cart || cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-background pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -159,10 +158,10 @@ const ShoppingCartInteractive = () => {
     );
   }
 
+  // --- Cart with items ---
   return (
     <div className="min-h-screen bg-background pt-20 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} className="mb-6" />
 
         {/* Page Header */}
@@ -172,40 +171,57 @@ const ShoppingCartInteractive = () => {
               Shopping Cart
             </h1>
             <p className="text-muted-foreground">
-              {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
+              {cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'} · {cart.totalQuantity}{' '}
+              {cart.totalQuantity === 1 ? 'piece' : 'pieces'} total
             </p>
           </div>
-          <Link
-            href="/product-listing"
-            className="hidden sm:flex items-center gap-2 text-primary hover:text-primary/80 transition-luxe"
-          >
-            <Icon name="ArrowLeftIcon" size={20} />
-            Continue Shopping
-          </Link>
+          <div className="hidden sm:flex items-center gap-4">
+            <button
+              onClick={handleClearCart}
+              disabled={isClearing}
+              className="flex items-center gap-2 text-muted-foreground hover:text-error transition-luxe text-sm disabled:opacity-50"
+            >
+              <Icon name="TrashIcon" size={16} />
+              {isClearing ? 'Clearing…' : 'Clear cart'}
+            </button>
+            <Link
+              href="/product-listing"
+              className="flex items-center gap-2 text-primary hover:text-primary/80 transition-luxe"
+            >
+              <Icon name="ArrowLeftIcon" size={20} />
+              Continue Shopping
+            </Link>
+          </div>
         </div>
 
-        {/* Main Content Grid */}
+        {/* Unavailable items banner */}
+        {cart.hasUnavailableItems && (
+          <div className="mb-6 flex items-start gap-3 p-4 bg-warning/10 border border-warning/30 rounded-md">
+            <Icon name="ExclamationTriangleIcon" size={20} className="text-warning flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-foreground text-sm">Some items are unavailable</p>
+              <p className="text-caption text-muted-foreground mt-0.5">
+                Review the items below and remove unavailable ones before proceeding to checkout.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Main grid */}
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Cart Items Section */}
+          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {/* Cart Items */}
-            <div className="space-y-4">
-              {cartItems.map((item) => (
-                <CartItem
-                  key={item.id}
-                  item={item}
-                  onQuantityChange={handleQuantityChange}
-                  onRemove={handleRemoveItem}
-                />
-              ))}
-            </div>
+            {cart.items.map((item) => (
+              <CartItem
+                key={item.cartItemId}
+                item={item}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemoveItem}
+                isUpdating={updatingItemId === item.cartItemId}
+              />
+            ))}
 
-            {/* Shipping Calculator - Mobile */}
-            <div className="lg:hidden">
-              <ShippingCalculator onCalculate={handleCalculateShipping} />
-            </div>
-
-            {/* Continue Shopping - Mobile */}
+            {/* Mobile continue shopping */}
             <Link
               href="/product-listing"
               className="flex sm:hidden items-center justify-center gap-2 h-12 px-6 bg-secondary text-secondary-foreground rounded-md font-medium hover:scale-102 transition-luxe"
@@ -215,20 +231,9 @@ const ShoppingCartInteractive = () => {
             </Link>
           </div>
 
-          {/* Summary Section */}
-          <div className="space-y-6">
-            <CartSummary
-              subtotal={subtotal}
-              shippingCost={shippingCost}
-              discount={discount}
-              onApplyPromoCode={handleApplyPromoCode}
-              onProceedToCheckout={handleProceedToCheckout}
-            />
-
-            {/* Shipping Calculator - Desktop */}
-            <div className="hidden lg:block">
-              <ShippingCalculator onCalculate={handleCalculateShipping} />
-            </div>
+          {/* Summary */}
+          <div>
+            <CartSummary cart={cart} onProceedToCheckout={handleProceedToCheckout} />
           </div>
         </div>
 
@@ -244,7 +249,7 @@ const ShoppingCartInteractive = () => {
               <p className="text-sm font-medium text-foreground mb-1">Guest Checkout Available</p>
               <p className="text-caption text-muted-foreground">
                 You can checkout as a guest or{' '}
-                <Link href="/" className="text-primary hover:underline">
+                <Link href="/login" className="text-primary hover:underline">
                   sign in to your account
                 </Link>{' '}
                 to save your cart and track orders.

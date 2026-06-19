@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import CartBadge from '@/components/cart/CartBadge';
 
 interface MenuItem {
   label: string;
@@ -14,10 +15,9 @@ interface MenuItem {
 interface MobileHamburgerMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  cartItemCount?: number;
 }
 
-const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHamburgerMenuProps) => {
+const MobileHamburgerMenu = ({ isOpen, onClose }: MobileHamburgerMenuProps) => {
   const menuItems: MenuItem[] = [
     {
       label: 'Shop',
@@ -130,10 +130,8 @@ const MobileHamburgerMenu = ({ isOpen, onClose, cartItemCount = 0 }: MobileHambu
                     {item.icon && <Icon name={item.icon as any} size={20} />}
                     <span className="font-medium">{item.label}</span>
                   </div>
-                  {item.label === 'Cart' && cartItemCount > 0 && (
-                    <span className="bg-accent text-accent-foreground text-xs font-medium rounded-full h-6 w-6 flex items-center justify-center">
-                      {cartItemCount > 9 ? '9+' : cartItemCount}
-                    </span>
+                  {item.label === 'Cart' && (
+                    <CartBadge className="relative static -top-0 -right-0" />
                   )}
                 </Link>
               )}

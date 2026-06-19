@@ -47,7 +47,6 @@ const HomepageInteractive = ({
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [cartItemCount] = useState(3);
 
   const handleShopNowClick = () => {
     router.push('/product-listing');
@@ -60,7 +59,6 @@ const HomepageInteractive = ({
   return (
     <div className="min-h-screen bg-background">
       <Header
-        cartItemCount={cartItemCount}
         onSearchClick={() => setIsSearchOpen(true)}
         onCartClick={() => router.push('/shopping-cart')}
       />
@@ -68,7 +66,6 @@ const HomepageInteractive = ({
       <MobileHamburgerMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
-        cartItemCount={cartItemCount}
       />
 
       <SearchComponent

@@ -74,7 +74,6 @@ const ProductListingInteractive = ({
       stockQuantity: number;
     }[];
   } | null>(null);
-  const [cartItemCount, setCartItemCount] = useState(3);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
@@ -239,8 +238,8 @@ const ProductListingInteractive = ({
     });
   };
 
-  const handleAddToCart = (productId: string, variantId?: string, quantity?: number) => {
-    setCartItemCount((prev) => prev + (quantity || 1));
+  const handleAddToCart = (_productId: string, _variantId?: string, _quantity?: number) => {
+    // Cart state is managed globally via cartStore; add-to-cart is handled on product-detail page
   };
 
   const handleWishlistToggle = (productId: string) => {
@@ -255,7 +254,6 @@ const ProductListingInteractive = ({
   return (
     <div className="min-h-screen bg-background">
       <Header
-        cartItemCount={cartItemCount}
         onSearchClick={() => setIsSearchOpen(true)}
         onCartClick={() => {}}
       />
@@ -263,7 +261,6 @@ const ProductListingInteractive = ({
       <MobileHamburgerMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
-        cartItemCount={cartItemCount}
       />
 
       <SearchComponent isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

@@ -7,14 +7,14 @@ import UserDropdown from '@/components/common/UserDropdown';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
 import WishlistBadge from '@/components/wishlist/WishlistBadge';
+import CartBadge from '@/components/cart/CartBadge';
 
 interface HeaderProps {
-  cartItemCount?: number;
   onSearchClick?: () => void;
   onCartClick?: () => void;
 }
 
-const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) => {
+const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isLoggedIn, isLoading, logout } = useAuth();
   const router = useRouter();
@@ -118,18 +118,15 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               <WishlistBadge />
             </Link>
 
-            <button
+            <Link
+              href="/shopping-cart"
               onClick={handleCartClick}
               className="relative p-2 text-foreground hover:text-primary transition-luxe"
               aria-label="Shopping cart"
             >
               <Icon name="ShoppingBagIcon" size={24} />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount > 9 ? '9+' : cartItemCount}
-                </span>
-              )}
-            </button>
+              <CartBadge />
+            </Link>
 
             {isLoggedIn ? (
               <UserDropdown />
@@ -161,18 +158,15 @@ const Header = ({ cartItemCount = 0, onSearchClick, onCartClick }: HeaderProps) 
               <Icon name="HeartIcon" size={24} />
               <WishlistBadge />
             </Link>
-            <button
+            <Link
+              href="/shopping-cart"
               onClick={handleCartClick}
               className="relative p-2 text-foreground hover:text-primary transition-luxe"
               aria-label="Shopping cart"
             >
               <Icon name="ShoppingBagIcon" size={24} />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount > 9 ? '9+' : cartItemCount}
-                </span>
-              )}
-            </button>
+              <CartBadge />
+            </Link>
             <button
               onClick={toggleMobileMenu}
               className="p-2 text-foreground hover:text-primary transition-luxe"

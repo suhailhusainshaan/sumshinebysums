@@ -83,7 +83,7 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
                     {product.name}
                   </h4>
                   <p className="text-data font-semibold text-primary">
-                    ${product.price.toFixed(2)}
+                    ₹{product.price.toFixed(2)}
                   </p>
                 </div>
               </Link>

@@ -14,7 +14,7 @@ export default function ContactSupportPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header cartItemCount={3} />
+      <Header />
 
       <main className="pt-20 lg:pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
