@@ -24,39 +24,14 @@ export default function ContactSupportPage() {
 
           <div className="mb-12 text-center">
             <h1 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              How Can We Help You?
+              Need help with your order?
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our dedicated support team is here to assist you with any questions or concerns about
-              your Sumshine By Sums experience.
+              We are here to support you with your concerns.
             </p>
           </div>
 
           <ContactSupportInteractive />
-
-          <div className="mt-16 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg p-8 text-center">
-            <h2 className="font-heading text-2xl font-semibold text-foreground mb-4">
-              Need Immediate Assistance?
-            </h2>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              For urgent matters requiring immediate attention, our phone support team is available
-              during business hours to provide real-time assistance.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="tel:+15551234567"
-                className="inline-flex items-center space-x-2 bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe"
-              >
-                <span>Call Now: +1 (555) 123-4567</span>
-              </a>
-              <a
-                href="mailto:support@sumshinebysums.com"
-                className="inline-flex items-center space-x-2 bg-card text-foreground border border-border px-6 py-3 rounded-md font-medium hover:bg-muted transition-luxe"
-              >
-                <span>Email Support</span>
-              </a>
-            </div>
-          </div>
         </div>
       </main>
     </div>

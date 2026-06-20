@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import Icon from '@/components/ui/AppIcon';
 import Header from '@/components/common/Header';
 import SearchComponent from '@/components/common/SearchComponent';
@@ -11,6 +12,7 @@ import SortControls from './SortControls';
 import ProductGrid from './ProductGrid';
 import QuickAddModal from './QuickAddModal';
 import ActiveFilters from './ActiveFilters';
+import { useCartStore } from '@/store/cartStore';
 import {
   ProductFilterOption,
   ProductFiltersResponse,
@@ -236,8 +238,23 @@ const ProductListingInteractive = ({
     });
   };
 
-  const handleAddToCart = (_productId: string, _variantId?: string, _quantity?: number) => {
-    // Cart state is managed globally via cartStore; add-to-cart is handled on product-detail page
+  const addItem = useCartStore((s) => s.addItem);
+
+  const handleAddToCart = async (productId: string, variantId?: string, quantity = 1) => {
+    if (!variantId) {
+      toast.error('Please select a variant');
+      return;
+    }
+    try {
+      const message = await addItem(Number(productId), Number(variantId), quantity);
+      if (message === 'Quantity adjusted to available stock') {
+        toast('Quantity adjusted to maximum available stock', { icon: 'ℹ️' });
+      } else {
+        toast.success('Added to cart!');
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to add to cart');
+    }
   };
 
   const handleWishlistToggle = (productId: string) => {

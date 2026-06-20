@@ -84,11 +84,11 @@ const BestsellersSection = ({ products = [] }: BestsellersSectionProps) => {
 
                 <div className="flex items-center space-x-2">
                   <span className="text-data text-lg font-semibold text-primary">
-                    ${product.price.toFixed(2)}
+                    ₹{product.price.toFixed(2)}
                   </span>
                   {product.comparePrice && (
                     <span className="text-data text-sm text-muted-foreground line-through">
-                      ${product.comparePrice.toFixed(2)}
+                      ₹{product.comparePrice.toFixed(2)}
                     </span>
                   )}
                 </div>

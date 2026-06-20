@@ -14,28 +14,21 @@ const HomepageContactInfo = () => {
     {
       icon: 'PhoneIcon',
       title: 'Customer Service',
-      content: '+1 (555) 123-4567',
+      content: '+91 9818341754',
       action: 'Call us',
-      href: 'tel:+15551234567',
+      href: 'tel:+919818341754',
     },
     {
       icon: 'EnvelopeIcon',
       title: 'Email Support',
-      content: 'support@sumshinebysums.com',
+      content: 'sumshinebysums@gmail.com',
       action: 'Send email',
-      href: 'mailto:support@sumshinebysums.com',
+      href: 'mailto:sumshinebysums@gmail.com',
     },
     {
       icon: 'ClockIcon',
       title: 'Business Hours',
-      content: 'Mon-Fri: 9AM-6PM EST\nSat: 10AM-4PM EST\nSun: Closed',
-    },
-    {
-      icon: 'MapPinIcon',
-      title: 'Visit Us',
-      content: '123 Jewelry Lane, Suite 456\nNew York, NY 10001',
-      action: 'Get directions',
-      href: 'https://maps.google.com/?q=40.7589,-73.9851',
+      content: 'Monday - Friday: 9:00 AM - 6:00 PM IST\nSaturday: 10:00 AM - 4:00 PM IST\nSunday: Closed',
     },
   ];
 
@@ -49,7 +42,7 @@ const HomepageContactInfo = () => {
         <p className="text-muted-foreground">We're here to help you</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {contactDetails.map((detail, index) => (
           <div key={index} className="flex flex-col items-center text-center">
             <div className="p-3 bg-muted rounded-full mb-4">
