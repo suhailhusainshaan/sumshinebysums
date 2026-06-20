@@ -65,7 +65,7 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
             {recommendedProducts.map((product) => (
               <Link
                 key={product.id}
-                href={`/product-detail?id=${product.id}`}
+                href={`/product-detail/${product.id}`}
                 className="group bg-card border border-border rounded-md overflow-hidden hover:shadow-warm-md transition-luxe"
               >
                 <div className="aspect-square overflow-hidden">

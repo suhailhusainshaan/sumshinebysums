@@ -4,7 +4,6 @@ import React, { useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
 import Header from '@/components/common/Header';
-import MobileHamburgerMenu from '@/components/common/MobileHamburgerMenu';
 import SearchComponent from '@/components/common/SearchComponent';
 import Breadcrumb from '@/components/common/Breadcrumb';
 import FilterPanel from './FilterPanel';
@@ -55,7 +54,6 @@ const ProductListingInteractive = ({
   query,
   errorMessage,
 }: ProductListingInteractiveProps) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -256,11 +254,6 @@ const ProductListingInteractive = ({
       <Header
         onSearchClick={() => setIsSearchOpen(true)}
         onCartClick={() => {}}
-      />
-
-      <MobileHamburgerMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
       />
 
       <SearchComponent isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

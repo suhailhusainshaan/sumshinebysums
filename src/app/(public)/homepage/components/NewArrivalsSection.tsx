@@ -46,7 +46,7 @@ const NewArrivalsSection = ({ products = [] }: NewArrivalsSectionProps) => {
           {products.map((item) => (
             <Link
               key={item.id}
-              href={`/product-detail?id=${item.id}`}
+              href={`/product-detail/${item.id}`}
               className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
             >
               <div className="relative h-80 overflow-hidden bg-muted">

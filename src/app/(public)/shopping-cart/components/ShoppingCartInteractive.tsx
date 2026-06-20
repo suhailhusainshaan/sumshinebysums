@@ -165,39 +165,47 @@ const ShoppingCartInteractive = () => {
         <Breadcrumb items={breadcrumbItems} className="mb-6" />
 
         {/* Page Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-2">
-              Shopping Cart
-            </h1>
-            <p className="text-muted-foreground">
-              {cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'} · {cart.totalQuantity}{' '}
-              {cart.totalQuantity === 1 ? 'piece' : 'pieces'} total
-            </p>
+        <div className="mb-6">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h1 className="font-heading text-2xl sm:text-4xl font-bold text-foreground mb-1">
+                Shopping Cart
+              </h1>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'} · {cart.totalQuantity}{' '}
+                {cart.totalQuantity === 1 ? 'piece' : 'pieces'} total
+              </p>
+            </div>
+            <button
+              onClick={() => router.back()}
+              className="flex-shrink-0 flex items-center gap-1.5 text-primary hover:text-primary/80 transition-luxe text-sm font-medium mt-1"
+            >
+              <Icon name="ArrowLeftIcon" size={16} />
+              <span className="hidden sm:inline">Continue Shopping</span>
+              <span className="sm:hidden">Back</span>
+            </button>
           </div>
-          <div className="hidden sm:flex items-center gap-4">
+          {/* Clear cart — visible on all screen sizes */}
+          <div className="mt-3">
             <button
               onClick={handleClearCart}
               disabled={isClearing}
-              className="flex items-center gap-2 text-muted-foreground hover:text-error transition-luxe text-sm disabled:opacity-50"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-error transition-luxe text-xs disabled:opacity-50"
             >
-              <Icon name="TrashIcon" size={16} />
+              <Icon name="TrashIcon" size={14} />
               {isClearing ? 'Clearing…' : 'Clear cart'}
             </button>
-            <Link
-              href="/product-listing"
-              className="flex items-center gap-2 text-primary hover:text-primary/80 transition-luxe"
-            >
-              <Icon name="ArrowLeftIcon" size={20} />
-              Continue Shopping
-            </Link>
           </div>
         </div>
 
         {/* Unavailable items banner */}
         {cart.hasUnavailableItems && (
           <div className="mb-6 flex items-start gap-3 p-4 bg-warning/10 border border-warning/30 rounded-md">
-            <Icon name="ExclamationTriangleIcon" size={20} className="text-warning flex-shrink-0 mt-0.5" />
+            <Icon
+              name="ExclamationTriangleIcon"
+              size={20}
+              className="text-warning flex-shrink-0 mt-0.5"
+            />
             <div>
               <p className="font-medium text-foreground text-sm">Some items are unavailable</p>
               <p className="text-caption text-muted-foreground mt-0.5">
@@ -207,8 +215,8 @@ const ShoppingCartInteractive = () => {
           </div>
         )}
 
-        {/* Main grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* Main grid: items left, summary right on desktop; stacked on mobile */}
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cart.items.map((item) => (
@@ -220,43 +228,34 @@ const ShoppingCartInteractive = () => {
                 isUpdating={updatingItemId === item.cartItemId}
               />
             ))}
-
-            {/* Mobile continue shopping */}
-            <Link
-              href="/product-listing"
-              className="flex sm:hidden items-center justify-center gap-2 h-12 px-6 bg-secondary text-secondary-foreground rounded-md font-medium hover:scale-102 transition-luxe"
-            >
-              <Icon name="ArrowLeftIcon" size={20} />
-              Continue Shopping
-            </Link>
           </div>
 
-          {/* Summary */}
-          <div>
+          {/* Summary — natural flow on mobile (below items), sticky sidebar on desktop */}
+          <div className="lg:col-span-1">
             <CartSummary cart={cart} onProceedToCheckout={handleProceedToCheckout} />
           </div>
         </div>
 
         {/* Guest Checkout Notice */}
-        <div className="mt-8 p-4 bg-muted rounded-md border border-border">
-          <div className="flex items-start gap-3">
-            <Icon
-              name="InformationCircleIcon"
-              size={20}
-              className="text-primary flex-shrink-0 mt-0.5"
-            />
-            <div>
-              <p className="text-sm font-medium text-foreground mb-1">Guest Checkout Available</p>
-              <p className="text-caption text-muted-foreground">
-                You can checkout as a guest or{' '}
-                <Link href="/login" className="text-primary hover:underline">
-                  sign in to your account
-                </Link>{' '}
-                to save your cart and track orders.
-              </p>
-            </div>
-          </div>
-        </div>
+        {/*<div className="mt-8 p-4 bg-muted rounded-md border border-border">*/}
+        {/*  <div className="flex items-start gap-3">*/}
+        {/*    <Icon*/}
+        {/*      name="InformationCircleIcon"*/}
+        {/*      size={20}*/}
+        {/*      className="text-primary flex-shrink-0 mt-0.5"*/}
+        {/*    />*/}
+        {/*    <div>*/}
+        {/*      <p className="text-sm font-medium text-foreground mb-1">Guest Checkout Available</p>*/}
+        {/*      <p className="text-caption text-muted-foreground">*/}
+        {/*        You can checkout as a guest or{' '}*/}
+        {/*        <Link href="/login" className="text-primary hover:underline">*/}
+        {/*          sign in to your account*/}
+        {/*        </Link>{' '}*/}
+        {/*        to save your cart and track orders.*/}
+        {/*      </p>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </div>
   );

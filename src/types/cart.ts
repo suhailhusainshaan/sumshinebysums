@@ -12,6 +12,7 @@ export interface CartItem {
   lineTotal: number;
   availableStock: number;
   isAvailable: boolean;
+  imageUrl: string | null;
   stockIssue: 'OUT_OF_STOCK' | 'INSUFFICIENT_STOCK' | 'PRODUCT_INACTIVE' | 'PRODUCT_UNPUBLISHED' | null;
 }
 
@@ -21,6 +22,7 @@ export interface Cart {
   itemCount: number;
   totalQuantity: number;
   subtotal: number;
+  shippingCharge: number;
   discountTotal: number;
   appliedPromoCodes: string[];
   total: number;

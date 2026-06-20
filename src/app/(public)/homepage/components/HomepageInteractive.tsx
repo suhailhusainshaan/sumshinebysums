@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/common/Header';
-import MobileHamburgerMenu from '@/components/common/MobileHamburgerMenu';
 import SearchComponent from '@/components/common/SearchComponent';
 import HeroSection from './HeroSection';
 import HomepageSlider from '@/components/HomepageSlider/HomepageSlider';
@@ -45,12 +44,7 @@ const HomepageInteractive = ({
   homepageSliders = [],
 }: HomepageInteractiveProps) => {
   const router = useRouter();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const handleShopNowClick = () => {
-    router.push('/product-listing');
-  };
 
   const handleSearch = async (_query: string): Promise<SearchResult[]> => {
     return [];
@@ -61,11 +55,6 @@ const HomepageInteractive = ({
       <Header
         onSearchClick={() => setIsSearchOpen(true)}
         onCartClick={() => router.push('/shopping-cart')}
-      />
-
-      <MobileHamburgerMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
       />
 
       <SearchComponent

@@ -5,11 +5,11 @@ import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
 import { CartItem as CartItemType } from '@/types/cart';
+import { resolveImageSrc } from '@/lib/image';
 
-// Stock issue labels
 const stockIssueLabel: Record<string, string> = {
   OUT_OF_STOCK: 'Out of stock',
-  INSUFFICIENT_STOCK: '', // filled dynamically
+  INSUFFICIENT_STOCK: '',
   PRODUCT_INACTIVE: 'Currently unavailable',
   PRODUCT_UNPUBLISHED: 'Currently unavailable',
 };
@@ -23,6 +23,8 @@ interface CartItemProps {
 
 const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: CartItemProps) => {
   const [localQty, setLocalQty] = useState(item.quantity);
+
+  const productUrl = `/product-detail/${item.productId}${item.variantId ? `?variant=${item.variantId}` : ''}`;
 
   const handleDecrease = async () => {
     const next = localQty - 1;
@@ -47,7 +49,6 @@ const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: Cart
     await onQuantityChange(item.cartItemId, value);
   };
 
-  // Keep local quantity in sync if the server responds with a different value
   React.useEffect(() => {
     setLocalQty(item.quantity);
   }, [item.quantity]);
@@ -70,10 +71,10 @@ const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: Cart
       `}
     >
       {/* Product Image */}
-      <Link href={`/product-detail/${item.productSlug}`} className="flex-shrink-0">
+      <Link href={productUrl} className="flex-shrink-0">
         <div className="w-full sm:w-24 h-32 sm:h-24 overflow-hidden rounded-md bg-muted">
           <AppImage
-            src={`/assets/images/no_image.png`}
+            src={resolveImageSrc(item.imageUrl)}
             alt={item.productName}
             width={96}
             height={96}
@@ -86,14 +87,18 @@ const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: Cart
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex-1 min-w-0">
+            {/* Point 3: Product Name */}
             <Link
-              href={`/product-detail/${item.productSlug}`}
+              href={productUrl}
               className="font-heading text-base sm:text-lg font-semibold text-foreground hover:text-primary transition-luxe line-clamp-2"
             >
               {item.productName}
             </Link>
+            {/* Point 3: Variant (Color) */}
             {item.variantName && (
-              <p className="text-caption text-muted-foreground mt-0.5">{item.variantName}</p>
+              <p className="text-caption text-muted-foreground mt-0.5 text-sm">
+                {item.variantName}
+              </p>
             )}
             <p className="text-caption text-muted-foreground text-xs mt-0.5">SKU: {item.sku}</p>
           </div>
@@ -114,50 +119,59 @@ const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: Cart
           </div>
         )}
 
-        {/* Price and Quantity */}
-        <div className="flex items-center justify-between gap-4 mt-3">
-          {/* Quantity stepper */}
-          <div className="flex items-center gap-2 bg-muted rounded-md p-1">
-            <button
-              onClick={handleDecrease}
-              disabled={isUpdating}
-              className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground rounded transition-luxe disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Decrease quantity"
-            >
-              <Icon name="MinusIcon" size={16} />
-            </button>
-            <input
-              type="number"
-              value={localQty}
-              onChange={handleInputChange}
-              min="1"
-              max={item.availableStock || 99}
-              className="w-12 text-center text-data font-medium bg-transparent border-none focus:outline-none"
-              aria-label="Quantity"
-            />
-            <button
-              onClick={handleIncrease}
-              disabled={isUpdating || localQty >= item.availableStock}
-              className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground rounded transition-luxe disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Increase quantity"
-            >
-              <Icon name="PlusIcon" size={16} />
-            </button>
+        {/* Bottom row: Quantity + Price */}
+        <div className="flex flex-wrap items-end justify-between gap-3 mt-3">
+          {/* Quantity stepper with label */}
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-muted-foreground font-medium">Quantity</span>
+            <div className="flex items-center gap-1 bg-muted rounded-md p-1">
+              <button
+                onClick={handleDecrease}
+                disabled={isUpdating}
+                className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground rounded transition-luxe disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Decrease quantity"
+              >
+                <Icon name="MinusIcon" size={16} />
+              </button>
+              <input
+                type="number"
+                value={localQty}
+                onChange={handleInputChange}
+                min="1"
+                max={item.availableStock || 99}
+                className="w-10 text-center text-data font-medium bg-transparent border-none focus:outline-none"
+                aria-label="Quantity"
+              />
+              <button
+                onClick={handleIncrease}
+                disabled={isUpdating || localQty >= item.availableStock}
+                className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground rounded transition-luxe disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Increase quantity"
+              >
+                <Icon name="PlusIcon" size={16} />
+              </button>
+            </div>
           </div>
 
-          {/* Pricing */}
+          {/* Price display */}
           <div className="text-right">
             <p className="text-data text-lg font-semibold text-primary">
               ₹{item.lineTotal.toFixed(2)}
             </p>
-            <div className="flex items-center gap-2 justify-end">
-              <p className="text-caption text-muted-foreground">₹{item.unitPrice.toFixed(2)} each</p>
-              {item.compareAtPrice !== null && item.compareAtPrice > item.unitPrice && (
-                <p className="text-caption text-muted-foreground line-through text-xs">
-                  ₹{item.compareAtPrice.toFixed(2)}
-                </p>
-              )}
-            </div>
+            {item.quantity > 1 ? (
+              <p className="text-caption text-muted-foreground text-xs">
+                {item.quantity} × ₹{item.unitPrice.toFixed(2)}
+              </p>
+            ) : (
+              <p className="text-caption text-muted-foreground text-xs">
+                ₹{item.unitPrice.toFixed(2)} / unit
+              </p>
+            )}
+            {item.compareAtPrice !== null && item.compareAtPrice > item.unitPrice && (
+              <p className="text-caption text-muted-foreground line-through text-xs">
+                ₹{item.compareAtPrice.toFixed(2)}
+              </p>
+            )}
           </div>
         </div>
       </div>
