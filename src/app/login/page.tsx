@@ -7,6 +7,8 @@ import { authService } from '@/service/auth.service';
 import Link from 'next/link';
 import { getGuestToken } from '@/lib/wishlistCookie';
 import { useWishlistStore } from '@/store/wishlistStore';
+import { getCartGuestToken } from '@/lib/api/cartApi';
+import { useCartStore } from '@/store/cartStore';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,6 +45,18 @@ export default function LoginPage() {
           }
         } else {
           await useWishlistStore.getState().fetchWishlist();
+        }
+
+        // Merge guest cart if one exists
+        const cartGuestToken = getCartGuestToken();
+        if (cartGuestToken) {
+          try {
+            await useCartStore.getState().mergeGuestCart(cartGuestToken);
+          } catch (e) {
+            console.error('Failed to merge cart:', e);
+          }
+        } else {
+          await useCartStore.getState().fetchCart();
         }
 
         const redirectUrl = res.data?.user?.roleCode === 'SUPER_ADMIN' ? '/admin' : '/';

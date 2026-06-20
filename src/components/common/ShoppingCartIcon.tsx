@@ -91,7 +91,7 @@ const ShoppingCartIcon = ({
                   </p>
                   <p className="text-caption text-muted-foreground">Qty: {item.quantity}</p>
                   <p className="text-data text-sm font-medium text-primary">
-                    ${item.price.toFixed(2)}
+                    ₹{item.price.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -102,7 +102,7 @@ const ShoppingCartIcon = ({
             <div className="flex items-center justify-between mb-4">
               <span className="font-medium text-popover-foreground">Subtotal:</span>
               <span className="text-data text-lg font-semibold text-primary">
-                ${totalPrice.toFixed(2)}
+                ₹{totalPrice.toFixed(2)}
               </span>
             </div>
             <Link

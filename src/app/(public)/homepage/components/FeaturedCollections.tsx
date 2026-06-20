@@ -56,7 +56,7 @@ const FeaturedCollections = ({ products = [] }: FeaturedProductsProps) => {
             products.map((product) => (
               <Link
                 key={product.id}
-                href={`/product-detail?id=${product.id}`}
+                href={`/product-detail/${product.id}`}
                 className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
               >
                 <div className="relative w-full aspect-square overflow-hidden bg-muted">

@@ -109,7 +109,7 @@ export default function WishlistPage() {
                     className="group relative overflow-hidden rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md"
                   >
                     <Link
-                      href={`/product-detail?id=${item.productId}${item.variantId ? `&variant=${item.variantId}` : ''}`}
+                      href={`/product-detail/${item.productId}${item.variantId ? `?variant=${item.variantId}` : ''}`}
                       className="block"
                     >
                       <div className="relative aspect-square overflow-hidden bg-muted">

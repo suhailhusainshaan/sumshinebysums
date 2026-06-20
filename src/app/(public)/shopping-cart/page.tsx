@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ShoppingCartPage() {
   return (
     <>
-      <Header cartItemCount={3} />
+      <Header />
       <ShoppingCartInteractive />
     </>
   );

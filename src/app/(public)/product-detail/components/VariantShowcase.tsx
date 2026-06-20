@@ -27,7 +27,7 @@ const VariantShowcase = ({ productId, variants, selectedVariantId }: VariantShow
         </p>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {variants.map((variant) => {
           const isSelected = selectedVariantId === variant.id;
           const image =
@@ -36,7 +36,7 @@ const VariantShowcase = ({ productId, variants, selectedVariantId }: VariantShow
           return (
             <Link
               key={variant.id}
-              href={`/product-detail?id=${productId}&variant=${variant.id}`}
+              href={`/product-detail/${productId}?variant=${variant.id}`}
               className={`overflow-hidden rounded-lg border bg-card transition-luxe hover:border-primary hover:shadow-warm ${isSelected ? 'border-primary shadow-warm' : 'border-border'
                 }`}
             >

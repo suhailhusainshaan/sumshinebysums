@@ -72,7 +72,7 @@ const RelatedProducts = ({ products, title = 'Complete the Look' }: RelatedProdu
           return (
             <Link
               key={product.id}
-              href={`/product-detail?id=${product.id}`}
+              href={`/product-detail/${product.id}`}
               className="group w-64 flex-shrink-0 rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md"
             >
               <div className="relative aspect-square overflow-hidden rounded-t-lg">

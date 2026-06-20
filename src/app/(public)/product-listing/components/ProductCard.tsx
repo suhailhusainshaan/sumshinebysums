@@ -60,7 +60,7 @@ const ProductCard = ({
 
   return (
     <div className="group relative overflow-hidden rounded-lg bg-card shadow-warm transition-luxe hover:shadow-warm-md">
-      <Link href={`/product-detail?id=${id}`} className="block">
+      <Link href={`/product-detail/${id}`} className="block">
         <div className="relative aspect-square overflow-hidden bg-muted group/image">
           {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
           

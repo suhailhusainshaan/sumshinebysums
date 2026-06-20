@@ -55,7 +55,7 @@ const BestsellersSection = ({ products = [] }: BestsellersSectionProps) => {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/product-detail?id=${product.id}`}
+              href={`/product-detail/${product.id}`}
               className="group overflow-hidden rounded-lg border border-border bg-card transition-luxe hover:shadow-warm-lg"
             >
               <div className="relative h-80 overflow-hidden bg-muted">

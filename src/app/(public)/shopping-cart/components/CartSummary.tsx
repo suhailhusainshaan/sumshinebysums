@@ -1,118 +1,152 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { Cart } from '@/types/cart';
 
 interface CartSummaryProps {
-  subtotal: number;
-  shippingCost: number;
-  discount: number;
-  onApplyPromoCode: (code: string) => void;
+  cart: Cart;
   onProceedToCheckout: () => void;
 }
 
-const CartSummary = ({
-  subtotal,
-  shippingCost,
-  discount,
-  onApplyPromoCode,
-  onProceedToCheckout,
-}: CartSummaryProps) => {
-  const [promoCode, setPromoCode] = useState('');
-  const [promoApplied, setPromoApplied] = useState(false);
-
-  const total = subtotal + shippingCost - discount;
-
-  const handleApplyPromo = () => {
-    if (promoCode.trim()) {
-      onApplyPromoCode(promoCode);
-      setPromoApplied(true);
-    }
-  };
-
+const CartSummary = ({ cart, onProceedToCheckout }: CartSummaryProps) => {
+  // GST placeholder — update rate when decided
+  const GST_RATE = 0; // 0 = not applied yet
+  const gstAmount = GST_RATE > 0 ? cart.subtotal * GST_RATE : 0;
+  const grandTotal = cart.total + gstAmount;
   return (
-    <div className="bg-card border border-border rounded-md p-6 top-20">
-      <h2 className="font-heading text-xl font-semibold text-foreground mb-6">Order Summary</h2>
+    <div className="bg-card border border-border rounded-md p-5 lg:sticky lg:top-22">
+      <h2 className="font-heading text-xl font-semibold text-foreground mb-5">Order Summary</h2>
 
-      {/* Promo Code Input */}
-      <div className="mb-6">
-        <label htmlFor="promoCode" className="block text-sm font-medium text-foreground mb-2">
-          Promo Code
-        </label>
-        <div className="flex gap-2">
-          <input
-            id="promoCode"
-            type="text"
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-            placeholder="Enter code"
-            className="flex-1 h-10 px-3 bg-input border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"
-          />
-          <button
-            onClick={handleApplyPromo}
-            disabled={!promoCode.trim() || promoApplied}
-            className="px-4 h-10 bg-secondary text-secondary-foreground rounded-md font-medium hover:scale-102 transition-luxe disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Apply
-          </button>
-        </div>
-        {promoApplied && (
-          <p className="text-caption text-success mt-2 flex items-center gap-1">
-            <Icon name="CheckCircleIcon" size={16} />
-            Promo code applied successfully
-          </p>
-        )}
+      {/* Point 2: Itemised bill */}
+      <div className="mb-4 space-y-2">
+        {cart.items.map((item) => (
+          <div key={item.cartItemId} className="flex items-start justify-between gap-2 text-sm">
+            <div className="flex-1 min-w-0">
+              <p className="text-foreground font-medium line-clamp-1">{item.productName}</p>
+              {item.variantName && (
+                <p className="text-muted-foreground text-xs">{item.variantName}</p>
+              )}
+              <p className="text-muted-foreground text-xs">
+                {item.quantity > 1
+                  ? `${item.quantity} × ₹${item.unitPrice.toFixed(2)}`
+                  : `₹${item.unitPrice.toFixed(2)}`}
+              </p>
+            </div>
+            <span className="text-data font-medium text-foreground whitespace-nowrap">
+              ₹{item.lineTotal.toFixed(2)}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Price Breakdown */}
-      <div className="space-y-3 mb-6 pb-6 border-b border-border">
-        <div className="flex items-center justify-between">
-          <span className="text-foreground">Subtotal</span>
-          <span className="text-data font-medium text-foreground">₹{subtotal.toFixed(2)}</span>
+      {/* Divider + totals */}
+      <div className="space-y-2 pt-4 border-t border-border mb-4">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">Subtotal</span>
+          <span className="text-data font-medium text-foreground">₹{cart.subtotal.toFixed(2)}</span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-foreground">Shipping</span>
-          <span className="text-data font-medium text-foreground">
-            {shippingCost === 0 ? 'FREE' : `₹${shippingCost.toFixed(2)}`}
-          </span>
-        </div>
-        {discount > 0 && (
-          <div className="flex items-center justify-between text-success">
+        {cart.discountTotal > 0 && (
+          <div className="flex items-center justify-between text-sm text-success">
             <span>Discount</span>
-            <span className="text-data font-medium">-${discount.toFixed(2)}</span>
+            <span className="text-data font-medium">-₹{cart.discountTotal.toFixed(2)}</span>
           </div>
         )}
+        {cart.appliedPromoCodes.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {cart.appliedPromoCodes.map((code) => (
+              <span
+                key={code}
+                className="text-xs px-2 py-0.5 bg-success/10 text-success border border-success/20 rounded-full"
+              >
+                {code}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Shipping */}
+        <div className="pt-2 space-y-1">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Shipping</span>
+            <span className="text-data font-medium text-foreground">
+              ₹{cart.shippingCharge.toFixed(2)}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Standard Shipping via India Post
+          </p>
+          <p className="text-xs text-muted-foreground/70 italic">
+            International shipping not available
+          </p>
+        </div>
+
+        {/* GST — shown as placeholder, rate TBD */}
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground flex items-center gap-1">
+            GST
+            <span className="text-xs text-muted-foreground/60">(TBD)</span>
+          </span>
+          <span className="text-data font-medium text-muted-foreground">
+            {GST_RATE > 0 ? `₹${gstAmount.toFixed(2)}` : '—'}
+          </span>
+        </div>
       </div>
 
-      {/* Total */}
-      <div className="flex items-center justify-between mb-6">
-        <span className="font-heading text-lg font-semibold text-foreground">Total</span>
-        <span className="text-data text-2xl font-bold text-primary">₹{total.toFixed(2)}</span>
+      {/* Grand Total */}
+      <div className="flex items-center justify-between mb-5 pt-3 border-t border-border">
+        <span className="font-heading text-base font-semibold text-foreground">Total</span>
+        <span className="text-data text-xl font-bold text-primary">₹{grandTotal.toFixed(2)}</span>
       </div>
+
+      {/* Unavailable items warning */}
+      {cart.hasUnavailableItems && (
+        <div className="mb-4 flex items-start gap-2 p-3 bg-warning/10 border border-warning/30 rounded-md text-sm text-warning">
+          <Icon name="ExclamationTriangleIcon" size={16} className="flex-shrink-0 mt-0.5" />
+          <span>Some items are unavailable. Please review before checkout.</span>
+        </div>
+      )}
 
       {/* Checkout Button */}
       <button
         onClick={onProceedToCheckout}
-        className="w-full h-12 bg-primary text-primary-foreground rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center gap-2"
+        disabled={cart.hasUnavailableItems}
+        className="w-full h-12 bg-primary text-primary-foreground rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         Proceed to Checkout
         <Icon name="ArrowRightIcon" size={20} />
       </button>
 
+      {cart.hasUnavailableItems && (
+        <p className="text-xs text-muted-foreground text-center mt-2">
+          Remove unavailable items to continue
+        </p>
+      )}
+
+      {/* Point 6: Continue Shopping */}
+      {/*<Link*/}
+      {/*  href="/product-listing"*/}
+      {/*  className="mt-3 w-full h-10 flex items-center justify-center gap-2 border border-border rounded-md text-sm font-medium text-foreground hover:bg-muted transition-luxe"*/}
+      {/*>*/}
+      {/*  <Icon name="ArrowLeftIcon" size={16} />*/}
+      {/*  Continue Shopping*/}
+      {/*</Link>*/}
+
       {/* Trust Signals */}
-      <div className="mt-6 pt-6 border-t border-border space-y-3">
+      <div className="mt-5 pt-5 border-t border-border space-y-2.5">
         <div className="flex items-center gap-2 text-caption text-muted-foreground">
           <Icon name="ShieldCheckIcon" size={16} className="text-success" />
           <span>Secure checkout with SSL encryption</span>
         </div>
         <div className="flex items-center gap-2 text-caption text-muted-foreground">
-          <Icon name="TruckIcon" size={16} className="text-success" />
-          <span>Free shipping on orders over ₹50</span>
+          <Icon name="TruckIcon" size={16} className="text-primary" />
+          <span>Standard shipping via India Post · ₹{cart.shippingCharge.toFixed(0)}</span>
         </div>
-        <div className="flex items-center gap-2 text-caption text-muted-foreground">
-          <Icon name="ArrowPathIcon" size={16} className="text-success" />
-          <span>30-day easy returns</span>
-        </div>
+        {/*<div className="flex items-center gap-2 text-caption text-muted-foreground">*/}
+        {/*  <Icon name="ArrowPathIcon" size={16} className="text-success" />*/}
+        {/*  <span>30-day easy returns</span>*/}
+        {/*</div>*/}
       </div>
     </div>
   );

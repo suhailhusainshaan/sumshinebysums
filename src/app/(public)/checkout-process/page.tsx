@@ -18,7 +18,7 @@ export default function CheckoutProcessPage() {
 
   return (
     <>
-      <Header cartItemCount={3} />
+      <Header />
       <main className="pt-20 min-h-screen bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
