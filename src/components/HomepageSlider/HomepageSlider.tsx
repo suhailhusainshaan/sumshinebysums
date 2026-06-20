@@ -35,7 +35,7 @@ export default function HomepageSlider({ slides }: HomepageSliderProps) {
 
   return (
     <section className="relative overflow-hidden bg-gray-100">
-      <div className="relative h-[256px] sm:h-[460px] lg:h-[620px]">
+      <div className="relative h-[256px] sm:h-[400px] lg:h-[500]">
         <Swiper
           modules={[Autoplay, Navigation, Pagination]}
           loop={sortedSlides.length > 1}
