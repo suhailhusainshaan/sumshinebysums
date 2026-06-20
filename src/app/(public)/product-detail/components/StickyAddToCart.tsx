@@ -1,16 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Icon from '@/components/ui/AppIcon';
+import { useCartStore } from '@/store/cartStore';
 
 interface StickyAddToCartProps {
   productName: string;
   price: number;
-  onAddToCart?: () => void;
+  productId: number;
+  variantId?: number;
 }
 
-const StickyAddToCart = ({ productName, price, onAddToCart }: StickyAddToCartProps) => {
+const StickyAddToCart = ({ productName, price, productId, variantId }: StickyAddToCartProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +28,26 @@ const StickyAddToCart = ({ productName, price, onAddToCart }: StickyAddToCartPro
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleAddToCart = async () => {
+    if (!variantId) {
+      toast.error('Please select an option first');
+      return;
+    }
+    setIsAdding(true);
+    try {
+      const message = await addItem(productId, variantId, 1);
+      if (message === 'Quantity adjusted to available stock') {
+        toast('Quantity adjusted to maximum available stock', { icon: 'ℹ️' });
+      } else {
+        toast.success('Added to cart!');
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to add to cart');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -33,11 +58,16 @@ const StickyAddToCart = ({ productName, price, onAddToCart }: StickyAddToCartPro
           <p className="text-data text-lg font-semibold text-primary">₹{price.toFixed(2)}</p>
         </div>
         <button
-          onClick={onAddToCart}
-          className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:scale-102 transition-luxe flex items-center space-x-2 flex-shrink-0"
+          onClick={handleAddToCart}
+          disabled={isAdding}
+          className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:scale-102 transition-luxe flex items-center space-x-2 flex-shrink-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
-          <Icon name="ShoppingBagIcon" size={20} />
-          <span>Add to Cart</span>
+          {isAdding ? (
+            <Icon name="ArrowPathIcon" size={20} className="animate-spin" />
+          ) : (
+            <Icon name="ShoppingBagIcon" size={20} />
+          )}
+          <span>{isAdding ? 'Adding…' : 'Add to Cart'}</span>
         </button>
       </div>
     </div>

@@ -91,7 +91,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-heading font-semibold text-primary">Sunshine by Sums</h1>
+          <h1 className="text-3xl font-heading font-semibold text-primary">Sumshine By Sums</h1>
           <p className="text-muted-foreground text-sm">Create your account</p>
         </div>
 
@@ -135,16 +135,16 @@ export default function RegisterPage() {
             onChange={(e) => handleChange('phone', e.target.value)}
           />
 
-          <select
-            className="w-full h-12 px-4 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"
-            value={formData.gender}
-            onChange={(e) => handleChange('gender', e.target.value)}
-          >
-            <option value="">Select Gender</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-            <option value="Non-binary">Non-binary</option>
-          </select>
+          {/*<select*/}
+          {/*  className="w-full h-12 px-4 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"*/}
+          {/*  value={formData.gender}*/}
+          {/*  onChange={(e) => handleChange('gender', e.target.value)}*/}
+          {/*>*/}
+          {/*  <option value="">Select Gender</option>*/}
+          {/*  <option value="Female">Female</option>*/}
+          {/*  <option value="Male">Male</option>*/}
+          {/*  <option value="Non-binary">Non-binary</option>*/}
+          {/*</select>*/}
 
           <input
             type="password"

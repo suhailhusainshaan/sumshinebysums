@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import Icon from '@/components/ui/AppIcon';
+import { useCartStore } from '@/store/cartStore';
 
 interface SizeOption {
   id: string;
@@ -10,12 +12,15 @@ interface SizeOption {
 }
 
 interface AddToCartSectionProps {
+  productId: number;
   sizes?: SizeOption[];
   showSizeGuide?: boolean;
+  /** Called after a successful add — optional, for parent to react (e.g. show notification) */
   onAddToCart?: (quantity: number, size?: string) => void;
 }
 
 const AddToCartSection = ({
+  productId,
   sizes = [],
   showSizeGuide = false,
   onAddToCart,
@@ -23,13 +28,35 @@ const AddToCartSection = ({
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>(sizes.length === 1 ? sizes[0].id : '');
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (sizes.length > 1 && !selectedSize) {
+      toast.error('Please select an option before adding to cart');
       return;
     }
 
-    onAddToCart?.(quantity, selectedSize);
+    const variantId = selectedSize ? Number(selectedSize) : sizes[0] ? Number(sizes[0].id) : null;
+    if (!variantId) {
+      toast.error('No variant available for this product');
+      return;
+    }
+
+    setIsAdding(true);
+    try {
+      const message = await addItem(productId, variantId, quantity);
+      if (message === 'Quantity adjusted to available stock') {
+        toast('Quantity adjusted to maximum available stock', { icon: 'ℹ️' });
+      } else {
+        toast.success('Added to cart!');
+      }
+      onAddToCart?.(quantity, selectedSize || undefined);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to add to cart');
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -99,10 +126,15 @@ const AddToCartSection = ({
 
       <button
         onClick={handleAddToCart}
-        className="flex w-full items-center justify-center space-x-2 rounded-md bg-primary px-6 py-4 text-lg font-medium text-primary-foreground transition-luxe hover:scale-102 hover:shadow-warm-md"
+        disabled={isAdding}
+        className="flex w-full items-center justify-center space-x-2 rounded-md bg-primary px-6 py-4 text-lg font-medium text-primary-foreground transition-luxe hover:scale-102 hover:shadow-warm-md disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
-        <Icon name="ShoppingBagIcon" size={24} />
-        <span>Add to Cart</span>
+        {isAdding ? (
+          <Icon name="ArrowPathIcon" size={24} className="animate-spin" />
+        ) : (
+          <Icon name="ShoppingBagIcon" size={24} />
+        )}
+        <span>{isAdding ? 'Adding…' : 'Add to Cart'}</span>
       </button>
 
       <button className="w-full rounded-md bg-accent px-6 py-4 text-lg font-medium text-accent-foreground transition-luxe hover:scale-102 hover:shadow-warm-md">

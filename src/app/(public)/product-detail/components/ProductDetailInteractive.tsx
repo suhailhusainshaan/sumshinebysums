@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProductImageGallery from './ProductImageGallery';
 import ProductInfo from './ProductInfo';
@@ -23,7 +23,6 @@ const asStringArray = (value: unknown) =>
   Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 
 const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInteractiveProps) => {
-  const [cartNotification, setCartNotification] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -95,32 +94,16 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
   }));
 
   const handleAddToCart = (_quantity: number, variantId?: string) => {
+    // Update URL to reflect selected variant
     if (variantId) {
       const params = new URLSearchParams(searchParams.toString());
       params.set('variant', variantId);
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
-    setCartNotification(true);
-    window.setTimeout(() => setCartNotification(false), 3000);
   };
 
   return (
     <>
-      {cartNotification && (
-        <div className="fixed right-4 top-20 z-notification animate-slide-in-right rounded-lg bg-success px-6 py-4 text-success-foreground shadow-warm-lg">
-          <div className="flex items-center space-x-3">
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            <span className="font-medium">Added to cart successfully!</span>
-          </div>
-        </div>
-      )}
 
       <div className="mb-16 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <div>
@@ -146,6 +129,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
             featured={product.isFeatured}
           />
           <AddToCartSection
+            productId={product.id}
             sizes={sizes}
             showSizeGuide={sizes.length > 1}
             onAddToCart={handleAddToCart}
@@ -192,9 +176,8 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
       <StickyAddToCart
         productName={product.name}
         price={selectedVariant?.price ?? product.price}
-        onAddToCart={() =>
-          handleAddToCart(1, selectedVariant ? String(selectedVariant.id) : undefined)
-        }
+        productId={product.id}
+        variantId={selectedVariant?.id}
       />
     </>
   );

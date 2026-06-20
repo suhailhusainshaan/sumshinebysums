@@ -306,7 +306,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
                 </div>
               </div>
               <span className="text-data font-semibold text-primary">
-                ${option.price.toFixed(2)}
+                ₹{option.price.toFixed(2)}
               </span>
             </label>
           ))}
@@ -327,7 +327,7 @@ const ShippingForm = ({ onNext, initialData }: ShippingFormProps) => {
             className="w-5 h-5 text-primary rounded focus:ring-ring"
           />
           <span className="text-foreground">
-            Add gift wrapping <span className="text-primary font-medium">(+$4.99)</span>
+            Add gift wrapping <span className="text-primary font-medium">(+₹4.99)</span>
           </span>
         </label>
         {formData.giftWrapping && (

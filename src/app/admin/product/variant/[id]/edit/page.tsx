@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import api from '@/lib/axios';
 import { useDropzone } from 'react-dropzone';
 import { resolveImageSrc } from '@/lib/image';
+import DeleteVariantModal from '@/components/admin/product/DeleteVariantModal';
 
 interface VariantImageState {
   id: string;
@@ -36,6 +37,8 @@ export default function EditVariantPage() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [variantSkuForDelete, setVariantSkuForDelete] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
@@ -66,6 +69,7 @@ export default function EditVariantPage() {
       const payload = response.data?.data;
       if (!payload) return;
 
+      setVariantSkuForDelete(payload.sku ?? '');
       setFormData((prev) => ({
         ...prev,
         name: payload.name ?? '',
@@ -406,6 +410,22 @@ export default function EditVariantPage() {
     }
   };
 
+  const handleDeleteVariant = async () => {
+    if (!variantId) return;
+    try {
+      const response = await api.delete(`/admin/product/variants/${variantId}`);
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Variant deleted');
+        router.back();
+      } else {
+        toast.error(response.data?.message || 'Unable to delete variant');
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Unable to delete variant');
+      throw error; // let modal reset its state
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     await submitVariantUpdate();
@@ -416,11 +436,12 @@ export default function EditVariantPage() {
   };
 
   return (
-    <div className="p-4 md:p-6">
-      <PageBreadcrumb
-        pageTitle="Edit Variant"
-        crumbs={[{ label: 'Product Management', href: '/admin/product' }]}
-      />
+    <>
+      <div className="p-4 md:p-6">
+        <PageBreadcrumb
+          pageTitle="Edit Variant"
+          crumbs={[{ label: 'Product Management', href: '/admin/product' }]}
+        />
 
       <div className="space-y-6 mt-6">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -588,6 +609,14 @@ export default function EditVariantPage() {
                 Cancel
               </button>
               <button
+                type="button"
+                onClick={() => setDeleteModalOpen(true)}
+                disabled={loading || !variantSkuForDelete}
+                className="px-6 py-2 rounded-lg border border-error-300 text-error-600 hover:bg-error-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-error-500/30 dark:text-error-400 dark:hover:bg-error-500/10"
+              >
+                Delete Variant
+              </button>
+              <button
                 type="submit"
                 disabled={saveStatus === 'saving'}
                 className="px-6 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
@@ -708,5 +737,13 @@ export default function EditVariantPage() {
         </form>
       </div>
     </div>
+
+    <DeleteVariantModal
+      isOpen={deleteModalOpen}
+      onClose={() => setDeleteModalOpen(false)}
+      onConfirm={handleDeleteVariant}
+      variantSku={variantSkuForDelete}
+    />
+    </>
   );
 }

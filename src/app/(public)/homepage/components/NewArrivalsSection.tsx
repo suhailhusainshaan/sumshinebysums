@@ -69,7 +69,7 @@ const NewArrivalsSection = ({ products = [] }: NewArrivalsSectionProps) => {
                 <h3 className="mb-2 line-clamp-1 font-medium text-foreground">{item.name}</h3>
                 <div className="flex items-center justify-between">
                   <span className="text-data text-lg font-semibold text-primary">
-                    ${item.price.toFixed(2)}
+                    ₹{item.price.toFixed(2)}
                   </span>
                   <Icon
                     name="ArrowRightIcon"

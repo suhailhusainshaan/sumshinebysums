@@ -157,7 +157,7 @@ const SearchComponent = ({
                     <h3 className="font-medium text-foreground truncate">{result.name}</h3>
                     <p className="text-caption text-muted-foreground">{result.category}</p>
                     <p className="text-data text-primary font-medium mt-1">
-                      ${result.price.toFixed(2)}
+                      ₹{result.price.toFixed(2)}
                     </p>
                   </div>
                   <Icon name="ChevronRightIcon" size={20} className="text-muted-foreground" />

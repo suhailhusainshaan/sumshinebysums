@@ -75,10 +75,9 @@ export default function LoginPage() {
         <div className="text-center mb-6">
           <Link href="/" className="group">
             <h1 className="text-3xl font-heading font-semibold text-primary transition-luxe group-hover:opacity-80">
-              Sunshine by Sums
+              Sumshine By Sums
             </h1>
           </Link>
-          <p className="text-muted-foreground text-sm mt-1">Luxury Jewellery Collection</p>
         </div>
 
         <h2 className="text-xl font-semibold text-center text-foreground mb-6">
@@ -130,7 +129,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground">
-          New to Sunshine by Sums?{' '}
+          New to Sumshine By Sums?{' '}
           <span
             className="text-primary font-medium cursor-pointer hover:underline"
             onClick={handleRegisterClick}

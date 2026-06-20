@@ -15,6 +15,7 @@ import api from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { Category } from '@/types/category';
 import { resolveImageSrc } from '@/lib/image';
+import DeleteVariantModal from '@/components/admin/product/DeleteVariantModal';
 
 interface VariantImage {
   id: number;
@@ -106,6 +107,11 @@ export default function EditProductPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    variantId: number | null;
+    variantSku: string;
+  }>({ isOpen: false, variantId: null, variantSku: '' });
 
   const [formData, setFormData] = useState<FormState>({
     name: '',
@@ -280,8 +286,7 @@ export default function EditProductPage() {
           features: {
             material: updated.features?.material ?? prev.features.material,
             finish: updated.features?.finish ?? prev.features.finish,
-            hypoallergenic:
-              updated.features?.hypoallergenic ?? prev.features.hypoallergenic,
+            hypoallergenic: updated.features?.hypoallergenic ?? prev.features.hypoallergenic,
           },
           specifications: {
             material: updated.specifications?.material ?? prev.specifications.material,
@@ -312,6 +317,31 @@ export default function EditProductPage() {
     }
   };
 
+  const openDeleteModal = (variant: Variant) => {
+    setDeleteModal({ isOpen: true, variantId: variant.id, variantSku: variant.sku });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({ isOpen: false, variantId: null, variantSku: '' });
+  };
+
+  const handleDeleteVariant = async () => {
+    if (!deleteModal.variantId) return;
+    try {
+      const response = await api.delete(`/admin/product/variants/${deleteModal.variantId}`);
+      if (response.data?.status === 200) {
+        toast.success(response.data?.message || 'Variant deleted');
+        setVariants((prev) => prev.filter((v) => v.id !== deleteModal.variantId));
+        closeDeleteModal();
+      } else {
+        toast.error(response.data?.message || 'Unable to delete variant');
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Unable to delete variant');
+      throw error; // let modal reset its state
+    }
+  };
+
   const getVariantImage = (variant: Variant) => {
     if (!variant?.images || variant.images.length === 0) return FALLBACK_IMAGE;
     const sortedImages = [...variant.images].sort(
@@ -323,313 +353,366 @@ export default function EditProductPage() {
   };
 
   return (
-    <div className="p-4 md:p-6">
-      <PageBreadcrumb
-        pageTitle="Edit Product"
-        crumbs={[{ label: 'Product Management', href: '/admin/product' }]}
-      />
+    <>
+      <div className="p-4 md:p-6">
+        <PageBreadcrumb
+          pageTitle="Edit Product"
+          crumbs={[{ label: 'Product Management', href: '/admin/product' }]}
+        />
 
-      <div className="space-y-6 mt-6">
-        <ComponentCard title="Variants" desc="Click a variant to edit its details">
-          {loading ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-pulse">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div
-                  key={`variant-skeleton-${index}`}
-                  className="rounded-xl border border-gray-200 bg-white p-4 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]"
-                >
-                  <div className="h-40 w-full rounded-lg bg-gray-100 dark:bg-white/[0.05]" />
-                  <div className="mt-4 space-y-2">
-                    <div className="h-4 w-2/3 rounded bg-gray-100 dark:bg-white/[0.05]" />
-                    <div className="h-3 w-1/2 rounded bg-gray-100 dark:bg-white/[0.05]" />
-                    <div className="h-3 w-full rounded bg-gray-100 dark:bg-white/[0.05]" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : sortedVariants.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
-              No variants found for this product yet.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {sortedVariants.map((variant) => (
-                <Link
-                  key={variant.id}
-                  href={`/admin/product/variant/${variant.id}/edit`}
-                  className="group rounded-xl border border-gray-200 bg-white p-4 shadow-theme-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]"
-                >
-                  <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
-                    <Image
-                      src={getVariantImage(variant)}
-                      alt={variant.name}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center justify-between gap-3">
-                      <h4 className="text-base font-semibold text-gray-800 dark:text-white/90">
-                        {variant.name}
-                      </h4>
-                      <Badge size="sm" color={variant.active ? 'success' : 'warning'}>
-                        {variant.active ? 'Active' : 'Draft'}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-gray-500">SKU: {variant.sku}</p>
-                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                      <span>Price: {variant.price ?? '—'}</span>
-                      <span>Order: {variant.displayOrder ?? 0}</span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </ComponentCard>
-
-        <form onSubmit={handleSubmit}>
-          <ComponentCard title="Product Details" desc="Update the main product fields">
-            {errors.global && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-                {errors.global}
-              </div>
-            )}
-            {saveStatus === 'saved' && (
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
-                Changes saved successfully.
-              </div>
-            )}
-
+        <div className="space-y-6 mt-6">
+          <ComponentCard
+            title="Variants"
+            desc="Click a variant to edit its details"
+            hasButton
+            buttonText="Add Variant"
+            buttonAction={`/admin/product/${productId}/variant/add`}
+          >
             {loading ? (
-              <div className="space-y-6 animate-pulse">
-                <div className="h-6 w-40 rounded bg-gray-100 dark:bg-white/[0.05]" />
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div
-                      key={`form-skel-${index}`}
-                      className="h-12 rounded-xl bg-gray-100 dark:bg-white/[0.05]"
-                    />
-                  ))}
-                </div>
-                <div className="h-28 rounded-xl bg-gray-100 dark:bg-white/[0.05]" />
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {Array.from({ length: 2 }).map((_, index) => (
-                    <div
-                      key={`form-skel-block-${index}`}
-                      className="h-32 rounded-xl bg-gray-100 dark:bg-white/[0.05]"
-                    />
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-pulse">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={`variant-skeleton-${index}`}
+                    className="rounded-xl border border-gray-200 bg-white p-4 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]"
+                  >
+                    <div className="h-40 w-full rounded-lg bg-gray-100 dark:bg-white/[0.05]" />
+                    <div className="mt-4 space-y-2">
+                      <div className="h-4 w-2/3 rounded bg-gray-100 dark:bg-white/[0.05]" />
+                      <div className="h-3 w-1/2 rounded bg-gray-100 dark:bg-white/[0.05]" />
+                      <div className="h-3 w-full rounded bg-gray-100 dark:bg-white/[0.05]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : sortedVariants.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+                No variants found for this product yet.
               </div>
             ) : (
-              <div className="space-y-8">
-                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                  <h3 className="mb-4 text-lg font-semibold">Basic Information</h3>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div>
-                      <Label htmlFor="name">Product Name *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        error={!!errors.name}
-                        hint={errors.name}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="slug">Slug *</Label>
-                      <Input
-                        id="slug"
-                        name="slug"
-                        value={formData.slug}
-                        onChange={handleChange}
-                        error={!!errors.slug}
-                        hint={errors.slug}
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <Label htmlFor="description">Description *</Label>
-                      <TextArea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={(value) =>
-                          setFormData((prev) => ({ ...prev, description: value }))
-                        }
-                        error={!!errors.description}
-                        hint={errors.description}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="categoryId">Category *</Label>
-                      <Select
-                        key={`category-${formData.categoryId}`}
-                        id="categoryId"
-                        name="categoryId"
-                        value={formData.categoryId}
-                        defaultValue={formData.categoryId}
-                        options={categories.map((category) => ({
-                          value: String(category.id),
-                          label: category.name,
-                        }))}
-                        onChange={(value) =>
-                          setFormData((prev) => ({ ...prev, categoryId: value }))
-                        }
-                        error={!!errors.categoryId}
-                        hint={errors.categoryId}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="brandId">Brand</Label>
-                      <Select
-                        key={`brand-${formData.brandId}`}
-                        id="brandId"
-                        name="brandId"
-                        value={formData.brandId}
-                        defaultValue={formData.brandId}
-                        options={brandOptions}
-                        onChange={(value) => setFormData((prev) => ({ ...prev, brandId: value }))}
-                      />
-                    </div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {sortedVariants.map((variant) => (
+                  <div key={variant.id} className="relative">
+                    <Link
+                      href={`/admin/product/variant/${variant.id}/edit`}
+                      className="group block rounded-xl border border-gray-200 bg-white p-4 shadow-theme-xs transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-theme-sm dark:border-gray-800 dark:bg-white/[0.03]"
+                    >
+                      <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+                        <Image
+                          src={getVariantImage(variant)}
+                          alt={variant.name}
+                          fill
+                          className="object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="mt-4 space-y-2">
+                        <div className="flex items-center justify-between gap-3">
+                          <h4 className="text-base font-semibold text-gray-800 dark:text-white/90">
+                            {variant.name}
+                          </h4>
+                          <div className="flex items-center gap-2">
+                            <Badge size="sm" color={variant.active ? 'success' : 'warning'}>
+                              {variant.active ? 'Active' : 'Draft'}
+                            </Badge>
+                            <Badge size="sm" color={variant.active ? 'error' : 'warning'}>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  openDeleteModal(variant);
+                                }}
+                                className="flex h-6 w-6 items-center justify-center rounded-full text-error-500 hover:bg-error-50 hover:text-error-600 dark:hover:bg-error-500/10"
+                                title="Delete variant"
+                                aria-label={`Delete variant ${variant.sku}`}
+                              >
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M10 11v6M14 11v6"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                </svg>
+                              </button>
+                            </Badge>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500">SKU: {variant.sku}</p>
+                        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                          <span>Price: {variant.price ?? '—'}</span>
+                          <span>Order: {variant.displayOrder ?? 0}</span>
+                        </div>
+                      </div>
+                    </Link>
                   </div>
-                </div>
-
-                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                  <h3 className="mb-4 text-lg font-semibold">Visibility & Ordering</h3>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    <div>
-                      <Label htmlFor="displayOrder">Display Order</Label>
-                      <Input
-                        id="displayOrder"
-                        name="displayOrder"
-                        type="number"
-                        value={formData.displayOrder}
-                        onChange={handleChange}
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="flex items-center gap-3 pt-7">
-                      <input
-                        type="checkbox"
-                        id="published"
-                        name="published"
-                        checked={formData.published}
-                        onChange={handleChange}
-                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                      />
-                      <Label htmlFor="published" className="mb-0">
-                        Published
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                  <h3 className="mb-4 text-lg font-semibold">Features</h3>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                    <div>
-                      <Label htmlFor="features.material">Material</Label>
-                      <Input
-                        id="features.material"
-                        name="features.material"
-                        value={formData.features.material}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="features.finish">Finish</Label>
-                      <Input
-                        id="features.finish"
-                        name="features.finish"
-                        value={formData.features.finish}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="flex items-center gap-3 pt-7">
-                      <input
-                        type="checkbox"
-                        id="features.hypoallergenic"
-                        name="features.hypoallergenic"
-                        checked={formData.features.hypoallergenic}
-                        onChange={handleChange}
-                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                      />
-                      <Label htmlFor="features.hypoallergenic" className="mb-0">
-                        Hypoallergenic
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
-                  <h3 className="mb-4 text-lg font-semibold">Specifications</h3>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                    <div>
-                      <Label htmlFor="specifications.material">Material</Label>
-                      <Input
-                        id="specifications.material"
-                        name="specifications.material"
-                        value={formData.specifications.material}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="specifications.purity">Purity</Label>
-                      <Input
-                        id="specifications.purity"
-                        name="specifications.purity"
-                        value={formData.specifications.purity}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="specifications.stone_type">Stone Type</Label>
-                      <Input
-                        id="specifications.stone_type"
-                        name="specifications.stone_type"
-                        value={formData.specifications.stone_type}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="flex items-center gap-3 pt-7">
-                      <input
-                        type="checkbox"
-                        id="specifications.hypoallergenic"
-                        name="specifications.hypoallergenic"
-                        checked={formData.specifications.hypoallergenic}
-                        onChange={handleChange}
-                        className="h-4 w-4 rounded border-gray-300 text-brand-500"
-                      />
-                      <Label htmlFor="specifications.hypoallergenic" className="mb-0">
-                        Hypoallergenic
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap justify-end gap-4">
-                  <button
-                    type="button"
-                    onClick={() => router.back()}
-                    className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="px-6 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {saveStatus === 'saved' ? 'Saved' : saving ? 'Saving...' : 'Save Changes'}
-                  </button>
-                </div>
+                ))}
               </div>
             )}
           </ComponentCard>
-        </form>
+
+          <form onSubmit={handleSubmit}>
+            <ComponentCard title="Product Details" desc="Update the main product fields">
+              {errors.global && (
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+                  {errors.global}
+                </div>
+              )}
+              {saveStatus === 'saved' && (
+                <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+                  Changes saved successfully.
+                </div>
+              )}
+
+              {loading ? (
+                <div className="space-y-6 animate-pulse">
+                  <div className="h-6 w-40 rounded bg-gray-100 dark:bg-white/[0.05]" />
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <div
+                        key={`form-skel-${index}`}
+                        className="h-12 rounded-xl bg-gray-100 dark:bg-white/[0.05]"
+                      />
+                    ))}
+                  </div>
+                  <div className="h-28 rounded-xl bg-gray-100 dark:bg-white/[0.05]" />
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    {Array.from({ length: 2 }).map((_, index) => (
+                      <div
+                        key={`form-skel-block-${index}`}
+                        className="h-32 rounded-xl bg-gray-100 dark:bg-white/[0.05]"
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                    <h3 className="mb-4 text-lg font-semibold">Basic Information</h3>
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                      <div>
+                        <Label htmlFor="name">Product Name *</Label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          error={!!errors.name}
+                          hint={errors.name}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="slug">Slug *</Label>
+                        <Input
+                          id="slug"
+                          name="slug"
+                          value={formData.slug}
+                          onChange={handleChange}
+                          error={!!errors.slug}
+                          hint={errors.slug}
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor="description">Description *</Label>
+                        <TextArea
+                          id="description"
+                          name="description"
+                          value={formData.description}
+                          onChange={(value) =>
+                            setFormData((prev) => ({ ...prev, description: value }))
+                          }
+                          error={!!errors.description}
+                          hint={errors.description}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="categoryId">Category *</Label>
+                        <Select
+                          key={`category-${formData.categoryId}`}
+                          id="categoryId"
+                          name="categoryId"
+                          value={formData.categoryId}
+                          defaultValue={formData.categoryId}
+                          options={categories.map((category) => ({
+                            value: String(category.id),
+                            label: category.name,
+                          }))}
+                          onChange={(value) =>
+                            setFormData((prev) => ({ ...prev, categoryId: value }))
+                          }
+                          error={!!errors.categoryId}
+                          hint={errors.categoryId}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="brandId">Brand</Label>
+                        <Select
+                          key={`brand-${formData.brandId}`}
+                          id="brandId"
+                          name="brandId"
+                          value={formData.brandId}
+                          defaultValue={formData.brandId}
+                          options={brandOptions}
+                          onChange={(value) => setFormData((prev) => ({ ...prev, brandId: value }))}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                    <h3 className="mb-4 text-lg font-semibold">Visibility & Ordering</h3>
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                      <div>
+                        <Label htmlFor="displayOrder">Display Order</Label>
+                        <Input
+                          id="displayOrder"
+                          name="displayOrder"
+                          type="number"
+                          value={formData.displayOrder}
+                          onChange={handleChange}
+                          placeholder="0"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 pt-7">
+                        <input
+                          type="checkbox"
+                          id="published"
+                          name="published"
+                          checked={formData.published}
+                          onChange={handleChange}
+                          className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                        />
+                        <Label htmlFor="published" className="mb-0">
+                          Published
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                    <h3 className="mb-4 text-lg font-semibold">Features</h3>
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+                      <div>
+                        <Label htmlFor="features.material">Material</Label>
+                        <Input
+                          id="features.material"
+                          name="features.material"
+                          value={formData.features.material}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="features.finish">Finish</Label>
+                        <Input
+                          id="features.finish"
+                          name="features.finish"
+                          value={formData.features.finish}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 pt-7">
+                        <input
+                          type="checkbox"
+                          id="features.hypoallergenic"
+                          name="features.hypoallergenic"
+                          checked={formData.features.hypoallergenic}
+                          onChange={handleChange}
+                          className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                        />
+                        <Label htmlFor="features.hypoallergenic" className="mb-0">
+                          Hypoallergenic
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
+                    <h3 className="mb-4 text-lg font-semibold">Specifications</h3>
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+                      <div>
+                        <Label htmlFor="specifications.material">Material</Label>
+                        <Input
+                          id="specifications.material"
+                          name="specifications.material"
+                          value={formData.specifications.material}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="specifications.purity">Purity</Label>
+                        <Input
+                          id="specifications.purity"
+                          name="specifications.purity"
+                          value={formData.specifications.purity}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="specifications.stone_type">Stone Type</Label>
+                        <Input
+                          id="specifications.stone_type"
+                          name="specifications.stone_type"
+                          value={formData.specifications.stone_type}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 pt-7">
+                        <input
+                          type="checkbox"
+                          id="specifications.hypoallergenic"
+                          name="specifications.hypoallergenic"
+                          checked={formData.specifications.hypoallergenic}
+                          onChange={handleChange}
+                          className="h-4 w-4 rounded border-gray-300 text-brand-500"
+                        />
+                        <Label htmlFor="specifications.hypoallergenic" className="mb-0">
+                          Hypoallergenic
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap justify-end gap-4">
+                    <button
+                      type="button"
+                      onClick={() => router.back()}
+                      className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="px-6 py-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {saveStatus === 'saved' ? 'Saved' : saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </ComponentCard>
+          </form>
+        </div>
       </div>
-    </div>
+
+      <DeleteVariantModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={handleDeleteVariant}
+        variantSku={deleteModal.variantSku}
+      />
+    </>
   );
 }

@@ -71,10 +71,10 @@ const OrderSummary = ({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">{item.name}</p>
-                <p className="text-data text-sm text-primary">${item.price.toFixed(2)}</p>
+                <p className="text-data text-sm text-primary">₹{item.price.toFixed(2)}</p>
               </div>
               <p className="text-data font-semibold text-foreground">
-                ${(item.price * item.quantity).toFixed(2)}
+                ₹{(item.price * item.quantity).toFixed(2)}
               </p>
             </div>
           ))}
@@ -99,7 +99,7 @@ const OrderSummary = ({
                   <Icon name="CheckCircleIcon" size={20} className="text-success" />
                   <span className="font-medium text-foreground">{promoCode}</span>
                 </div>
-                <span className="text-success font-medium">-${discount.toFixed(2)}</span>
+                <span className="text-success font-medium">-₹{discount.toFixed(2)}</span>
               </div>
             ) : (
               <>
@@ -134,32 +134,32 @@ const OrderSummary = ({
       <div className="p-6 space-y-3">
         <div className="flex items-center justify-between text-foreground">
           <span>Subtotal</span>
-          <span className="text-data">${subtotal.toFixed(2)}</span>
+          <span className="text-data">₹{subtotal.toFixed(2)}</span>
         </div>
         <div className="flex items-center justify-between text-foreground">
           <span>Shipping</span>
-          <span className="text-data">${shipping.toFixed(2)}</span>
+          <span className="text-data">₹{shipping.toFixed(2)}</span>
         </div>
         {giftWrapping > 0 && (
           <div className="flex items-center justify-between text-foreground">
             <span>Gift Wrapping</span>
-            <span className="text-data">${giftWrapping.toFixed(2)}</span>
+            <span className="text-data">₹{giftWrapping.toFixed(2)}</span>
           </div>
         )}
         <div className="flex items-center justify-between text-foreground">
           <span>Tax (8%)</span>
-          <span className="text-data">${tax.toFixed(2)}</span>
+          <span className="text-data">₹{tax.toFixed(2)}</span>
         </div>
         {discount > 0 && (
           <div className="flex items-center justify-between text-success">
             <span>Discount</span>
-            <span className="text-data">-${discount.toFixed(2)}</span>
+            <span className="text-data">-₹{discount.toFixed(2)}</span>
           </div>
         )}
         <div className="pt-3 border-t border-border">
           <div className="flex items-center justify-between">
             <span className="font-heading text-lg font-semibold text-foreground">Total</span>
-            <span className="text-data text-2xl font-bold text-primary">${total.toFixed(2)}</span>
+            <span className="text-data text-2xl font-bold text-primary">₹{total.toFixed(2)}</span>
           </div>
         </div>
       </div>
