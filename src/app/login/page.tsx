@@ -77,7 +77,6 @@ export default function LoginPage() {
 
     const googleToken = credentialResponse.credential;
 
-    console.log('Google Token:', googleToken);
 
     // This endpoint will be implemented in Java backend
     const res = await authService.googleLogin({
