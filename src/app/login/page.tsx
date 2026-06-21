@@ -9,6 +9,7 @@ import { getGuestToken } from '@/lib/wishlistCookie';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { getCartGuestToken } from '@/lib/api/cartApi';
 import { useCartStore } from '@/store/cartStore';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -69,6 +70,67 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleLogin = async (credentialResponse: any) => {
+  try {
+    setIsLoading(true);
+    setError('');
+
+    const googleToken = credentialResponse.credential;
+
+
+    // This endpoint will be implemented in Java backend
+    const res = await authService.googleLogin({
+      idToken: googleToken,
+    });
+
+    if (res.status === 200) {
+      const expiryTime = Date.now() + res.data.tokenExpiry;
+
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+      localStorage.setItem('expiry_time', expiryTime.toString());
+
+      const guestToken = getGuestToken();
+
+      if (guestToken) {
+        try {
+          await useWishlistStore.getState().mergeGuestWishlist(guestToken);
+        } catch (e) {
+          console.error('Failed to merge wishlist:', e);
+        }
+      } else {
+        await useWishlistStore.getState().fetchWishlist();
+      }
+
+      const cartGuestToken = getCartGuestToken();
+
+      if (cartGuestToken) {
+        try {
+          await useCartStore.getState().mergeGuestCart(cartGuestToken);
+        } catch (e) {
+          console.error('Failed to merge cart:', e);
+        }
+      } else {
+        await useCartStore.getState().fetchCart();
+      }
+
+      const redirectUrl =
+        res.data?.user?.roleCode === 'SUPER_ADMIN'
+          ? '/admin'
+          : '/';
+
+      router.push(redirectUrl);
+    }
+  } catch (err: any) {
+    setError(
+      err.response?.data?.message ||
+      'Google login failed. Please try again.'
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative">
@@ -127,6 +189,16 @@ export default function LoginPage() {
           <span className="px-3 text-sm text-muted-foreground">or</span>
           <div className="flex-1 border-t border-border"></div>
         </div>
+
+        <div className="flex justify-center mb-6">
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              setError('Google Login Failed');
+            }}
+          />
+        </div>
+
 
         <p className="text-center text-sm text-muted-foreground">
           New to Sumshine By Sums?{' '}
