@@ -80,7 +80,7 @@ export default function LoginPage() {
 
     // This endpoint will be implemented in Java backend
     const res = await authService.googleLogin({
-      token: googleToken,
+      idToken: googleToken,
     });
 
     if (res.status === 200) {
