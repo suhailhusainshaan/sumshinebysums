@@ -133,7 +133,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
-      <div className="bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative">
+      <div
+        className={`bg-card w-full max-w-md p-10 rounded-xl shadow-warm relative transition-transform transition-opacity duration-200 ease-in-out ${
+          isLoading ? 'opacity-70 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+        }`}
+        aria-busy={isLoading}
+      >
         <div className="text-center mb-6">
           <Link href="/" className="group">
             <h1 className="text-3xl font-heading font-semibold text-primary transition-luxe group-hover:opacity-80">
@@ -210,6 +215,19 @@ export default function LoginPage() {
           </span>
         </p>
       </div>
+
+      {isLoading && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex flex-col items-center space-y-4">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="text-white text-lg font-medium">Signing you in...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
