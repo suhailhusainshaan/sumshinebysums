@@ -151,6 +151,12 @@ export default function LoginPage() {
           Login to your account
         </h2>
 
+        {error && (
+          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">Email</label>
@@ -215,19 +221,6 @@ export default function LoginPage() {
           </span>
         </p>
       </div>
-
-      {isLoading && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          role="status"
-          aria-live="polite"
-        >
-          <div className="flex flex-col items-center space-y-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <div className="text-white text-lg font-medium">Signing you in...</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

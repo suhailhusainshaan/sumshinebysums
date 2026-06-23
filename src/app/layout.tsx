@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import WishlistInitializer from '@/components/wishlist/WishlistInitializer';
 import NextTopLoader from 'nextjs-toploader';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import GlobalLoadingOverlay from '@/components/common/GlobalLoadingOverlay';
 
 export default function RootLayout({
   children,
@@ -29,6 +30,8 @@ export default function RootLayout({
           />
 
           <WishlistInitializer />
+
+          <GlobalLoadingOverlay />
 
           <AuthGuard>{children}</AuthGuard>
 
