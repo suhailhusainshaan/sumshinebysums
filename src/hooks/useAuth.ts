@@ -16,6 +16,8 @@ interface User {
   roleCode?: string;
   theme?: string | null;
   userName?: string;
+  username?: string;
+  mobile?: string;
 }
 
 interface UseAuthReturn {
