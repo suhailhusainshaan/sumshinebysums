@@ -9,6 +9,8 @@ interface OrderSummaryProps {
   selectedAddress: Address | null;
   onPlaceOrder: () => void;
   isPlacingOrder: boolean;
+  actionLabel?: string;
+  disableForUnavailableItems?: boolean;
 }
 
 function stockMessage(item: CheckoutPreviewItem): string {
@@ -27,8 +29,11 @@ const OrderSummary = ({
   selectedAddress,
   onPlaceOrder,
   isPlacingOrder,
+  actionLabel = 'Place Order',
+  disableForUnavailableItems = true,
 }: OrderSummaryProps) => {
-  const disabled = !preview || preview.hasUnavailableItems || isPlacingOrder;
+  const disabled =
+    !preview || (disableForUnavailableItems && preview.hasUnavailableItems) || isPlacingOrder;
 
   return (
     <div className="bg-card border border-border rounded-md p-5 lg:sticky lg:top-24">
@@ -96,13 +101,6 @@ const OrderSummary = ({
               ₹{preview.total.toFixed(2)}
             </span>
           </div>
-
-          {preview.hasUnavailableItems && (
-            <div className="mt-4 flex items-start gap-2 rounded-md border border-warning/30 bg-warning/10 p-3 text-sm text-warning">
-              <Icon name="ExclamationTriangleIcon" size={16} className="mt-0.5 flex-shrink-0" />
-              <span>Some items cannot be ordered. Update your cart before placing the order.</span>
-            </div>
-          )}
         </>
       ) : (
         selectedAddress && (
@@ -116,7 +114,7 @@ const OrderSummary = ({
         disabled={disabled}
         className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary font-medium text-primary-foreground hover:scale-102 hover:shadow-warm-md transition-luxe disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
       >
-        {isPlacingOrder ? 'Placing Order...' : 'Place Order'}
+        {isPlacingOrder ? 'Loading...' : actionLabel}
         <Icon name="ArrowRightIcon" size={20} />
       </button>
 

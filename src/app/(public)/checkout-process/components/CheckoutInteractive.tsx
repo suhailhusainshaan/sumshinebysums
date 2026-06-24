@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Icon from '@/components/ui/AppIcon';
@@ -8,14 +8,22 @@ import {
   createAddress,
   getAddresses,
   getApiMessage,
+  getCheckoutPreview,
   getCities,
   getStates,
   lookupPincode,
   setDefaultAddress,
   updateAddress,
 } from '@/lib/api/checkoutApi';
-import { Address, AddressPayload, CityOption, StateOption } from '@/types/checkout';
+import {
+  Address,
+  AddressPayload,
+  CheckoutPreview,
+  CityOption,
+  StateOption,
+} from '@/types/checkout';
 import { useCartStore } from '@/store/cartStore';
+import OrderSummary from './OrderSummary';
 
 type AddressFormState = {
   label: string;
@@ -83,6 +91,7 @@ const CheckoutInteractive = () => {
   const [states, setStates] = useState<StateOption[]>([]);
   const [cities, setCities] = useState<CityOption[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [preview, setPreview] = useState<CheckoutPreview | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [form, setForm] = useState<AddressFormState>(emptyAddressForm);
@@ -90,6 +99,11 @@ const CheckoutInteractive = () => {
   const [pincodeStatus, setPincodeStatus] = useState('');
   const [isSavingAddress, setIsSavingAddress] = useState(false);
   const [isSettingDefault, setIsSettingDefault] = useState<number | null>(null);
+
+  const selectedAddress = useMemo(
+    () => addresses.find((address) => address.id === selectedAddressId) || null,
+    [addresses, selectedAddressId]
+  );
 
   const loadAddresses = useCallback(async () => {
     const res = await getAddresses();
@@ -179,6 +193,39 @@ const CheckoutInteractive = () => {
       isMounted = false;
     };
   }, [form.stateId]);
+
+  useEffect(() => {
+    if (!selectedAddressId) {
+      setPreview(null);
+      return;
+    }
+
+    const addressId = selectedAddressId;
+    let isMounted = true;
+    async function loadPreview() {
+      try {
+        const res = await getCheckoutPreview(addressId);
+        if (!isMounted) return;
+        if (res.status) {
+          setPreview(res.data);
+        } else {
+          setPreview(null);
+          toast.error(res.message);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setPreview(null);
+          toast.error(getApiMessage(error, 'Failed to prepare checkout summary'));
+        }
+      }
+    }
+
+    loadPreview();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedAddressId]);
 
   const setField = (field: keyof AddressFormState, value: string | boolean) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -305,268 +352,265 @@ const CheckoutInteractive = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="bg-card border border-border rounded-md p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-          <div>
-            <h2 className="font-heading text-xl font-semibold text-foreground">Delivery Address</h2>
-            <p className="text-sm text-muted-foreground">
-              Choose a saved address or add a new Indian delivery address.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={resetAddressForm}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-muted transition-luxe"
-          >
-            <Icon name="PlusIcon" size={18} />
-            Add Address
-          </button>
-        </div>
-
-        {addresses.length > 0 ? (
-          <div className="space-y-3">
-            {addresses.map((address) => {
-              const isSelected = selectedAddressId === address.id;
-              return (
-                <label
-                  key={address.id}
-                  className={`block cursor-pointer rounded-md border p-4 transition-luxe ${
-                    isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/40'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="radio"
-                      name="address"
-                      checked={isSelected}
-                      onChange={() => setSelectedAddressId(address.id)}
-                      className="mt-1 h-4 w-4 text-primary focus:ring-ring"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-medium text-foreground">{address.fullName}</p>
-                        {address.label && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-                            {address.label}
-                          </span>
-                        )}
-                        {address.isDefault && (
-                          <span className="rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
-                            Default
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {address.line1}
-                        {address.line2 ? `, ${address.line2}` : ''}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {address.city}, {address.state} {address.postalCode}
-                      </p>
-                      <p className="text-sm text-muted-foreground">{address.phone}</p>
-                      <div className="mt-3 flex flex-wrap gap-3 text-sm">
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            handleEditAddress(address);
-                          }}
-                          className="font-medium text-primary hover:text-primary/80"
-                        >
-                          Edit
-                        </button>
-                        {!address.isDefault && (
-                          <button
-                            type="button"
-                            disabled={isSettingDefault === address.id}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleSetDefault(address.id);
-                            }}
-                            className="font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
-                          >
-                            {isSettingDefault === address.id ? 'Saving...' : 'Set default'}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="rounded-md border border-dashed border-border p-5 text-sm text-muted-foreground">
-            No saved addresses yet. Add one to continue to order summary.
-          </div>
-        )}
-      </section>
-
-      {formOpen && (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2 space-y-6">
         <section className="bg-card border border-border rounded-md p-5">
-          <div className="mb-5 flex items-start justify-between gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
             <div>
-              <h2 className="font-heading text-lg font-semibold text-foreground">
-                {editingAddressId ? 'Edit Address' : 'Add Address'}
+              <h2 className="font-heading text-xl font-semibold text-foreground">
+                Delivery Address
               </h2>
               <p className="text-sm text-muted-foreground">
-                Enter the PIN first to auto-fill state and city where available.
+                Choose a saved address or add a new Indian delivery address.
               </p>
             </div>
-            {addresses.length > 0 && (
-              <button
-                type="button"
-                onClick={() => setFormOpen(false)}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                Cancel
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={resetAddressForm}
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium text-foreground hover:bg-muted transition-luxe"
+            >
+              <Icon name="PlusIcon" size={18} />
+              Add Address
+            </button>
           </div>
 
-          <form onSubmit={handleSubmitAddress} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field
-                id="label"
-                label="Label"
-                value={form.label}
-                onChange={(value) => setField('label', value)}
-                placeholder="Home"
-                error={formErrors.label}
-              />
-              <Field
-                id="fullName"
-                label="Full Name"
-                value={form.fullName}
-                onChange={(value) => setField('fullName', value)}
-                placeholder="Suhail Husain"
-                error={formErrors.fullName}
-                required
-              />
-              <Field
-                id="phone"
-                label="Phone"
-                value={form.phone}
-                onChange={(value) => setField('phone', value)}
-                placeholder="9876543210"
-                error={formErrors.phone}
-                required
-              />
+          {addresses.length > 0 ? (
+            <div className="space-y-3">
+              {addresses.map((address) => {
+                const isSelected = selectedAddressId === address.id;
+                return (
+                  <label
+                    key={address.id}
+                    className={`block cursor-pointer rounded-md border p-4 transition-luxe ${
+                      isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/40'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="radio"
+                        name="address"
+                        checked={isSelected}
+                        onChange={() => setSelectedAddressId(address.id)}
+                        className="mt-1 h-4 w-4 text-primary focus:ring-ring"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-medium text-foreground">{address.fullName}</p>
+                          {address.label && (
+                            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                              {address.label}
+                            </span>
+                          )}
+                          {address.isDefault && (
+                            <span className="rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
+                              Default
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {address.line1}
+                          {address.line2 ? `, ${address.line2}` : ''}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {address.city}, {address.state} {address.postalCode}
+                        </p>
+                        <p className="text-sm text-muted-foreground">{address.phone}</p>
+                        <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              handleEditAddress(address);
+                            }}
+                            className="font-medium text-primary hover:text-primary/80"
+                          >
+                            Edit
+                          </button>
+                          {!address.isDefault && (
+                            <button
+                              type="button"
+                              disabled={isSettingDefault === address.id}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleSetDefault(address.id);
+                              }}
+                              className="font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+                            >
+                              {isSettingDefault === address.id ? 'Saving...' : 'Set default'}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-md border border-dashed border-border p-5 text-sm text-muted-foreground">
+              No saved addresses yet. Add one to continue to order summary.
+            </div>
+          )}
+        </section>
+
+        {formOpen && (
+          <section className="bg-card border border-border rounded-md p-5">
+            <div className="mb-5 flex items-start justify-between gap-3">
               <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">
+                  {editingAddressId ? 'Edit Address' : 'Add Address'}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Enter the PIN first to auto-fill state and city where available.
+                </p>
+              </div>
+              {addresses.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setFormOpen(false)}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+
+            <form onSubmit={handleSubmitAddress} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Field
-                  id="postalCode"
-                  label="PIN Code"
-                  value={form.postalCode}
-                  onChange={handlePostalCodeChange}
-                  placeholder="110001"
-                  error={formErrors.postalCode}
+                  id="label"
+                  label="Label"
+                  value={form.label}
+                  onChange={(value) => setField('label', value)}
+                  placeholder="Home"
+                  error={formErrors.label}
+                />
+                <Field
+                  id="fullName"
+                  label="Full Name"
+                  value={form.fullName}
+                  onChange={(value) => setField('fullName', value)}
+                  placeholder="Suhail Husain"
+                  error={formErrors.fullName}
                   required
                 />
-                {pincodeStatus && (
-                  <p className="mt-1 text-xs text-muted-foreground">{pincodeStatus}</p>
-                )}
+                <Field
+                  id="phone"
+                  label="Phone"
+                  value={form.phone}
+                  onChange={(value) => setField('phone', value)}
+                  placeholder="9876543210"
+                  error={formErrors.phone}
+                  required
+                />
+                <div>
+                  <Field
+                    id="postalCode"
+                    label="PIN Code"
+                    value={form.postalCode}
+                    onChange={handlePostalCodeChange}
+                    placeholder="110001"
+                    error={formErrors.postalCode}
+                    required
+                  />
+                  {pincodeStatus && (
+                    <p className="mt-1 text-xs text-muted-foreground">{pincodeStatus}</p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <Field
-              id="line1"
-              label="Street / Building"
-              value={form.line1}
-              onChange={(value) => setField('line1', value)}
-              placeholder="123 Main Street"
-              error={formErrors.line1}
-              required
-            />
-            <Field
-              id="line2"
-              label="Flat / Floor"
-              value={form.line2}
-              onChange={(value) => setField('line2', value)}
-              placeholder="Flat 4B"
-              error={formErrors.line2}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SelectField
-                id="stateId"
-                label="State"
-                value={form.stateId}
-                onChange={(value) => {
-                  setForm((current) => ({ ...current, stateId: value, cityId: '' }));
-                  setFormErrors((current) => ({ ...current, stateId: undefined }));
-                }}
-                error={formErrors.stateId}
+              <Field
+                id="line1"
+                label="Street / Building"
+                value={form.line1}
+                onChange={(value) => setField('line1', value)}
+                placeholder="123 Main Street"
+                error={formErrors.line1}
                 required
-              >
-                <option value="">Select state</option>
-                {states.map((state) => (
-                  <option key={state.id} value={state.id}>
-                    {state.name}
-                  </option>
-                ))}
-              </SelectField>
-              <SelectField
-                id="cityId"
-                label="City"
-                value={form.cityId}
-                onChange={(value) => setField('cityId', value)}
-                error={formErrors.cityId}
-                required
-                disabled={!form.stateId}
-              >
-                <option value="">{form.stateId ? 'Select city' : 'Select state first'}</option>
-                {cities.map((city) => (
-                  <option key={city.id} value={city.id}>
-                    {city.name}
-                  </option>
-                ))}
-              </SelectField>
-            </div>
-
-            <label className="flex items-center gap-2 text-sm text-foreground">
-              <input
-                type="checkbox"
-                checked={form.isDefault}
-                onChange={(event) => setField('isDefault', event.target.checked)}
-                className="h-4 w-4 rounded border-border text-primary focus:ring-ring"
               />
-              Make this my default address
-            </label>
+              <Field
+                id="line2"
+                label="Flat / Floor"
+                value={form.line2}
+                onChange={(value) => setField('line2', value)}
+                placeholder="Flat 4B"
+                error={formErrors.line2}
+              />
 
-            <button
-              type="submit"
-              disabled={isSavingAddress}
-              className="inline-flex h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground hover:scale-102 hover:shadow-warm-md transition-luxe disabled:opacity-60 disabled:hover:scale-100"
-            >
-              {isSavingAddress ? 'Saving...' : editingAddressId ? 'Update Address' : 'Save Address'}
-              <Icon name="CheckIcon" size={18} />
-            </button>
-          </form>
-        </section>
-      )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <SelectField
+                  id="stateId"
+                  label="State"
+                  value={form.stateId}
+                  onChange={(value) => {
+                    setForm((current) => ({ ...current, stateId: value, cityId: '' }));
+                    setFormErrors((current) => ({ ...current, stateId: undefined }));
+                  }}
+                  error={formErrors.stateId}
+                  required
+                >
+                  <option value="">Select state</option>
+                  {states.map((state) => (
+                    <option key={state.id} value={state.id}>
+                      {state.name}
+                    </option>
+                  ))}
+                </SelectField>
+                <SelectField
+                  id="cityId"
+                  label="City"
+                  value={form.cityId}
+                  onChange={(value) => setField('cityId', value)}
+                  error={formErrors.cityId}
+                  required
+                  disabled={!form.stateId}
+                >
+                  <option value="">{form.stateId ? 'Select city' : 'Select state first'}</option>
+                  {cities.map((city) => (
+                    <option key={city.id} value={city.id}>
+                      {city.name}
+                    </option>
+                  ))}
+                </SelectField>
+              </div>
 
-      <section className="bg-card border border-border rounded-md p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h2 className="font-heading text-lg font-semibold text-foreground">
-              Review before payment
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              You will see item availability, delivery address, order notes, and totals next.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleContinueToSummary}
-            disabled={!selectedAddressId}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground hover:scale-102 hover:shadow-warm-md transition-luxe disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
-          >
-            Continue to Order Summary
-            <Icon name="ArrowRightIcon" size={20} />
-          </button>
-        </div>
-      </section>
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={form.isDefault}
+                  onChange={(event) => setField('isDefault', event.target.checked)}
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-ring"
+                />
+                Make this my default address
+              </label>
+
+              <button
+                type="submit"
+                disabled={isSavingAddress}
+                className="inline-flex h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground hover:scale-102 hover:shadow-warm-md transition-luxe disabled:opacity-60 disabled:hover:scale-100"
+              >
+                {isSavingAddress
+                  ? 'Saving...'
+                  : editingAddressId
+                    ? 'Update Address'
+                    : 'Save Address'}
+                <Icon name="CheckIcon" size={18} />
+              </button>
+            </form>
+          </section>
+        )}
+      </div>
+
+      <div className="lg:col-span-1">
+        <OrderSummary
+          preview={preview}
+          selectedAddress={selectedAddress}
+          onPlaceOrder={handleContinueToSummary}
+          isPlacingOrder={false}
+          actionLabel="Continue to Order Summary"
+          disableForUnavailableItems={false}
+        />
+      </div>
     </div>
   );
 };

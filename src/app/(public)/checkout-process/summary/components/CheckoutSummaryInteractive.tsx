@@ -4,8 +4,10 @@ import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
 import { getApiMessage, getCheckoutPreview, initiateCheckout } from '@/lib/api/checkoutApi';
+import { resolveImageSrc } from '@/lib/image';
 import { CheckoutOrder, CheckoutPreview, CheckoutPreviewItem } from '@/types/checkout';
 import { useCartStore } from '@/store/cartStore';
 import OrderConfirmation from '../../components/OrderConfirmation';
@@ -23,6 +25,15 @@ function stockMessage(item: CheckoutPreviewItem): string {
     return 'This item is no longer available';
   }
   return '';
+}
+
+function productHref(item: CheckoutPreviewItem): string {
+  return `/product-detail/${item.productId}?variant=${item.variantId}`;
+}
+
+function productImage(item: CheckoutPreviewItem): string {
+  if (!item.imageUrl) return '/assets/images/no_image.png';
+  return item.imageUrl.startsWith('http') ? item.imageUrl : resolveImageSrc(item.imageUrl);
 }
 
 function CheckoutSummaryContent() {
@@ -192,14 +203,34 @@ function CheckoutSummaryContent() {
             {preview.items.map((item) => (
               <div key={item.cartItemId} className="rounded-md border border-border p-4">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="font-medium text-foreground">{item.productName}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {item.variantName || item.sku}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {item.quantity} × ₹{item.unitPrice.toFixed(2)}
-                    </p>
+                  <div className="flex min-w-0 gap-3">
+                    <Link
+                      href={productHref(item)}
+                      className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-muted"
+                      aria-label={`View ${item.productName}`}
+                    >
+                      <AppImage
+                        src={productImage(item)}
+                        alt={item.productName}
+                        fill
+                        sizes="80px"
+                        className="h-full w-full object-cover"
+                      />
+                    </Link>
+                    <div className="min-w-0">
+                      <Link
+                        href={productHref(item)}
+                        className="font-medium text-foreground hover:text-primary transition-luxe"
+                      >
+                        {item.productName}
+                      </Link>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {item.variantName || item.sku}
+                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {item.quantity} × ₹{item.unitPrice.toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                   <span className="whitespace-nowrap text-data font-semibold text-foreground">
                     ₹{item.lineTotal.toFixed(2)}

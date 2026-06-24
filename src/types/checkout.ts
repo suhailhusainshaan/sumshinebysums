@@ -67,9 +67,11 @@ export interface CheckoutPreviewItem {
   cartItemId: number;
   productId: number;
   variantId: number;
+  productSlug?: string | null;
   productName: string;
   variantName: string | null;
   sku: string;
+  imageUrl?: string | null;
   quantity: number;
   unitPrice: number;
   compareAtPrice: number | null;
