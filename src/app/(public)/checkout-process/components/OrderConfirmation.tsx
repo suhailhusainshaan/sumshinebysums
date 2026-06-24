@@ -3,108 +3,94 @@
 import React from 'react';
 import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
+import { CheckoutOrder } from '@/types/checkout';
 
 interface OrderConfirmationProps {
-  orderNumber: string;
-  email: string;
-  estimatedDelivery: string;
+  order: CheckoutOrder;
   onContinueShopping: () => void;
 }
 
-const OrderConfirmation = ({
-  orderNumber,
-  email,
-  estimatedDelivery,
-  onContinueShopping,
-}: OrderConfirmationProps) => {
+const OrderConfirmation = ({ order, onContinueShopping }: OrderConfirmationProps) => {
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-card rounded-lg shadow-warm-lg p-8 text-center">
-        {/* Success Icon */}
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-success/10 rounded-full mb-6">
-          <Icon name="CheckCircleIcon" size={48} className="text-success" />
+      <div className="bg-card border border-border rounded-md shadow-warm-lg p-6 sm:p-8 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-success/10 rounded-full mb-5">
+          <Icon name="CheckCircleIcon" size={40} className="text-success" />
         </div>
 
-        {/* Success Message */}
-        <h2 className="font-heading text-3xl font-bold text-foreground mb-2">Order Confirmed!</h2>
-        <p className="text-lg text-muted-foreground mb-8">
-          Thank you for your purchase. Your order has been successfully placed.
+        <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
+          Order Created
+        </h2>
+        <p className="text-muted-foreground mb-8">
+          Your order is pending payment. Use the order details below for the next payment step.
         </p>
 
-        {/* Order Details */}
-        <div className="bg-muted/30 rounded-lg p-6 mb-8 text-left">
+        <div className="bg-muted/30 rounded-md p-5 mb-8 text-left">
           <div className="space-y-4">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-caption text-muted-foreground mb-1">Order Number</p>
-                <p className="text-data text-lg font-semibold text-foreground">{orderNumber}</p>
+                <p className="text-data text-lg font-semibold text-foreground">
+                  {order.orderNumber}
+                </p>
               </div>
-              <Link
-                href={`/order-tracking?order=${orderNumber}`}
-                className="text-primary hover:text-primary/80 transition-luxe flex items-center space-x-1"
-              >
-                <span className="text-sm font-medium">Track Order</span>
-                <Icon name="ArrowRightIcon" size={16} />
-              </Link>
+              <span className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
+                {order.paymentStatus}
+              </span>
             </div>
             <div className="border-t border-border pt-4">
-              <p className="text-caption text-muted-foreground mb-1">Confirmation Email</p>
-              <p className="text-foreground">{email}</p>
+              <p className="text-caption text-muted-foreground mb-1">Order Total</p>
+              <p className="text-data text-xl font-bold text-primary">₹{order.total.toFixed(2)}</p>
             </div>
             <div className="border-t border-border pt-4">
-              <p className="text-caption text-muted-foreground mb-1">Estimated Delivery</p>
-              <p className="text-foreground font-medium">{estimatedDelivery}</p>
+              <p className="text-caption text-muted-foreground mb-1">Deliver To</p>
+              <p className="text-foreground font-medium">{order.shippingAddress.fullName}</p>
+              <p className="text-sm text-muted-foreground">
+                {order.shippingAddress.line1}
+                {order.shippingAddress.line2 ? `, ${order.shippingAddress.line2}` : ''}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
+                {order.shippingAddress.postalCode}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Information Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-lg p-4 text-center">
-            <Icon name="EnvelopeIcon" size={32} className="mx-auto text-primary mb-2" />
-            <p className="text-sm font-medium text-foreground mb-1">Email Sent</p>
-            <p className="text-caption text-muted-foreground">Check your inbox for order details</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+          <div className="border border-border rounded-md p-4">
+            <Icon
+              name="ClipboardDocumentCheckIcon"
+              size={28}
+              className="mx-auto text-primary mb-2"
+            />
+            <p className="text-sm font-medium text-foreground">Order Saved</p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-4 text-center">
-            <Icon name="TruckIcon" size={32} className="mx-auto text-primary mb-2" />
-            <p className="text-sm font-medium text-foreground mb-1">Processing</p>
-            <p className="text-caption text-muted-foreground">Your order is being prepared</p>
+          <div className="border border-border rounded-md p-4">
+            <Icon name="CreditCardIcon" size={28} className="mx-auto text-primary mb-2" />
+            <p className="text-sm font-medium text-foreground">Payment Pending</p>
           </div>
-          <div className="bg-card border border-border rounded-lg p-4 text-center">
-            <Icon name="BellIcon" size={32} className="mx-auto text-primary mb-2" />
-            <p className="text-sm font-medium text-foreground mb-1">Updates</p>
-            <p className="text-caption text-muted-foreground">We'll notify you of any changes</p>
+          <div className="border border-border rounded-md p-4">
+            <Icon name="TruckIcon" size={28} className="mx-auto text-primary mb-2" />
+            <p className="text-sm font-medium text-foreground">Ships After Payment</p>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/"
             onClick={onContinueShopping}
-            className="flex-1 bg-primary text-primary-foreground py-4 px-6 rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center space-x-2"
+            className="flex-1 bg-primary text-primary-foreground py-3 px-5 rounded-md font-medium hover:scale-102 hover:shadow-warm-md transition-luxe flex items-center justify-center gap-2"
           >
             <Icon name="ShoppingBagIcon" size={20} />
-            <span>Continue Shopping</span>
+            Continue Shopping
           </Link>
-          <Link
-            href={`/order-tracking?order=${orderNumber}`}
-            className="flex-1 bg-muted text-foreground py-4 px-6 rounded-md font-medium hover:bg-muted/80 transition-luxe flex items-center justify-center space-x-2"
-          >
-            <Icon name="MapPinIcon" size={20} />
-            <span>Track Order</span>
-          </Link>
-        </div>
-
-        {/* Help Section */}
-        <div className="mt-8 pt-8 border-t border-border">
-          <p className="text-sm text-muted-foreground mb-4">Need help with your order?</p>
           <Link
             href="/contact-support"
-            className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 transition-luxe"
+            className="flex-1 bg-muted text-foreground py-3 px-5 rounded-md font-medium hover:bg-muted/80 transition-luxe flex items-center justify-center gap-2"
           >
             <Icon name="ChatBubbleLeftRightIcon" size={20} />
-            <span className="font-medium">Contact Support</span>
+            Contact Support
           </Link>
         </div>
       </div>

@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useCartStore } from '@/store/cartStore';
 import Header from '@/components/common/Header';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
 import toast from 'react-hot-toast';
-import useAuth from '@/hooks/useAuth';
 import { resolveImageSrc } from '@/lib/image';
+import AccountSidebar from '@/components/account/AccountSidebar';
 
 /* ─── Skeleton ──────────────────────────────────────────────────────────── */
 function WishlistSkeleton() {
@@ -67,8 +66,7 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
 
   const price = item.variant?.price ?? 0;
   const compareAt = item.variant?.compareAtPrice ?? 0;
-  const discountPct =
-    compareAt > 0 ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
+  const discountPct = compareAt > 0 ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
 
   const handleAddToCart = async () => {
     setIsAdding(true);
@@ -98,10 +96,7 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
         <div className="relative aspect-square overflow-hidden bg-muted">
           <AppImage
             src={image.startsWith('http') ? image : resolveImageSrc(image)}
-            alt={
-              item.productImages.find((img) => img.isFeatureImage)?.altText ||
-              item.product.name
-            }
+            alt={item.productImages.find((img) => img.isFeatureImage)?.altText || item.product.name}
             className="h-full w-full object-cover transition-luxe group-hover:scale-105"
           />
         </div>
@@ -124,13 +119,9 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
                 ₹{compareAt.toFixed(2)}
               </span>
             )}
-            <span className="text-base font-semibold text-foreground">
-              ₹{price.toFixed(2)}
-            </span>
+            <span className="text-base font-semibold text-foreground">₹{price.toFixed(2)}</span>
             {discountPct > 0 && (
-              <span className="text-sm font-medium text-primary">
-                {discountPct}% Off
-              </span>
+              <span className="text-sm font-medium text-primary">{discountPct}% Off</span>
             )}
           </div>
         </Link>
@@ -186,8 +177,8 @@ export default function WishlistPage() {
       } else {
         toast.success('Added to cart!');
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to add to cart');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to add to cart');
     }
   };
 
@@ -197,11 +188,12 @@ export default function WishlistPage() {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="pt-20 lg:pt-24">
-
         {/* Breadcrumb — full width with consistent padding */}
         <div className="px-4 sm:px-6 lg:px-8 py-4 border-b border-border">
           <nav className="text-sm text-muted-foreground flex items-center gap-1">
-            <Link href="/" className="hover:text-primary transition-luxe">Home</Link>
+            <Link href="/" className="hover:text-primary transition-luxe">
+              Home
+            </Link>
             <Icon name="ChevronRightIcon" size={14} />
             <span className="text-foreground">My Wishlist</span>
           </nav>
@@ -209,50 +201,7 @@ export default function WishlistPage() {
 
         {/* Full-width two-column layout: sidebar flush left, content fills right */}
         <div className="flex flex-col lg:flex-row min-h-[calc(100vh-theme(spacing.24))]">
-
-          {/* ── Sidebar ── pinned to the left, fixed width, with its own padding */}
-          <aside className="lg:w-72 shrink-0 border-r border-border bg-background px-4 pt-8 pb-12 lg:px-6">
-            {/* My Profile */}
-            <div className="bg-card rounded-lg shadow-warm mb-3 overflow-hidden">
-              <Link
-                href="/profile"
-                className="flex items-center gap-3 px-5 py-4 hover:bg-muted transition-luxe"
-              >
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground">
-                  <Icon name="UserIcon" size={18} />
-                </span>
-                <span className="font-medium text-foreground">My Profile</span>
-              </Link>
-            </div>
-
-            {/* Nav group */}
-            <div className="bg-card rounded-lg shadow-warm mb-3 overflow-hidden divide-y divide-border">
-              {/* My Orders */}
-              <Link
-                href="/"
-                className="flex items-center gap-3 px-5 py-4 hover:bg-muted transition-luxe group"
-              >
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground group-hover:text-primary transition-luxe">
-                  <Icon name="ClipboardDocumentListIcon" size={18} />
-                </span>
-                <span className="font-medium text-foreground">My Orders</span>
-              </Link>
-
-              {/* Favourites — active */}
-              <div className="relative flex items-center gap-3 px-5 py-4 bg-muted/40">
-                <span className="absolute left-0 top-0 h-full w-[3px] bg-primary rounded-r-full" />
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
-                  <Icon name="HeartIcon" size={18} variant="solid" />
-                </span>
-                <span className="font-semibold text-primary">Favourites</span>
-              </div>
-            </div>
-
-            {/* Log Out */}
-            <div className="bg-card rounded-lg shadow-warm overflow-hidden">
-              <LogOutButton />
-            </div>
-          </aside>
+          <AccountSidebar active="wishlist" />
 
           {/* ── Content ── takes remaining width, its own padding */}
           <div className="flex-1 min-w-0 px-8 lg:px-12 pt-8 pb-12">
@@ -261,9 +210,7 @@ export default function WishlistPage() {
               <h1 className="font-heading text-2xl lg:text-3xl font-bold text-foreground">
                 Favourites
               </h1>
-              <span className="text-2xl lg:text-3xl font-bold text-primary">
-                ({items.length})
-              </span>
+              <span className="text-2xl lg:text-3xl font-bold text-primary">({items.length})</span>
             </div>
 
             {items.length === 0 ? (
@@ -272,9 +219,7 @@ export default function WishlistPage() {
                   <Icon name="HeartIcon" size={36} className="text-muted-foreground" />
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-medium text-foreground mb-2">
-                    Your wishlist is empty
-                  </p>
+                  <p className="text-xl font-medium text-foreground mb-2">Your wishlist is empty</p>
                   <p className="text-muted-foreground mb-6">
                     Save items you love and find them here anytime
                   </p>
@@ -289,39 +234,18 @@ export default function WishlistPage() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
                 {items.map((item) => (
-                  <WishlistCard key={item.id} item={item} onRemove={handleRemove} onAddToCart={handleAddToCart} />
+                  <WishlistCard
+                    key={item.id}
+                    item={item}
+                    onRemove={handleRemove}
+                    onAddToCart={handleAddToCart}
+                  />
                 ))}
               </div>
             )}
           </div>
-
         </div>
       </main>
     </div>
-  );
-}
-
-/* ─── LogOut extracted to avoid hook-in-render issues ───────────────────── */
-function LogOutButton() {
-  const { logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
-
-  return (
-    <button
-      onClick={handleLogout}
-      className="w-full flex items-center gap-3 px-5 py-4 hover:bg-muted transition-luxe group"
-    >
-      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground group-hover:text-error transition-luxe">
-        <Icon name="ArrowRightOnRectangleIcon" size={18} />
-      </span>
-      <span className="font-medium text-foreground group-hover:text-error transition-luxe">
-        Log Out
-      </span>
-    </button>
   );
 }
