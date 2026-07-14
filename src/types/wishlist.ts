@@ -2,16 +2,21 @@ export interface WishlistItem {
   id: number;
   productId: number;
   variantId: number | null;
-  product: {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    isPublished: boolean;
-    isActive: boolean;
-    brandId: number;
-    categoryId: number;
-  };
+  name: string;
+  slug: string;
+  description: string;
+  brandId: number;
+  brandName: string | null;
+  brandSlug: string | null;
+  categoryId: number;
+  categoryName: string | null;
+  categorySlug: string | null;
+  thumbnail: string | null;
+  inStock: boolean;
+  available: boolean;
+  discountPercentage: number;
+  published: boolean;
+  active: boolean;
   variant: {
     id: number;
     sku: string;
@@ -19,12 +24,15 @@ export interface WishlistItem {
     price: number;
     compareAtPrice: number;
     stockQuantity: number;
-    isActive: boolean;
+    active: boolean;
   } | null;
-  productImages: {
+  images: {
+    id: number;
     imageUrl: string;
     altText: string;
-    isFeatureImage: boolean;
+    featureImage: boolean;
+    variantId: number;
+    productId: number;
   }[];
   createdAt: string;
 }

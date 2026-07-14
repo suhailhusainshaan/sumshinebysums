@@ -87,20 +87,22 @@ const CartItem = ({ item, onQuantityChange, onRemove, isUpdating = false }: Cart
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex-1 min-w-0">
-            {/* Point 3: Product Name */}
             <Link
               href={productUrl}
               className="font-heading text-base sm:text-lg font-semibold text-foreground hover:text-primary transition-luxe line-clamp-2"
             >
               {item.productName}
             </Link>
-            {/* Point 3: Variant (Color) */}
+            {item.categoryName && (
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
+                {item.categoryName}
+              </p>
+            )}
             {item.variantName && (
               <p className="text-caption text-muted-foreground mt-0.5 text-sm">
                 {item.variantName}
               </p>
             )}
-            <p className="text-caption text-muted-foreground text-xs mt-0.5">SKU: {item.sku}</p>
           </div>
           <button
             onClick={() => onRemove(item.cartItemId)}

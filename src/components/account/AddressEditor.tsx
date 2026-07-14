@@ -269,7 +269,7 @@ export default function AddressEditor({ addressId }: AddressEditorProps) {
           label="Full Name"
           value={form.fullName}
           onChange={(value) => setField('fullName', value)}
-          placeholder="Suhail Husain"
+          placeholder="Enter Full Name"
           error={errors.fullName}
           required
         />
@@ -278,7 +278,7 @@ export default function AddressEditor({ addressId }: AddressEditorProps) {
           label="Phone"
           value={form.phone}
           onChange={(value) => setField('phone', value)}
-          placeholder="9876543210"
+          // placeholder="9876543210"
           error={errors.phone}
           required
         />
@@ -288,7 +288,7 @@ export default function AddressEditor({ addressId }: AddressEditorProps) {
             label="PIN Code"
             value={form.postalCode}
             onChange={handlePostalCodeChange}
-            placeholder="110001"
+            //placeholder="110001"
             error={errors.postalCode}
             required
           />
@@ -302,7 +302,7 @@ export default function AddressEditor({ addressId }: AddressEditorProps) {
           label="Street / Building"
           value={form.line1}
           onChange={(value) => setField('line1', value)}
-          placeholder="123 Main Street"
+          //placeholder="123 Main Street"
           error={errors.line1}
           required
         />
@@ -311,7 +311,7 @@ export default function AddressEditor({ addressId }: AddressEditorProps) {
           label="Flat / Floor"
           value={form.line2}
           onChange={(value) => setField('line2', value)}
-          placeholder="Flat 4B"
+          //placeholder="Flat 4B"
           error={errors.line2}
         />
       </div>

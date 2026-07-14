@@ -218,15 +218,20 @@ function CheckoutSummaryContent() {
                       />
                     </Link>
                     <div className="min-w-0">
+                      {item.categoryName && (
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
+                          {item.categoryName}
+                        </p>
+                      )}
                       <Link
                         href={productHref(item)}
                         className="font-medium text-foreground hover:text-primary transition-luxe"
                       >
                         {item.productName}
                       </Link>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {item.variantName || item.sku}
-                      </p>
+                      {item.variantName && (
+                        <p className="mt-1 text-sm text-muted-foreground">{item.variantName}</p>
+                      )}
                       <p className="mt-1 text-sm text-muted-foreground">
                         {item.quantity} × ₹{item.unitPrice.toFixed(2)}
                       </p>
@@ -236,7 +241,7 @@ function CheckoutSummaryContent() {
                     ₹{item.lineTotal.toFixed(2)}
                   </span>
                 </div>
-                {!item.isAvailable && (
+                {!item.available && (
                   <p className="mt-3 flex items-center gap-2 text-sm font-medium text-warning">
                     <Icon name="ExclamationTriangleIcon" size={16} />
                     {stockMessage(item)}

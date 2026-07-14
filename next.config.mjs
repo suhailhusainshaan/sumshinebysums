@@ -1,11 +1,12 @@
 const isProd = process.env.NODE_ENV === 'production';
+import path from 'path';
 /** @type {import('next').NextConfig} */
 // Updated by Codex
 
 // This file is updated by Codex or open AI
 const nextConfig = {
   turbopack: {
-    root: './',
+    root: path.resolve(process.cwd()),
     rules: {
       '*.svg': {
         loaders: ['@svgr/webpack'],
