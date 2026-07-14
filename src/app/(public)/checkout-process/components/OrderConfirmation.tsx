@@ -7,22 +7,41 @@ import { CheckoutOrder } from '@/types/checkout';
 
 interface OrderConfirmationProps {
   order: CheckoutOrder;
+  /** Payment has been verified by the backend. */
+  paymentVerified?: boolean;
+  /** Razorpay payment ID, shown when verified. */
+  razorpayPaymentId?: string;
   onContinueShopping: () => void;
 }
 
-const OrderConfirmation = ({ order, onContinueShopping }: OrderConfirmationProps) => {
+const OrderConfirmation = ({
+  order,
+  paymentVerified = false,
+  razorpayPaymentId,
+  onContinueShopping,
+}: OrderConfirmationProps) => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-card border border-border rounded-md shadow-warm-lg p-6 sm:p-8 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-success/10 rounded-full mb-5">
-          <Icon name="CheckCircleIcon" size={40} className="text-success" />
+        <div
+          className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-5 ${
+            paymentVerified ? 'bg-success/10' : 'bg-warning/10'
+          }`}
+        >
+          <Icon
+            name={paymentVerified ? 'CheckCircleIcon' : 'ClockIcon'}
+            size={40}
+            className={paymentVerified ? 'text-success' : 'text-warning'}
+          />
         </div>
 
         <h2 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">
-          Order Created
+          {paymentVerified ? 'Payment Successful' : 'Order Created'}
         </h2>
         <p className="text-muted-foreground mb-8">
-          Your order is pending payment. Use the order details below for the next payment step.
+          {paymentVerified
+            ? "Your payment has been confirmed. We'll start preparing your order shortly."
+            : 'Your order is pending payment. Use the order details below for the next payment step.'}
         </p>
 
         <div className="bg-muted/30 rounded-md p-5 mb-8 text-left">
@@ -34,10 +53,26 @@ const OrderConfirmation = ({ order, onContinueShopping }: OrderConfirmationProps
                   {order.orderNumber}
                 </p>
               </div>
-              <span className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
-                {order.paymentStatus}
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                  paymentVerified
+                    ? 'bg-success/10 text-success'
+                    : 'bg-warning/10 text-warning'
+                }`}
+              >
+                {paymentVerified ? 'PAID' : order.paymentStatus}
               </span>
             </div>
+
+            {paymentVerified && razorpayPaymentId && (
+              <div className="border-t border-border pt-4">
+                <p className="text-caption text-muted-foreground mb-1">Payment ID</p>
+                <p className="text-data text-sm font-mono text-foreground break-all">
+                  {razorpayPaymentId}
+                </p>
+              </div>
+            )}
+
             <div className="border-t border-border pt-4">
               <p className="text-caption text-muted-foreground mb-1">Order Total</p>
               <p className="text-data text-xl font-bold text-primary">₹{order.total.toFixed(2)}</p>
@@ -64,15 +99,23 @@ const OrderConfirmation = ({ order, onContinueShopping }: OrderConfirmationProps
               size={28}
               className="mx-auto text-primary mb-2"
             />
-            <p className="text-sm font-medium text-foreground">Order Saved</p>
+            <p className="text-sm font-medium text-foreground">Order Placed</p>
           </div>
           <div className="border border-border rounded-md p-4">
-            <Icon name="CreditCardIcon" size={28} className="mx-auto text-primary mb-2" />
-            <p className="text-sm font-medium text-foreground">Payment Pending</p>
+            <Icon
+              name={paymentVerified ? 'CheckBadgeIcon' : 'CreditCardIcon'}
+              size={28}
+              className={`mx-auto mb-2 ${paymentVerified ? 'text-success' : 'text-primary'}`}
+            />
+            <p className="text-sm font-medium text-foreground">
+              {paymentVerified ? 'Payment Confirmed' : 'Payment Pending'}
+            </p>
           </div>
           <div className="border border-border rounded-md p-4">
             <Icon name="TruckIcon" size={28} className="mx-auto text-primary mb-2" />
-            <p className="text-sm font-medium text-foreground">Ships After Payment</p>
+            <p className="text-sm font-medium text-foreground">
+              {paymentVerified ? 'Being Prepared' : 'Ships After Payment'}
+            </p>
           </div>
         </div>
 
