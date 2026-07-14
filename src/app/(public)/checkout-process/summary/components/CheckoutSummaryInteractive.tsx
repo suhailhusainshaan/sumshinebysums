@@ -7,10 +7,12 @@ import toast from 'react-hot-toast';
 import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
 import { getApiMessage, getCheckoutPreview, initiateCheckout } from '@/lib/api/checkoutApi';
+import { createPaymentOrder, verifyPayment } from '@/lib/api/paymentApi';
 import { resolveImageSrc } from '@/lib/image';
-import { CheckoutOrder, CheckoutPreview, CheckoutPreviewItem } from '@/types/checkout';
+import { CheckoutPreview, CheckoutPreviewItem } from '@/types/checkout';
 import { useCartStore } from '@/store/cartStore';
-import OrderConfirmation from '../../components/OrderConfirmation';
+import { useRazorpay } from '@/hooks/useRazorpay';
+import useAuth from '@/hooks/useAuth';
 
 function needsAuth(errorMessage: string): boolean {
   return /unauthorized|jwt|token/i.test(errorMessage);
@@ -40,10 +42,11 @@ function CheckoutSummaryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { fetchCart } = useCartStore();
+  const { user } = useAuth();
+  const { openCheckout } = useRazorpay();
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState<CheckoutPreview | null>(null);
   const [notes, setNotes] = useState('');
-  const [order, setOrder] = useState<CheckoutOrder | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const addressId = Number(searchParams.get('addressId'));
@@ -84,7 +87,6 @@ function CheckoutSummaryContent() {
     }
 
     loadPreview();
-
     return () => {
       isMounted = false;
     };
@@ -95,7 +97,6 @@ function CheckoutSummaryContent() {
       toast.error('Order summary is not ready yet');
       return;
     }
-
     if (preview.hasUnavailableItems) {
       toast.error('Update your cart before proceeding');
       return;
@@ -103,21 +104,74 @@ function CheckoutSummaryContent() {
 
     setIsSubmitting(true);
     try {
-      const res = await initiateCheckout(addressId, notes);
-      if (!res.status) throw new Error(res.message);
-      setOrder(res.data);
+      // 1. Create the order on the backend (status: PENDING)
+      const checkoutRes = await initiateCheckout(addressId, notes);
+      if (!checkoutRes.status) throw new Error(checkoutRes.message);
+      const { orderId, orderNumber } = checkoutRes.data;
+
+      // Refresh cart count (order creation clears the cart server-side)
       await fetchCart();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 2. Create a Razorpay order tied to our internal order
+      const paymentRes = await createPaymentOrder(orderId);
+      if (!paymentRes.status) throw new Error(paymentRes.message);
+      const { razorpayOrderId, amount } = paymentRes.data;
+
+      const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      if (!keyId) throw new Error('Payment configuration missing. Please contact support.');
+
+      // 3. Open Razorpay modal — promise resolves once user pays or dismisses
+      const outcome = await openCheckout({
+        key: keyId,
+        amount,
+        currency: 'INR',
+        name: 'SumShineBySums',
+        description: `Order #${orderNumber}`,
+        order_id: razorpayOrderId,
+        prefill: {
+          name: user?.name ?? user?.firstName,
+          email: user?.email,
+        },
+        notes: {
+          orderId: String(orderId),
+          orderNumber,
+        },
+        theme: { color: '#d4a853' },
+      });
+
+      // 4. Handle modal dismiss — order saved, no payment
+      if (outcome.type === 'dismissed') {
+        router.push(`/order-confirmation/${orderId}?status=cancelled`);
+        return;
+      }
+
+      // 5. Verify payment signature with backend
+      try {
+        const { response } = outcome;
+        const verifyRes = await verifyPayment({
+          razorpayOrderId: response.razorpay_order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpaySignature: response.razorpay_signature,
+        });
+
+        if (verifyRes.status && verifyRes.data.verified) {
+          router.push(
+            `/order-confirmation/${orderId}?status=paid&paymentId=${response.razorpay_payment_id}`,
+          );
+        } else {
+          router.push(`/order-confirmation/${orderId}?status=failed`);
+        }
+      } catch {
+        // Verification network error — redirect to pending state
+        router.push(`/order-confirmation/${orderId}?status=pending`);
+      }
     } catch (error) {
       toast.error(getApiMessage(error, 'Failed to proceed to checkout'));
-    } finally {
       setIsSubmitting(false);
     }
+    // On success paths we navigate away, so we intentionally skip setIsSubmitting(false)
+    // to avoid a flash of re-enabled state before the page transitions.
   };
-
-  if (order) {
-    return <OrderConfirmation order={order} onContinueShopping={() => router.push('/')} />;
-  }
 
   if (loading) {
     return (
@@ -154,6 +208,7 @@ function CheckoutSummaryContent() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
+        {/* Delivery Address */}
         <section className="bg-card border border-border rounded-md p-5">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
@@ -180,6 +235,7 @@ function CheckoutSummaryContent() {
           </div>
         </section>
 
+        {/* Items */}
         <section className="bg-card border border-border rounded-md p-5">
           <div className="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
@@ -198,7 +254,6 @@ function CheckoutSummaryContent() {
               </Link>
             )}
           </div>
-
           <div className="space-y-3">
             {preview.items.map((item) => (
               <div key={item.cartItemId} className="rounded-md border border-border p-4">
@@ -252,20 +307,22 @@ function CheckoutSummaryContent() {
           </div>
         </section>
 
+        {/* Order Notes */}
         <section className="bg-card border border-border rounded-md p-5">
           <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Order Notes</h2>
           <textarea
             value={notes}
-            onChange={(event) => setNotes(event.target.value)}
+            onChange={(e) => setNotes(e.target.value)}
             rows={3}
             maxLength={300}
             className="w-full rounded-md border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-luxe"
-            placeholder="Please pack as a gift"
+            placeholder="E.g. Please pack as a gift"
           />
           <p className="mt-1 text-right text-xs text-muted-foreground">{notes.length}/300</p>
         </section>
       </div>
 
+      {/* Payment Summary sidebar */}
       <aside className="lg:col-span-1">
         <div className="bg-card border border-border rounded-md p-5 lg:sticky lg:top-24">
           <h2 className="font-heading text-xl font-semibold text-foreground mb-5">
@@ -310,14 +367,43 @@ function CheckoutSummaryContent() {
             disabled={preview.hasUnavailableItems || isSubmitting}
             className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary font-medium text-primary-foreground hover:scale-102 hover:shadow-warm-md transition-luxe disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
           >
-            {isSubmitting ? 'Processing...' : 'Proceed to Checkout'}
-            <Icon name="ArrowRightIcon" size={20} />
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-primary-foreground"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                Preparing payment…
+              </>
+            ) : (
+              <>
+                <Icon name="CreditCardIcon" size={20} />
+                Pay Now
+              </>
+            )}
           </button>
 
           <div className="mt-5 space-y-2.5 border-t border-border pt-5">
             <div className="flex items-center gap-2 text-caption text-muted-foreground">
               <Icon name="ShieldCheckIcon" size={16} className="text-success" />
-              <span>Secure authenticated checkout</span>
+              <span>Secure payment via Razorpay</span>
             </div>
             <div className="flex items-center gap-2 text-caption text-muted-foreground">
               <Icon name="TruckIcon" size={16} className="text-primary" />
