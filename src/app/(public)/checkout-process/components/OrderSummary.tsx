@@ -52,6 +52,11 @@ const OrderSummary = ({
               <div key={item.cartItemId} className="rounded-md border border-border p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
+                    {item.categoryName && (
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
+                        {item.categoryName}
+                      </p>
+                    )}
                     <p className="line-clamp-1 text-sm font-medium text-foreground">
                       {item.productName}
                     </p>
@@ -66,7 +71,7 @@ const OrderSummary = ({
                     ₹{item.lineTotal.toFixed(2)}
                   </span>
                 </div>
-                {!item.isAvailable && (
+                {!item.available && (
                   <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-warning">
                     <Icon name="ExclamationTriangleIcon" size={14} />
                     {stockMessage(item)}

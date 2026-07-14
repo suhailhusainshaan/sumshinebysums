@@ -99,7 +99,7 @@ export default function NotificationDropdown() {
                   <span className="font-medium text-gray-800 dark:text-white/90">Terry Franci</span>
                   <span>requests permission to change</span>
                   <span className="font-medium text-gray-800 dark:text-white/90">
-                    Project - Nganter App
+                    Project - Sumshine By Sums
                   </span>
                 </span>
 

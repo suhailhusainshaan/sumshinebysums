@@ -60,8 +60,9 @@ interface CardProps {
 function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
   const [isAdding, setIsAdding] = useState(false);
   const image =
-    item.productImages.find((img) => img.isFeatureImage)?.imageUrl ||
-    item.productImages[0]?.imageUrl ||
+    item.thumbnail ||
+    item.images.find((img) => img.featureImage)?.imageUrl ||
+    item.images[0]?.imageUrl ||
     '/assets/images/no_image.png';
 
   const price = item.variant?.price ?? 0;
@@ -96,7 +97,7 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
         <div className="relative aspect-square overflow-hidden bg-muted">
           <AppImage
             src={image.startsWith('http') ? image : resolveImageSrc(image)}
-            alt={item.productImages.find((img) => img.isFeatureImage)?.altText || item.product.name}
+            alt={item.images.find((img) => img.featureImage)?.altText || item.name}
             className="h-full w-full object-cover transition-luxe group-hover:scale-105"
           />
         </div>
@@ -108,9 +109,17 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
           href={`/product-detail/${item.productId}${item.variantId ? `?variant=${item.variantId}` : ''}`}
           className="block"
         >
-          <h3 className="text-sm font-medium text-foreground mb-2 line-clamp-2 min-h-[2.5rem] leading-snug">
-            {item.product.name}
+          {item.categoryName && (
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              {item.categoryName}
+            </p>
+          )}
+          <h3 className="text-lg font-medium text-foreground mb-1 line-clamp-2 min-h-[1.5rem] leading-snug">
+            {item.name}
           </h3>
+          {item.variant?.name && (
+            <p className="text-xs text-muted-foreground mb-2">{item.variant.name}</p>
+          )}
 
           {/* Pricing row */}
           <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -132,7 +141,7 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
         {/* Add to Cart */}
         <button
           onClick={handleAddToCart}
-          disabled={isAdding || !item.variant}
+          disabled={isAdding || !item.variant || item.available === false}
           className="mt-4 w-full flex items-center justify-center gap-2 text-sm font-bold tracking-wide text-primary border-t border-border pt-3 hover:text-primary/80 transition-luxe uppercase disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isAdding ? (

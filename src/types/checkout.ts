@@ -69,15 +69,16 @@ export interface CheckoutPreviewItem {
   variantId: number;
   productSlug?: string | null;
   productName: string;
+  categoryName: string | null;
   variantName: string | null;
   sku: string;
-  imageUrl?: string | null;
+  imageUrl: string | null;
   quantity: number;
   unitPrice: number;
   compareAtPrice: number | null;
   lineTotal: number;
   availableStock: number;
-  isAvailable: boolean;
+  available: boolean;
   stockIssue: StockIssue;
 }
 
