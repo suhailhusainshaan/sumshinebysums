@@ -155,9 +155,13 @@ function CheckoutSummaryContent() {
         });
 
         if (verifyRes.status && verifyRes.data.verified) {
-          router.push(
-            `/order-confirmation/${orderId}?status=paid&paymentId=${response.razorpay_payment_id}`,
-          );
+          const confirmationParams = new URLSearchParams({
+            status: 'paid',
+            paymentId: response.razorpay_payment_id,
+            orderNumber: verifyRes.data.orderNumber,
+          });
+
+          router.push(`/order-confirmation/${orderId}?${confirmationParams.toString()}`);
         } else {
           router.push(`/order-confirmation/${orderId}?status=failed`);
         }

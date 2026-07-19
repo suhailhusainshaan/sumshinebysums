@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
 
 type PaymentStatus = 'paid' | 'failed' | 'cancelled' | 'pending';
@@ -23,7 +23,8 @@ const STATUS_CONFIG: Record<PaymentStatus, StatusConfig> = {
     iconColor: 'text-success',
     iconBg: 'bg-success/10',
     heading: 'Payment Successful!',
-    message: "Your payment was confirmed and your order is being prepared. We'll notify you once it ships.",
+    message:
+      "Your payment was confirmed and your order is being prepared. We'll notify you once it ships.",
     statusLabel: 'PAID',
     statusBadgeClass: 'bg-success/10 text-success',
   },
@@ -42,8 +43,7 @@ const STATUS_CONFIG: Record<PaymentStatus, StatusConfig> = {
     iconColor: 'text-muted-foreground',
     iconBg: 'bg-muted',
     heading: 'Payment Cancelled',
-    message:
-      'You closed the payment window. Your order has been saved and is awaiting payment.',
+    message: 'You closed the payment window. Your order has been saved and is awaiting payment.',
     statusLabel: 'PENDING',
     statusBadgeClass: 'bg-warning/10 text-warning',
   },
@@ -60,12 +60,11 @@ const STATUS_CONFIG: Record<PaymentStatus, StatusConfig> = {
 };
 
 function OrderConfirmationContent() {
-  const params = useParams();
   const searchParams = useSearchParams();
 
-  const orderId = params.orderId as string;
   const rawStatus = searchParams.get('status') ?? 'pending';
   const paymentId = searchParams.get('paymentId');
+  const orderNumber = searchParams.get('orderNumber');
 
   const status: PaymentStatus =
     rawStatus === 'paid' || rawStatus === 'failed' || rawStatus === 'cancelled'
@@ -95,7 +94,9 @@ function OrderConfirmationContent() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">Order ID</p>
-              <p className="text-data text-lg font-semibold text-foreground">#{orderId}</p>
+              <p className="text-data text-lg font-semibold text-foreground">
+                {orderNumber ? `#${orderNumber}` : 'Pending confirmation'}
+              </p>
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-semibold ${config.statusBadgeClass}`}
