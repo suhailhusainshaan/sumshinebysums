@@ -61,8 +61,8 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
   const [isAdding, setIsAdding] = useState(false);
   const image =
     item.thumbnail ||
-    item.images.find((img) => img.featureImage)?.imageUrl ||
-    item.images[0]?.imageUrl ||
+    item.images?.find((img) => img.featureImage)?.imageUrl ||
+    item.images?.[0]?.imageUrl ||
     '/assets/images/no_image.png';
 
   const price = item.variant?.price ?? 0;
@@ -97,7 +97,7 @@ function WishlistCard({ item, onRemove, onAddToCart }: CardProps) {
         <div className="relative aspect-square overflow-hidden bg-muted">
           <AppImage
             src={image.startsWith('http') ? image : resolveImageSrc(image)}
-            alt={item.images.find((img) => img.featureImage)?.altText || item.name}
+            alt={item.images?.find((img) => img.featureImage)?.altText || item.name}
             className="h-full w-full object-cover transition-luxe group-hover:scale-105"
           />
         </div>

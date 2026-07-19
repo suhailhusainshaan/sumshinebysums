@@ -1,9 +1,10 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/ui/AppIcon';
+import { useCartStore } from '@/store/cartStore';
 
 type PaymentStatus = 'paid' | 'failed' | 'cancelled' | 'pending';
 
@@ -61,6 +62,7 @@ const STATUS_CONFIG: Record<PaymentStatus, StatusConfig> = {
 
 function OrderConfirmationContent() {
   const searchParams = useSearchParams();
+  const fetchCart = useCartStore((s) => s.fetchCart);
 
   const rawStatus = searchParams.get('status') ?? 'pending';
   const paymentId = searchParams.get('paymentId');
@@ -70,6 +72,12 @@ function OrderConfirmationContent() {
     rawStatus === 'paid' || rawStatus === 'failed' || rawStatus === 'cancelled'
       ? rawStatus
       : 'pending';
+
+  // Re-fetch cart whenever landing here so the header badge reflects
+  // the post-payment state (cart is cleared server-side after payment).
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
 
   const config = STATUS_CONFIG[status];
 

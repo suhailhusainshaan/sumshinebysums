@@ -2,6 +2,7 @@ import AuthGuard from '@/lib/AuthGuard';
 import '../styles/index.css';
 import { Toaster } from 'react-hot-toast';
 import WishlistInitializer from '@/components/wishlist/WishlistInitializer';
+import CartInitializer from '@/components/cart/CartInitializer';
 import NextTopLoader from 'nextjs-toploader';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GlobalLoadingOverlay from '@/components/common/GlobalLoadingOverlay';
@@ -30,6 +31,7 @@ export default function RootLayout({
           />
 
           <WishlistInitializer />
+          <CartInitializer />
 
           <GlobalLoadingOverlay />
 

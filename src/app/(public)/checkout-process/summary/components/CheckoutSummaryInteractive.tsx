@@ -10,7 +10,6 @@ import { getApiMessage, getCheckoutPreview, initiateCheckout } from '@/lib/api/c
 import { createPaymentOrder, verifyPayment } from '@/lib/api/paymentApi';
 import { resolveImageSrc } from '@/lib/image';
 import { CheckoutPreview, CheckoutPreviewItem } from '@/types/checkout';
-import { useCartStore } from '@/store/cartStore';
 import { useRazorpay } from '@/hooks/useRazorpay';
 import useAuth from '@/hooks/useAuth';
 
@@ -41,7 +40,6 @@ function productImage(item: CheckoutPreviewItem): string {
 function CheckoutSummaryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { fetchCart } = useCartStore();
   const { user } = useAuth();
   const { openCheckout } = useRazorpay();
   const [loading, setLoading] = useState(true);
@@ -108,9 +106,6 @@ function CheckoutSummaryContent() {
       const checkoutRes = await initiateCheckout(addressId, notes);
       if (!checkoutRes.status) throw new Error(checkoutRes.message);
       const { orderId, orderNumber } = checkoutRes.data;
-
-      // Refresh cart count (order creation clears the cart server-side)
-      await fetchCart();
 
       // 2. Create a Razorpay order tied to our internal order
       const paymentRes = await createPaymentOrder(orderId);
