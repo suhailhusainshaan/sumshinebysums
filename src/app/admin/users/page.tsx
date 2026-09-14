@@ -46,7 +46,7 @@ type StatsResponse = {
   message: string;
 };
 
-const passwordStrength = /^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$/;
+const passwordStrength = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
@@ -208,7 +208,7 @@ export default function UserManagementPage() {
       }
     }
 
-    if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       nextErrors.email = 'Invalid email format';
     }
 

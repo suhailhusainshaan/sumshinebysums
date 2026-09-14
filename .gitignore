@@ -39,3 +39,8 @@ next-env.d.ts
 *.swo
 EOF
 .env*
+.cloudflared.pid
+.commandcode/
+.nextjs.pid
+.springboot.pid
+logs/
