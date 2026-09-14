@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSidebar } from '@/context/admin/SidebarContext';
 import {
-  BoxCubeIcon,
-  CalenderIcon,
+  // BoxCubeIcon, // disabled with UI Elements sidebar item
+  // CalenderIcon, // disabled with Calendar sidebar item
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
+  // ListIcon, // disabled with Forms sidebar item
+  // PageIcon, // disabled with Pages sidebar item
+  // PieChartIcon, // disabled with Charts sidebar item
+  // PlugInIcon, // disabled with Authentication sidebar item
+  // TableIcon, // disabled with Tables sidebar item
   UserCircleIcon,
   FileIcon,
 } from '@/icons/admin/index';
@@ -50,11 +50,13 @@ const navItems: NavItem[] = [
       { name: 'Homepage Sliders', path: '/admin/homepage-sliders', pro: false },
     ],
   },
+  /* Calendar — fullcalendar view for adding/editing events (disabled)
   {
     icon: <CalenderIcon />,
     name: 'Calendar',
     path: '/admin/calendar',
   },
+  */
   {
     icon: <UserCircleIcon />,
     name: 'Users',
@@ -66,16 +68,21 @@ const navItems: NavItem[] = [
     path: '/admin/profile',
   },
 
+  /* Forms — reusable form controls and input examples (disabled)
   {
     name: 'Forms',
     icon: <ListIcon />,
     subItems: [{ name: 'Form Elements', path: '/admin/form-elements', pro: false }],
   },
+  */
+  /* Tables — shared table primitives and a sample data table (disabled)
   {
     name: 'Tables',
     icon: <TableIcon />,
     subItems: [{ name: 'Basic Tables', path: '/admin/basic-tables', pro: false }],
   },
+  */
+  /* Pages — simple static pages (blank and 404) (disabled)
   {
     name: 'Pages',
     icon: <PageIcon />,
@@ -84,9 +91,11 @@ const navItems: NavItem[] = [
       { name: '404 Error', path: '/admin/error-404', pro: false },
     ],
   },
+  */
 ];
 
 const othersItems: NavItem[] = [
+  /* Charts — ApexCharts line and bar examples (disabled)
   {
     icon: <PieChartIcon />,
     name: 'Charts',
@@ -95,6 +104,8 @@ const othersItems: NavItem[] = [
       { name: 'Bar Chart', path: '/admin/bar-chart', pro: false },
     ],
   },
+  */
+  /* UI Elements — reusable display components (alerts, avatars, badges, etc.) (disabled)
   {
     icon: <BoxCubeIcon />,
     name: 'UI Elements',
@@ -107,6 +118,8 @@ const othersItems: NavItem[] = [
       { name: 'Videos', path: '/admin/videos', pro: false },
     ],
   },
+  */
+  /* Authentication — sign in and sign up flows (disabled)
   {
     icon: <PlugInIcon />,
     name: 'Authentication',
@@ -115,6 +128,7 @@ const othersItems: NavItem[] = [
       { name: 'Sign Up', path: '/admin/signup', pro: false },
     ],
   },
+  */
 ];
 
 const AppSidebar: React.FC = () => {
