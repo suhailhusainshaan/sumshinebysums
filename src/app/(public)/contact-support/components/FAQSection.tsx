@@ -2,24 +2,26 @@
 
 import React, { useState } from 'react';
 import Icon from '@/components/ui/AppIcon';
+import { FAQResponse } from '@/service/faq.service';
 
 interface FAQItem {
   question: string;
   answer: string;
   category: string;
+  category_slug?: string;
 }
 
 interface FAQSectionProps {
   onSearchQuery?: (query: string) => void;
+  initialData?: FAQResponse | null;
 }
 
-const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
+const FAQSection = ({ onSearchQuery, initialData }: FAQSectionProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedItems, setExpandedItems] = useState<number[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
-  const categories = [
-    { id: 'all', label: 'All Questions', icon: 'QuestionMarkCircleIcon' },
+  const defaultCategories = [
     { id: 'shipping', label: 'Shipping', icon: 'TruckIcon' },
     { id: 'returns', label: 'Returns', icon: 'ArrowPathIcon' },
     { id: 'sizing', label: 'Sizing', icon: 'ScaleIcon' },
@@ -27,7 +29,21 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
     { id: 'payment', label: 'Payment', icon: 'CreditCardIcon' },
   ];
 
-  const faqData: FAQItem[] = [
+  const categories = initialData?.categories?.length
+    ? [
+        { id: 'all', label: 'All Questions', icon: 'QuestionMarkCircleIcon' },
+        ...initialData.categories.map((c) => ({
+          id: c.slug || c.id || '',
+          label: c.label,
+          icon: c.icon,
+        })),
+      ]
+    : [
+        { id: 'all', label: 'All Questions', icon: 'QuestionMarkCircleIcon' },
+        ...defaultCategories,
+      ];
+
+  const defaultFaqs: FAQItem[] = [
     {
       category: 'shipping',
       question: 'What are your shipping options and delivery times?',
@@ -102,6 +118,13 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
     },
   ];
 
+  const faqData = initialData?.faqs?.length
+    ? initialData.faqs.map((faq) => ({
+        ...faq,
+        category: faq.category_slug || faq.category || '',
+      }))
+    : defaultFaqs;
+
   const toggleItem = (index: number) => {
     setExpandedItems((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
@@ -126,7 +149,7 @@ const FAQSection = ({ onSearchQuery }: FAQSectionProps) => {
   });
 
   return (
-    <div className="bg-card rounded-lg shadow-warm-md p-6 lg:p-8">
+    <div id="faq" className="bg-card rounded-lg shadow-warm-md p-6 lg:p-8">
       <div className="flex items-center space-x-3 mb-6">
         <div className="p-3 bg-secondary/10 rounded-lg">
           <Icon name="QuestionMarkCircleIcon" size={24} className="text-secondary" />

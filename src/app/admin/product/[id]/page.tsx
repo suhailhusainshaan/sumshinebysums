@@ -303,6 +303,7 @@ export default function ViewProductPage() {
                 </p>
               </div>
 
+              {/*
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="rounded-xl border border-gray-200 p-5 dark:border-gray-800">
                   <p className="text-xs uppercase tracking-wide text-gray-400">Features</p>
@@ -328,6 +329,7 @@ export default function ViewProductPage() {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           )}
         </ComponentCard>

@@ -10,7 +10,7 @@ interface ProductInfoProps {
   name: string;
   price: number;
   originalPrice?: number | null;
-  material: string;
+  // material: string;
   availability: string;
   sku: string;
   brand?: string;
@@ -24,7 +24,7 @@ const ProductInfo = ({
   name,
   price,
   originalPrice,
-  material,
+  // material,
   availability,
   sku,
   brand,
@@ -77,10 +77,12 @@ const ProductInfo = ({
       </div>
 
       <div className="space-y-3 border-t border-border pt-4">
+        {/*
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Material:</span>
           <span className="font-medium text-foreground">{material}</span>
         </div>
+        */}
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Availability:</span>
           <span className="flex items-center space-x-2">

@@ -82,6 +82,7 @@
     "react-dom": "19.2.3",
     "react-dropzone": "^14.3.8",
     "react-hot-toast": "^2.6.0",
+    "react-quill-new": "^3.8.3",
     "recharts": "^2.15.2",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",

@@ -3,8 +3,13 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
 import FAQSection from './FAQSection';
+import { FAQResponse } from '@/service/faq.service';
 
-const ContactSupportInteractive = () => {
+interface Props {
+  initialFaqData?: FAQResponse | null;
+}
+
+const ContactSupportInteractive = ({ initialFaqData }: Props) => {
   const handleFAQSearch = (query: string) => {
     console.log('FAQ search query:', query);
   };
@@ -14,7 +19,7 @@ const ContactSupportInteractive = () => {
       <div className="max-w-xl mx-auto">
         <ContactInfo />
       </div>
-      <FAQSection onSearchQuery={handleFAQSearch} />
+      <FAQSection onSearchQuery={handleFAQSearch} initialData={initialFaqData} />
     </div>
   );
 };

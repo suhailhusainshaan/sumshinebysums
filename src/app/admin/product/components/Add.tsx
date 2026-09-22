@@ -260,6 +260,7 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
           </div>
 
           {/* Jewelry Details */}
+          {/*
           <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
             <h3 className="text-lg font-semibold mb-4">Jewelry Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -305,6 +306,7 @@ export default function Add({ categories = [], brands = [] }: DefaultInputsProps
               </div>
             </div>
           </div>
+          */}
 
           {/* Pricing & Inventory */}
           <div className="border-b border-gray-200 dark:border-gray-700 pb-6">

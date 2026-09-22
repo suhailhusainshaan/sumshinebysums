@@ -34,13 +34,12 @@ const Footer = ({ categories = [] }: FooterProps) => {
   const footerLinks = {
     help: [
       { label: 'Contact Us', path: '/contact-support' },
-      { label: 'FAQ', path: '/contact-support' },
+      { label: 'FAQ', path: '/contact-support#faq' },
     ],
     company: [
-      { label: 'About Us', path: '/' },
-      { label: 'Privacy Policy', path: '/' },
-      { label: 'Terms of Service', path: '/' },
-      { label: 'Careers', path: '/' },
+      { label: 'About Us', path: '/about-us' },
+      { label: 'Privacy Policy', path: '/privacy-policy' },
+      { label: 'Terms and Conditions', path: '/terms-and-conditions' },
     ],
   };
 
@@ -138,21 +137,21 @@ const Footer = ({ categories = [] }: FooterProps) => {
           </div>
 
           {/* Company Links */}
-          {/*<div>*/}
-          {/*  <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Company</h3>*/}
-          {/*  <ul className="space-y-3">*/}
-          {/*    {footerLinks?.company?.map((link) => (*/}
-          {/*      <li key={link?.label}>*/}
-          {/*        <Link*/}
-          {/*          href={link?.path}*/}
-          {/*          className="text-muted-foreground hover:text-primary transition-luxe"*/}
-          {/*        >*/}
-          {/*          {link?.label}*/}
-          {/*        </Link>*/}
-          {/*      </li>*/}
-          {/*    ))}*/}
-          {/*  </ul>*/}
-          {/*</div>*/}
+          <div>
+            <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Company</h3>
+            <ul className="space-y-3">
+              {footerLinks?.company?.map((link) => (
+                <li key={link?.label}>
+                  <Link
+                    href={link?.path}
+                    className="text-muted-foreground hover:text-primary transition-luxe"
+                  >
+                    {link?.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Bottom Bar */}

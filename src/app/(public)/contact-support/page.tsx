@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/common/Header';
 import Breadcrumb from '@/components/common/Breadcrumb';
 import ContactSupportInteractive from './components/ContactSupportInteractive';
+import { getFAQs } from '@/service/faq.service';
 
 export const metadata: Metadata = {
   title: 'Contact Support - Sumshine By Sums',
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
     'Get in touch with Sumshine By Sums customer support team. We offer multiple communication channels including live chat, email, and phone support with comprehensive FAQ resources to help you with orders, shipping, returns, and product inquiries.',
 };
 
-export default function ContactSupportPage() {
+export default async function ContactSupportPage() {
   const breadcrumbItems = [{ label: 'Home', path: '/' }, { label: 'Contact Support' }];
+  const faqData = await getFAQs();
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,7 +33,7 @@ export default function ContactSupportPage() {
             </p>
           </div>
 
-          <ContactSupportInteractive />
+          <ContactSupportInteractive initialFaqData={faqData} />
         </div>
       </main>
     </div>

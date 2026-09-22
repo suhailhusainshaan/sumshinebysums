@@ -601,6 +601,7 @@ export default function EditProductPage() {
                     </div>
                   </div>
 
+                  {/*
                   <div className="border-b border-gray-200 pb-6 dark:border-gray-700">
                     <h3 className="mb-4 text-lg font-semibold">Features</h3>
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -683,6 +684,7 @@ export default function EditProductPage() {
                       </div>
                     </div>
                   </div>
+                  */}
 
                   <div className="flex flex-wrap justify-end gap-4">
                     <button
