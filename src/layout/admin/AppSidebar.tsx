@@ -44,10 +44,17 @@ const navItems: NavItem[] = [
   },
   {
     icon: <FileIcon />,
+    name: 'Orders',
+    path: '/admin/orders',
+  },
+  {
+    icon: <FileIcon />,
     name: 'CMS',
     subItems: [
       { name: 'Static Content', path: '/admin/static-content', pro: false },
+      { name: 'Static Pages', path: '/admin/static-pages', pro: false },
       { name: 'Homepage Sliders', path: '/admin/homepage-sliders', pro: false },
+      { name: 'FAQ', path: '/admin/faq', pro: false },
     ],
   },
   /* Calendar — fullcalendar view for adding/editing events (disabled)

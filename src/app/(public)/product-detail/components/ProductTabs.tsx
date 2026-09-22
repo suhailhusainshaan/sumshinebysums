@@ -35,7 +35,7 @@ const ProductTabs = ({
     icon: string;
   }[] = [
     { id: 'description', label: 'Description', icon: 'DocumentTextIcon' },
-    { id: 'care', label: 'Details', icon: 'SparklesIcon' },
+    // { id: 'care', label: 'Details', icon: 'SparklesIcon' },
     { id: 'reviews', label: `Reviews (${reviews.length})`, icon: 'StarIcon' },
     { id: 'shipping', label: 'Shipping', icon: 'TruckIcon' },
   ];
@@ -47,8 +47,9 @@ const ProductTabs = ({
   const specEntries = useMemo(
     () =>
       Object.entries({ ...features, ...specifications }).filter(
-        ([, value]) =>
-          typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+        ([key, value]) =>
+          (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') &&
+          !['material', 'purity', 'stone', 'stone_type', 'hypoallergenic'].includes(key.toLowerCase())
       ),
     [features, specifications]
   );
@@ -86,6 +87,7 @@ const ProductTabs = ({
           </div>
         )}
 
+        {/*
         {activeTab === 'care' && (
           <div className="space-y-6">
             {careInstructions.length > 0 && (
@@ -127,6 +129,7 @@ const ProductTabs = ({
             )}
           </div>
         )}
+        */}
 
         {activeTab === 'reviews' && (
           <div className="space-y-6">
