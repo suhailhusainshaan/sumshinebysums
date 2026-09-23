@@ -6,6 +6,37 @@ import CartInitializer from '@/components/cart/CartInitializer';
 import NextTopLoader from 'nextjs-toploader';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GlobalLoadingOverlay from '@/components/common/GlobalLoadingOverlay';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Sumshine By Sums',
+    default: 'Sumshine By Sums | Handcrafted Artificial Jewelry',
+  },
+  description: 'Discover exquisite handcrafted artificial jewelry at Sumshine By Sums. Shop necklaces, earrings, bracelets, rings, and sets with premium quality designs at accessible prices.',
+  openGraph: {
+    title: 'Sumshine By Sums',
+    description: 'Discover exquisite handcrafted artificial jewelry at Sumshine By Sums.',
+    url: 'https://www.sumshinebysums.com',
+    siteName: 'Sumshine By Sums',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1599643477874-5c866f5c0c0b?q=80&w=1200&auto=format&fit=crop', // Temporary placeholder hero image
+        width: 1200,
+        height: 630,
+        alt: 'Sumshine By Sums - Premium Jewelry',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sumshine By Sums',
+    description: 'Discover exquisite handcrafted artificial jewelry at Sumshine By Sums.',
+    images: ['https://images.unsplash.com/photo-1599643477874-5c866f5c0c0b?q=80&w=1200&auto=format&fit=crop'], // Temporary placeholder
+  },
+};
 
 export default function RootLayout({
   children,
