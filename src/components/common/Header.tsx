@@ -58,8 +58,11 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
                   <path d="M16 14L12 18L16 22L20 18L16 14Z" fill="currentColor" opacity="0.7" />
                   <circle cx="16" cy="16" r="2" fill="currentColor" />
                 </svg>
-                <span className="font-heading text-base sm:text-xl font-semibold text-foreground">
+                <span className="font-heading text-sm sm:text-xl font-semibold text-foreground hidden min-[400px]:block">
                   Sumshine By Sums
+                </span>
+                <span className="font-heading text-sm font-semibold text-foreground block min-[400px]:hidden">
+                  Sumshine
                 </span>
               </div>
             </Link>
@@ -129,10 +132,10 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
             </div>
 
             {/* Mobile Actions */}
-            <div className="flex lg:hidden items-center space-x-1">
+            <div className="flex lg:hidden items-center space-x-0.5 sm:space-x-1">
               <button
                 onClick={handleSearchClick}
-                className="p-2 text-foreground hover:text-primary transition-luxe"
+                className="p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
                 aria-label="Search"
               >
                 <Icon name="MagnifyingGlassIcon" size={22} />
@@ -140,7 +143,7 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
 
               <Link
                 href="/wishlist"
-                className="relative p-2 text-foreground hover:text-primary transition-luxe"
+                className="relative p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
                 aria-label="Wishlist"
               >
                 <Icon name="HeartIcon" size={22} />
@@ -150,7 +153,7 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
               <Link
                 href="/shopping-cart"
                 onClick={handleCartClick}
-                className="relative p-2 text-foreground hover:text-primary transition-luxe"
+                className="relative p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
                 aria-label="Shopping cart"
               >
                 <Icon name="ShoppingBagIcon" size={22} />
@@ -158,13 +161,13 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
               </Link>
 
               {isLoggedIn ? (
-                <div className="pl-1">
+                <div className="pl-0.5 sm:pl-1">
                   <UserDropdown />
                 </div>
               ) : (
                 <button
                   onClick={handleLoginClick}
-                  className="p-2 text-foreground hover:text-primary transition-luxe"
+                  className="p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
                   aria-label="Login"
                 >
                   <Icon name="UserIcon" size={22} />
@@ -173,7 +176,7 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
 
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="p-2 text-foreground hover:text-primary transition-luxe"
+                className="p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
                 aria-label="Open menu"
               >
                 <Icon name="Bars3Icon" size={22} />
