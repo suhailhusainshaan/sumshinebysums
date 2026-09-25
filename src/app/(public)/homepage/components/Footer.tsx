@@ -24,12 +24,12 @@ const Footer = ({ categories = [] }: FooterProps) => {
     shopLinks.length > 0
       ? shopLinks
       : [
-        { label: 'Necklaces', path: '/product-listing?category=necklaces' },
-        { label: 'Earrings', path: '/product-listing?category=earrings' },
-        { label: 'Bracelets', path: '/product-listing?category=bracelets' },
-        { label: 'Rings', path: '/product-listing?category=rings' },
-        { label: 'Sets', path: '/product-listing?category=sets' },
-      ];
+          { label: 'Necklaces', path: '/product-listing?category=necklaces' },
+          { label: 'Earrings', path: '/product-listing?category=earrings' },
+          { label: 'Bracelets', path: '/product-listing?category=bracelets' },
+          { label: 'Rings', path: '/product-listing?category=rings' },
+          { label: 'Sets', path: '/product-listing?category=sets' },
+        ];
 
   const footerLinks = {
     help: [
@@ -48,7 +48,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
   ];
 
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className="border-t border-white/40 bg-background/80 backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Brand Section */}
@@ -76,7 +76,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
                   key={social?.icon}
                   href={social?.url}
                   aria-label={social?.label}
-                  className="w-14 h-14 flex items-center justify-center bg-muted rounded-full text-foreground hover:bg-primary hover:text-primary-foreground transition-luxe"
+                  className="glass-chip flex h-14 w-14 items-center justify-center rounded-full text-foreground transition-spring hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground"
                 >
                   {social?.icon === 'instagram' ? (
                     <svg
@@ -155,7 +155,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border">
+        <div className="border-t border-white/35 pt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
             <p className="text-caption text-muted-foreground text-center sm:text-left">
               © {currentYear} Sumshine By Sums. All rights reserved.

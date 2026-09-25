@@ -68,11 +68,6 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
     available: (variant.stockQuantity ?? 0) > 0,
   }));
 
-  const material =
-    asString(product.specifications?.material) ||
-    asString(product.features?.material) ||
-    product.brand?.name ||
-    'Not specified';
   const careInstructions =
     asStringArray(product.specifications?.careInstructions).length > 0
       ? asStringArray(product.specifications?.careInstructions)
@@ -86,9 +81,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
     name: related.name,
     price: related.price,
     originalPrice: related.comparePrice,
-    image: related.thumbnail
-      ? resolveImageSrc(related.thumbnail)
-      : '/assets/images/no_image.png',
+    image: related.thumbnail ? resolveImageSrc(related.thumbnail) : '/assets/images/no_image.png',
     alt: related.images[0]?.altText || related.name,
     category: related.category?.name || 'Product',
   }));
@@ -104,8 +97,7 @@ const ProductDetailInteractive = ({ product, relatedProducts }: ProductDetailInt
 
   return (
     <>
-
-      <div className="mb-16 grid gap-8 lg:grid-cols-2 lg:gap-12">
+      <div className="mb-16 space-y-8 lg:grid lg:grid-cols-2 lg:gap-12 lg:space-y-0">
         <div>
           <ProductImageGallery
             key={selectedVariant ? `variant-${selectedVariant.id}` : 'product-gallery'}

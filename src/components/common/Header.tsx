@@ -34,13 +34,13 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
 
   if (isLoading) {
     return (
-      <header className="fixed top-0 left-0 right-0 bg-card shadow-warm z-header h-16 lg:h-18" />
+      <header className="fixed top-0 left-0 right-0 z-header h-16 border-b border-white/40 bg-background/70 shadow-warm-sm backdrop-blur-2xl lg:h-18" />
     );
   }
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 bg-card shadow-warm z-header">
+      <header className="fixed top-0 left-0 right-0 z-header border-b border-white/40 bg-background/70 shadow-warm-sm backdrop-blur-2xl">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
@@ -184,10 +184,7 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
       </header>
 
       {/* Slide-out mobile nav — rendered at root level so it's above everything */}
-      <MobileHamburgerMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-      />
+      <MobileHamburgerMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
     </>
   );
 };
