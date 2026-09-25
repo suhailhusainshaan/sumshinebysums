@@ -50,7 +50,7 @@ const HomepageContactInfo = () => {
         {contactDetails.map((detail, index) => (
           <div
             key={index}
-            className="flex flex-col items-center rounded-[28px] border border-white/35 bg-white/20 p-6 text-center shadow-warm-sm backdrop-blur-md transition-spring hover:-translate-y-1 hover:bg-white/30"
+            className="glass-panel flex flex-col items-center rounded-[28px] p-6 text-center shadow-warm-sm transition-spring hover:-translate-y-1 hover:shadow-warm-md"
           >
             <div className="glass-chip mb-4 rounded-full p-3">
               <Icon name={detail.icon as any} size={24} className="text-primary" />

@@ -76,7 +76,7 @@ const CategoriesSection = ({ categories = [] }: CategoriesSectionProps) => {
             <Link
               key={category.id}
               href={`/product-listing?category_id=${category.id}`}
-              className="group relative block overflow-hidden rounded-[32px] border border-white/45 bg-white/20 p-1 shadow-warm-lg backdrop-blur transition-spring hover:-translate-y-1 hover:shadow-warm-xl"
+              className="glass-panel group relative block overflow-hidden rounded-[32px] p-1 shadow-warm-lg transition-spring hover:-translate-y-1 hover:shadow-warm-xl"
             >
               <div className="relative aspect-square overflow-hidden rounded-[28px] bg-muted">
                 <AppImage
@@ -96,7 +96,7 @@ const CategoriesSection = ({ categories = [] }: CategoriesSectionProps) => {
                   </div>
 
                   {/*<div className="rounded-[22px] bg-white/18 px-4 py-3 shadow-warm backdrop-blur-xl">*/}
-                  <div className="rounded-[22px] bg-white/18 px-4 py-3 shadow-warm">
+                  <div className="glass-chip rounded-[22px] px-4 py-3 shadow-warm">
                     <h3 className="font-heading text-2xl font-semibold leading-tight text-white sm:text-3xl">
                       {category.name}
                     </h3>

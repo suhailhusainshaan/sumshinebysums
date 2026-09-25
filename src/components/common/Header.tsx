@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
 import WishlistBadge from '@/components/wishlist/WishlistBadge';
 import CartBadge from '@/components/cart/CartBadge';
+import { useStorefrontTheme } from '@/context/storefront/StorefrontThemeContext';
 
 interface HeaderProps {
   onSearchClick?: () => void;
@@ -18,6 +19,7 @@ interface HeaderProps {
 const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isLoggedIn, isLoading } = useAuth();
+  const { mode, toggleMode } = useStorefrontTheme();
   const router = useRouter();
 
   const handleSearchClick = () => {
@@ -34,13 +36,13 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
 
   if (isLoading) {
     return (
-      <header className="fixed top-0 left-0 right-0 z-header h-16 border-b border-white/40 bg-background/70 shadow-warm-sm backdrop-blur-2xl lg:h-18" />
+      <header className="fixed top-0 left-0 right-0 z-header h-16 border-b border-border bg-background/70 shadow-warm-sm backdrop-blur-2xl lg:h-18" />
     );
   }
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-header border-b border-white/40 bg-background/70 shadow-warm-sm backdrop-blur-2xl">
+      <header className="fixed top-0 left-0 right-0 z-header border-b border-border bg-background/70 shadow-warm-sm backdrop-blur-2xl">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
@@ -99,6 +101,14 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
                 <Icon name="MagnifyingGlassIcon" size={24} />
               </button>
 
+              <button
+                onClick={() => void toggleMode()}
+                className="p-2 text-foreground hover:text-primary transition-luxe"
+                aria-label={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              >
+                <Icon name={mode === 'dark' ? 'SunIcon' : 'MoonIcon'} size={24} />
+              </button>
+
               <Link
                 href="/wishlist"
                 className="relative p-2 text-foreground hover:text-primary transition-luxe"
@@ -139,6 +149,14 @@ const Header = ({ onSearchClick, onCartClick }: HeaderProps) => {
                 aria-label="Search"
               >
                 <Icon name="MagnifyingGlassIcon" size={22} />
+              </button>
+
+              <button
+                onClick={() => void toggleMode()}
+                className="p-1.5 sm:p-2 text-foreground hover:text-primary transition-luxe"
+                aria-label={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              >
+                <Icon name={mode === 'dark' ? 'SunIcon' : 'MoonIcon'} size={22} />
               </button>
 
               <Link
