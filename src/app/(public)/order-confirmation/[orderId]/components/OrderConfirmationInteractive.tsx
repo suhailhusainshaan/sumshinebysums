@@ -402,7 +402,7 @@ function PaidView({
             <ReceiptPrinter.Header>
               {/* Left — branding pill */}
               <span className="shrink-0 rounded-full border border-border bg-muted/60 px-3 py-1 font-data text-[10px] font-medium text-muted-foreground tracking-wider uppercase">
-                Sumshine
+                Sumshine By Sums
               </span>
 
               {/* Centre — order placed badge (absolute so it doesn't push the pills apart) */}
@@ -448,9 +448,11 @@ function PaidView({
                   <div className="min-w-0">
                     <p className="font-data text-sm font-semibold text-foreground leading-tight truncate">
                       {order
-                        ? order.items.length === 1
-                          ? order.items[0].product.name
-                          : `${order.itemCount} item${order.itemCount !== 1 ? 's' : ''}`
+                        ? order.items?.length === 1
+                          ? order.items[0]?.product?.name || 'Your order'
+                          : `${order.itemCount ?? order.items?.length ?? 0} item${
+                              (order.itemCount ?? order.items?.length ?? 0) !== 1 ? 's' : ''
+                            }`
                         : 'Your order'}
                     </p>
                     <p className="mt-0.5 font-data text-[11px] text-muted-foreground">
