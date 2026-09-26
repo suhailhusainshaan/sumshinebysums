@@ -32,10 +32,9 @@ export default function HomepageSlider({ slides }: HomepageSliderProps) {
   const nextClassName = `homepage-slider-next-${navId}`;
   const dotsClassName = `homepage-slider-dots-${navId}`;
 
-
   return (
-    <section className="relative overflow-hidden bg-gray-100">
-      <div className="relative h-[256px] sm:h-[400px] lg:h-[500]">
+    <section className="relative overflow-hidden px-3 pb-8 pt-4 sm:px-6 lg:px-8 lg:pb-12 lg:pt-6">
+      <div className="glass-panel relative mx-auto h-[256px] max-w-7xl overflow-hidden rounded-[28px] sm:h-[400px] lg:h-[500px] lg:rounded-[40px] 2xl:h-[620px] 2xl:max-w-[1600px] 3xl:h-[720px] 3xl:max-w-[1840px]">
         <Swiper
           modules={[Autoplay, Navigation, Pagination]}
           loop={sortedSlides.length > 1}

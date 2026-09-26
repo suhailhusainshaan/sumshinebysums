@@ -24,6 +24,7 @@ export interface Product {
   active?: boolean;
   features: Record<string, any>;
   specifications: Record<string, any>;
+  createdAt: string;
 }
 
 // This matches the Pageable JSON structure from Spring Boot

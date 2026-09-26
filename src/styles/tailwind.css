@@ -10,50 +10,68 @@
 @layer base {
   :root {
     /* Primary Colors */
-    --color-primary: #D4A574; /* Warm champagne gold */
-    --color-primary-foreground: #FFFFFF; /* white */
-    
+    --color-primary: #c89455; /* Rich champagne gold */
+    --color-primary-foreground: #ffffff; /* white */
+
     /* Secondary Colors */
-    --color-secondary: #E8B4A0; /* Soft rose gold */
-    --color-secondary-foreground: #2C1810; /* Rich dark brown */
-    
+    --color-secondary: #f2c6b6; /* Soft rose quartz */
+    --color-secondary-foreground: #24140d; /* Espresso brown */
+
     /* Accent Colors */
-    --color-accent: #C67B5C; /* Rich copper */
-    --color-accent-foreground: #FFFFFF; /* white */
-    
+    --color-accent: #b86f4b; /* Polished copper */
+    --color-accent-foreground: #ffffff; /* white */
+
     /* Background Colors */
-    --color-background: #FEFCFA; /* Warm off-white */
-    --color-foreground: #2C1810; /* Rich dark brown */
-    
+    --color-background: #fff8f1; /* Pearl ivory */
+    --color-foreground: #24140d; /* Espresso brown */
+
     /* Surface Colors */
-    --color-card: #F9F6F2; /* Subtle cream */
-    --color-card-foreground: #2C1810; /* Rich dark brown */
-    
-    --color-popover: #F9F6F2; /* Subtle cream */
-    --color-popover-foreground: #2C1810; /* Rich dark brown */
-    
+    --color-card: rgba(255, 255, 255, 0.62); /* Frosted glass */
+    --color-card-foreground: #24140d; /* Espresso brown */
+
+    --color-popover: rgba(255, 255, 255, 0.72); /* Frosted glass */
+    --color-popover-foreground: #24140d; /* Espresso brown */
+
     /* Muted Colors */
-    --color-muted: #F9F6F2; /* Subtle cream */
-    --color-muted-foreground: #6B5B4F; /* Muted brown */
-    
+    --color-muted: rgba(255, 255, 255, 0.45); /* Pearl glass */
+    --color-muted-foreground: #7b6658; /* Warm taupe */
+
     /* Border & Input */
-    --color-border: rgba(212, 165, 116, 0.15); /* Primary with opacity */
-    --color-input: #F9F6F2; /* Subtle cream */
-    --color-ring: #D4A574; /* Warm champagne gold */
-    
+    --color-border: rgba(200, 148, 85, 0.22); /* Champagne border */
+    --color-input: rgba(255, 255, 255, 0.64); /* Frosted input */
+    --color-ring: #c89455; /* Rich champagne gold */
+
+    /* Glass Effects */
+    --glass-bg: rgba(255, 255, 255, 0.52);
+    --glass-border: rgba(255, 255, 255, 0.62);
+    --glass-shadow: 0 24px 70px rgba(92, 54, 24, 0.14);
+    --glass-chip-bg: rgba(255, 255, 255, 0.28);
+    --glass-chip-border: rgba(255, 255, 255, 0.45);
+    --glass-chip-shadow: 0 10px 30px rgba(92, 54, 24, 0.1);
+    --glow-rose: rgba(242, 198, 182, 0.34);
+    --glow-gold: rgba(200, 148, 85, 0.28);
+    --glow-ground: rgba(255, 255, 255, 0.44);
+
+    /* Shadows */
+    --shadow-warm-sm: 0 1px 3px rgba(44, 24, 16, 0.08);
+    --shadow-warm: 0 2px 6px rgba(44, 24, 16, 0.1);
+    --shadow-warm-md: 0 4px 12px rgba(44, 24, 16, 0.12);
+    --shadow-warm-lg: 0 8px 24px rgba(44, 24, 16, 0.14);
+    --shadow-warm-xl: 0 20px 40px -8px rgba(44, 24, 16, 0.16);
+
     /* State Colors */
-    --color-success: #8B9D83; /* Sage green */
-    --color-success-foreground: #FFFFFF; /* white */
-    
-    --color-warning: #E6A85C; /* Warm amber */
-    --color-warning-foreground: #2C1810; /* Rich dark brown */
-    
-    --color-error: #C85A54; /* Muted coral */
-    --color-error-foreground: #FFFFFF; /* white */
-    
-    --color-destructive: #C85A54; /* Muted coral */
-    --color-destructive-foreground: #FFFFFF; /* white */
-    
+    --color-success: #8b9d83; /* Sage green */
+    --color-success-foreground: #ffffff; /* white */
+
+    --color-warning: #e6a85c; /* Warm amber */
+    --color-warning-foreground: #2c1810; /* Rich dark brown */
+
+    --color-error: #c85a54; /* Muted coral */
+    --color-error-foreground: #ffffff; /* white */
+
+    --color-destructive: #c85a54; /* Muted coral */
+    --color-destructive-foreground: #ffffff; /* white */
+
     /* Radius */
     --radius-sm: 6px;
     --radius-md: 12px;
@@ -61,51 +79,102 @@
     --radius-xl: 24px;
   }
 
+  html:not(.dark)[data-light-theme='champagne'] {
+    --color-primary: #b98543;
+    --color-secondary: #f0d0be;
+    --color-accent: #a96845;
+    --color-background: #fff5e9;
+    --color-foreground: #24140d;
+    --color-card: rgba(255, 248, 241, 0.72);
+    --color-popover: rgba(255, 248, 241, 0.82);
+    --color-muted: rgba(255, 239, 221, 0.7);
+    --color-muted-foreground: #735f50;
+    --color-border: rgba(185, 133, 67, 0.28);
+    --color-ring: #b98543;
+    --glass-bg: rgba(255, 245, 233, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.74);
+    --glass-shadow: 0 28px 80px rgba(88, 50, 18, 0.16);
+    --glow-rose: rgba(240, 208, 190, 0.34);
+    --glow-gold: rgba(185, 133, 67, 0.3);
+  }
+
   .dark {
     /* Primary Colors */
-    --color-primary: #D4A574; /* Warm champagne gold */
-    --color-primary-foreground: #1A1612; /* Dark background */
-    
+    --color-primary: #d8ad6a; /* Antique champagne gold */
+    --color-primary-foreground: #17120d; /* Charcoal velvet */
+
     /* Secondary Colors */
-    --color-secondary: #E8B4A0; /* Soft rose gold */
-    --color-secondary-foreground: #1A1612; /* Dark background */
-    
+    --color-secondary: #8f6b52; /* Aged bronze */
+    --color-secondary-foreground: #f4ece2; /* Warm pearl */
+
     /* Accent Colors */
-    --color-accent: #C67B5C; /* Rich copper */
-    --color-accent-foreground: #1A1612; /* Dark background */
-    
+    --color-accent: #c7895f; /* Burnished copper */
+    --color-accent-foreground: #17120d; /* Charcoal velvet */
+
     /* Background Colors */
-    --color-background: #1A1612; /* Dark warm background */
-    --color-foreground: #EBE8E5; /* Cream white 92% */
-    
+    --color-background: #171717; /* Textile charcoal */
+    --color-foreground: #f4ece2; /* Warm pearl */
+
     /* Surface Colors */
-    --color-card: #2A2218; /* Elevated dark surface */
-    --color-card-foreground: #EBE8E5; /* Cream white 92% */
-    
-    --color-popover: #2A2218; /* Elevated dark surface */
-    --color-popover-foreground: #EBE8E5; /* Cream white 92% */
-    
+    --color-card: rgba(42, 41, 39, 0.82); /* Smoky raised glass */
+    --color-card-foreground: #f4ece2; /* Warm pearl */
+
+    --color-popover: rgba(35, 34, 33, 0.92); /* Deep smoky glass */
+    --color-popover-foreground: #f4ece2; /* Warm pearl */
+
     /* Muted Colors */
-    --color-muted: #3A3228; /* Higher elevation surface */
-    --color-muted-foreground: #B8AFA5; /* Muted cream */
-    
+    --color-muted: rgba(65, 63, 60, 0.78); /* Stone glass */
+    --color-muted-foreground: #c4b7a7; /* Muted pearl */
+
     /* Border & Input */
-    --color-border: rgba(212, 165, 116, 0.2); /* Amber-tinted border */
-    --color-input: #2A2218; /* Elevated dark surface */
-    --color-ring: #D4A574; /* Warm champagne gold */
-    
+    --color-border: rgba(216, 173, 106, 0.24); /* Gold edge */
+    --color-input: rgba(42, 41, 39, 0.86); /* Smoky input */
+    --color-ring: #d8ad6a; /* Antique champagne gold */
+
+    /* Glass Effects */
+    --glass-bg: rgba(43, 42, 40, 0.76);
+    --glass-border: rgba(216, 173, 106, 0.22);
+    --glass-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 0 rgba(83, 66, 45, 0.7),
+      0 26px 70px rgba(0, 0, 0, 0.52);
+    --glass-chip-bg: rgba(90, 88, 84, 0.68);
+    --glass-chip-border: rgba(216, 173, 106, 0.24);
+    --glass-chip-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 0 rgba(73, 58, 39, 0.62),
+      0 18px 40px rgba(0, 0, 0, 0.42);
+    --glow-rose: rgba(168, 111, 88, 0.1);
+    --glow-gold: rgba(216, 173, 106, 0.18);
+    --glow-ground: rgba(255, 231, 194, 0.06);
+
+    /* Shadows */
+    --shadow-warm-sm:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 0 rgba(83, 66, 45, 0.55),
+      0 10px 24px rgba(0, 0, 0, 0.34);
+    --shadow-warm:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 3px 0 rgba(83, 66, 45, 0.64),
+      0 14px 30px rgba(0, 0, 0, 0.42);
+    --shadow-warm-md:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 0 rgba(83, 66, 45, 0.68),
+      0 18px 42px rgba(0, 0, 0, 0.48);
+    --shadow-warm-lg:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 5px 0 rgba(83, 66, 45, 0.72),
+      0 26px 60px rgba(0, 0, 0, 0.54);
+    --shadow-warm-xl:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 7px 0 rgba(83, 66, 45, 0.76),
+      0 34px 90px rgba(0, 0, 0, 0.62);
+
     /* State Colors */
-    --color-success: #8B9D83; /* Sage green */
-    --color-success-foreground: #1A1612; /* Dark background */
-    
-    --color-warning: #E6A85C; /* Warm amber */
-    --color-warning-foreground: #1A1612; /* Dark background */
-    
-    --color-error: #C85A54; /* Muted coral */
-    --color-error-foreground: #1A1612; /* Dark background */
-    
-    --color-destructive: #C85A54; /* Muted coral */
-    --color-destructive-foreground: #1A1612; /* Dark background */
+    --color-success: #8b9d83; /* Sage green */
+    --color-success-foreground: #17120d; /* Charcoal velvet */
+
+    --color-warning: #e6a85c; /* Warm amber */
+    --color-warning-foreground: #17120d; /* Charcoal velvet */
+
+    --color-error: #c85a54; /* Muted coral */
+    --color-error-foreground: #17120d; /* Charcoal velvet */
+
+    --color-destructive: #c85a54; /* Muted coral */
+    --color-destructive-foreground: #17120d; /* Charcoal velvet */
   }
 }
 
@@ -113,43 +182,48 @@
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Source Sans 3', sans-serif;
     font-size: 16px;
     line-height: 1.6;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Crimson Text', serif;
   }
-  
+
   h1 {
     font-size: 2.25rem;
     line-height: 1.2;
   }
-  
+
   h2 {
     font-size: 1.875rem;
     line-height: 1.25;
   }
-  
+
   h3 {
     font-size: 1.5rem;
     line-height: 1.3;
   }
-  
+
   h4 {
     font-size: 1.25rem;
     line-height: 1.4;
   }
-  
+
   h5 {
     font-size: 1.125rem;
     line-height: 1.5;
   }
-  
+
   @media (max-width: 768px) {
     body {
       font-size: 15px;
@@ -164,37 +238,80 @@
     line-height: 1.4;
     letter-spacing: 0.025em;
   }
-  
+
   .text-data {
     font-family: 'JetBrains Mono', monospace;
-    font-feature-settings: 'tnum' on, 'lnum' on;
+    font-feature-settings:
+      'tnum' on,
+      'lnum' on;
   }
-  
+
   .transition-luxe {
     transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  
+
   .transition-spring {
     transition: all 250ms cubic-bezier(0.34, 1.26, 0.64, 1);
   }
-  
+
   .shadow-warm-sm {
-    box-shadow: 0 1px 3px rgba(44, 24, 16, 0.08);
+    box-shadow: var(--shadow-warm-sm);
   }
-  
+
   .shadow-warm {
-    box-shadow: 0 2px 6px rgba(44, 24, 16, 0.1);
+    box-shadow: var(--shadow-warm);
   }
-  
+
   .shadow-warm-md {
-    box-shadow: 0 4px 12px rgba(44, 24, 16, 0.12);
+    box-shadow: var(--shadow-warm-md);
   }
-  
+
   .shadow-warm-lg {
-    box-shadow: 0 8px 24px rgba(44, 24, 16, 0.14);
+    box-shadow: var(--shadow-warm-lg);
   }
-  
+
   .shadow-warm-xl {
-    box-shadow: 0 20px 40px -8px rgba(44, 24, 16, 0.16);
+    box-shadow: var(--shadow-warm-xl);
+  }
+
+  .liquid-bg {
+    background:
+      radial-gradient(circle at 12% 8%, var(--glow-rose), transparent 32rem),
+      radial-gradient(circle at 86% 14%, var(--glow-gold), transparent 30rem),
+      radial-gradient(circle at 50% 82%, var(--glow-ground), transparent 34rem),
+      var(--color-background);
+  }
+
+  .dark .liquid-bg {
+    background:
+      radial-gradient(circle at 14% 8%, var(--glow-gold), transparent 30rem),
+      radial-gradient(circle at 84% 12%, var(--glow-rose), transparent 28rem),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      radial-gradient(circle at 50% 82%, var(--glow-ground), transparent 34rem),
+      var(--color-background);
+    background-size:
+      auto,
+      auto,
+      18px 18px,
+      18px 18px,
+      auto,
+      auto;
+  }
+
+  .glass-panel {
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(24px) saturate(1.35);
+    -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  }
+
+  .glass-chip {
+    border: 1px solid var(--glass-chip-border);
+    background: var(--glass-chip-bg);
+    box-shadow: var(--glass-chip-shadow);
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
   }
 }

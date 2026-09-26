@@ -33,7 +33,7 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
 
   if (!hasRedirect) {
     return (
-      <div className="relative block h-full w-full overflow-hidden text-left cursor-default">
+      <div className="group relative block h-full w-full overflow-hidden text-left cursor-default">
         {content}
       </div>
     );
@@ -43,7 +43,7 @@ export default function SliderCard({ slide, priority = false, onClick }: SliderC
     return (
       <Link
         href={url}
-        className="relative block h-full w-full overflow-hidden text-left cursor-pointer"
+        className="group relative block h-full w-full overflow-hidden text-left cursor-pointer"
         aria-label={`Open ${slide.altText || 'homepage promotion'}`}
       >
         {content}

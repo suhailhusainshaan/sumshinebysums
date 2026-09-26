@@ -57,14 +57,17 @@ const CategoriesSection = ({ categories = [] }: CategoriesSectionProps) => {
   }
 
   return (
-    <section className="bg-background py-16">
+    <section className="relative py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         <div className="mx-auto mb-12 max-w-3xl text-center">
-          <h2 className="mb-3 font-heading text-3xl font-bold text-foreground lg:text-4xl">
+          <span className="glass-chip mb-4 inline-flex rounded-full px-4 py-2 text-caption font-medium uppercase tracking-[0.24em] text-primary">
+            Shop by style
+          </span>
+          <h2 className="mb-3 font-heading text-4xl font-semibold text-foreground lg:text-5xl">
             Our Offerings
           </h2>
           <p className="text-lg text-muted-foreground">
-            Checkout our Handmade, Homemade and Heart-made Designs
+            Check out our handmade, homemade, and heart-made designs
           </p>
         </div>
 
@@ -73,44 +76,31 @@ const CategoriesSection = ({ categories = [] }: CategoriesSectionProps) => {
             <Link
               key={category.id}
               href={`/product-listing?category_id=${category.id}`}
-              className="group relative block overflow-hidden rounded-[28px]"
+              className="glass-panel group relative block overflow-hidden rounded-[32px] p-1 shadow-warm-lg transition-spring hover:-translate-y-1 hover:shadow-warm-xl"
             >
-              <div className="relative aspect-square overflow-hidden bg-muted">
+              <div className="relative aspect-square overflow-hidden rounded-[28px] bg-muted">
                 <AppImage
                   src={resolveCategoryImageSrc(category.logoUrl)}
                   alt={category.name}
                   fill
                   className="object-cover transition-spring duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-white/10" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.3),transparent_16rem)]" />
 
-                <div className="absolute inset-0 flex flex-col justify-between p-6 text-white lg:p-7">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="max-w-[75%]">
-                      {/*<p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">*/}
-                      {/*  Category*/}
-                      {/*</p>*/}
-                      {/*<h3 className="mt-2 font-heading text-3xl font-semibold text-white">*/}
-                      {/*  {category.name}*/}
-                      {/*</h3>*/}
-                    </div>
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-spring group-hover:translate-x-1">
+                <div className="absolute inset-0 flex flex-col justify-between p-4 text-white lg:p-5">
+                  <div className="flex justify-end">
+                    <span className="glass-chip flex h-11 w-11 items-center justify-center rounded-full text-white transition-spring group-hover:translate-x-1">
                       <Icon name="ArrowRightIcon" size={18} />
                     </span>
                   </div>
 
-                  {/*<div className="max-w-md">*/}
-                  {/*  <p className="line-clamp-2 text-sm leading-6 text-white/80 sm:text-base">*/}
-                  {/*    {category.description ||*/}
-                  {/*      `Explore handcrafted ${category.name.toLowerCase()} designed for gifting and daily styling.`}*/}
-                  {/*  </p>*/}
-                  {/*  <span className="mt-4 inline-flex items-center text-sm font-medium text-[#f4c27a]">*/}
-                  {/*    Shop collection*/}
-                  {/*  </span>*/}
-                  {/*</div>*/}
-                  <h3 className="mt-2 font-heading text-3xl font-semibold text-white">
-                    {category.name}
-                  </h3>
+                  {/*<div className="rounded-[22px] bg-white/18 px-4 py-3 shadow-warm backdrop-blur-xl">*/}
+                  <div className="glass-chip rounded-[22px] px-4 py-3 shadow-warm">
+                    <h3 className="font-heading text-2xl font-semibold leading-tight text-white sm:text-3xl">
+                      {category.name}
+                    </h3>
+                  </div>
                 </div>
               </div>
             </Link>

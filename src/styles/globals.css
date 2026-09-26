@@ -817,3 +817,31 @@ span.flatpickr-weekday,
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
+
+
+/* ─── Print styles — receipt page ──────────────────────────────────────────── */
+/*
+ * When handlePrint() adds .printing-receipt to <html>, window.print() fires
+ * with these rules active. Everything outside #receipt-print-area is hidden;
+ * the receipt renders isolated on a white page.
+ */
+@media print {
+  html.printing-receipt body > * {
+    visibility: hidden !important;
+  }
+
+  html.printing-receipt #receipt-print-area,
+  html.printing-receipt #receipt-print-area * {
+    visibility: visible !important;
+  }
+
+  html.printing-receipt #receipt-print-area {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    padding-top: 1rem !important;
+    background: white !important;
+  }
+}
