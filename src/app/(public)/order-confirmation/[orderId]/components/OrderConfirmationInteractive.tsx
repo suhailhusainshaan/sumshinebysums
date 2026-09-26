@@ -447,13 +447,14 @@ function PaidView({
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="font-data text-sm font-semibold text-foreground leading-tight truncate">
-                      {order
-                        ? order.items?.length === 1
-                          ? order.items[0]?.product?.name || 'Your order'
-                          : `${order.itemCount ?? order.items?.length ?? 0} item${
-                              (order.itemCount ?? order.items?.length ?? 0) !== 1 ? 's' : ''
-                            }`
-                        : 'Your order'}
+                      Your Order
+                      {/*{order*/}
+                      {/*  ? order.items?.length === 1*/}
+                      {/*    ? order.items[0]?.product?.name || 'Your order'*/}
+                      {/*    : `${order.itemCount ?? order.items?.length ?? 0} item${*/}
+                      {/*        (order.itemCount ?? order.items?.length ?? 0) !== 1 ? 's' : ''*/}
+                      {/*      }`*/}
+                      {/*  : 'Your order'}*/}
                     </p>
                     <p className="mt-0.5 font-data text-[11px] text-muted-foreground">
                       {order?.orderNumber
