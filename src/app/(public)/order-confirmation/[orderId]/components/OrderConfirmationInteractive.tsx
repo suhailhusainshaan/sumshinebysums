@@ -401,16 +401,16 @@ function PaidView({
             {/* ── Machine header: branding + success badge + nav ── */}
             <ReceiptPrinter.Header>
               {/* Left — branding pill */}
-              <span className="shrink-0 rounded-full border border-border bg-muted/60 px-3 py-1 font-data text-[10px] font-medium text-muted-foreground tracking-wider uppercase">
+              <span className="hidden sm:inline-flex shrink-0 rounded-full border border-border bg-muted/60 px-3 py-1 font-data text-[10px] font-medium text-muted-foreground tracking-wider uppercase">
                 Sumshine By Sums
               </span>
 
               {/* Centre — order placed badge (absolute so it doesn't push the pills apart) */}
-              <div className="absolute left-1/2 -translate-x-1/2 flex flex-row items-center gap-3 pointer-events-none">
+              <div className="absolute left-1/2 -translate-x-1/2 flex flex-row items-center gap-2 sm:gap-3 pointer-events-none">
                 {/* Animated green check */}
-                <div className="relative flex items-center justify-center w-11 h-11">
+                <div className="relative flex items-center justify-center w-8 h-8 sm:w-11 sm:h-11">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-green-400/25 animate-ping" />
-                  <span className="relative flex items-center justify-center w-11 h-11 rounded-full bg-green-700 shadow-[0_0_20px_rgba(34,197,94,0.45)]">
+                  <span className="relative flex items-center justify-center w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-green-700 shadow-[0_0_20px_rgba(34,197,94,0.45)]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -419,13 +419,13 @@ function PaidView({
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="w-5 h-5"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                     >
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </span>
                 </div>
-                <span className="font-heading text-3xl font-semibold text-foreground whitespace-nowrap">
+                <span className="font-heading text-xl sm:text-3xl font-semibold text-foreground whitespace-nowrap">
                   Order Placed
                 </span>
               </div>
@@ -433,7 +433,7 @@ function PaidView({
               {/* Right — home button */}
               <Link
                 href="/"
-                className="shrink-0 flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-3 py-1 font-data text-[10px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-luxe"
+                className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-muted/60 px-3 py-1 font-data text-[10px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-luxe"
               >
                 <Icon name="HomeIcon" size={12} />
                 Home
