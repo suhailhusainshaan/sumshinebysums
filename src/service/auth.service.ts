@@ -9,6 +9,18 @@ export const authService = {
     const response = await api.post('/auth/google', data);
     return response.data;
   },
+  otpOptions: async (identifier: string) => {
+    const response = await api.post('/auth/otp/options', { identifier });
+    return response.data;
+  },
+  sendOtp: async (requestId: string, method: 'EMAIL' | 'WHATSAPP') => {
+    const response = await api.post('/auth/otp/send', { requestId, method });
+    return response.data;
+  },
+  verifyOtp: async (requestId: string, otp: string) => {
+    const response = await api.post('/auth/otp/verify', { requestId, otp });
+    return response.data;
+  },
   updateProfile: async (data: Record<string, unknown>) => {
     const response = await api.put('/admin/users/me', data);
     return response.data;
