@@ -7,6 +7,7 @@ import api from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { getGuestToken } from '@/lib/wishlistCookie';
 import { useWishlistStore } from '@/store/wishlistStore';
+import { useAuthStore } from '@/store/authStore';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -57,6 +58,9 @@ export default function RegisterPage() {
         localStorage.setItem('token', res.data.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.data.user));
         localStorage.setItem('expiry_time', String(expiryTime));
+        
+        useAuthStore.getState().login(res.data.data.user);
+
         toast.success(res.data?.message || 'Registration successful!');
 
         const guestToken = getGuestToken();

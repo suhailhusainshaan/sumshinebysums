@@ -5,8 +5,20 @@ export const authService = {
     const response = await api.post('/auth/login', credentials);
     return response.data; // This returns your { data, message, status } object
   },
-  googleLogin: async (data: { token: string }) => {
+  googleLogin: async (data: { idToken: string }) => {
     const response = await api.post('/auth/google', data);
+    return response.data;
+  },
+  otpOptions: async (identifier: string) => {
+    const response = await api.post('/auth/otp/options', { identifier });
+    return response.data;
+  },
+  sendOtp: async (requestId: string, method: 'EMAIL' | 'WHATSAPP') => {
+    const response = await api.post('/auth/otp/send', { requestId, method });
+    return response.data;
+  },
+  verifyOtp: async (requestId: string, otp: string) => {
+    const response = await api.post('/auth/otp/verify', { requestId, otp });
     return response.data;
   },
   updateProfile: async (data: Record<string, unknown>) => {
@@ -34,5 +46,9 @@ export const authService = {
   me: async () => {
     const response = await api.get('/auth/me');
     return response.data; // { data, message, status }
+  },
+  updateTheme: async (theme: 'light' | 'dark') => {
+    const response = await api.put('/auth/theme', { theme });
+    return response.data;
   },
 };

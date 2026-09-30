@@ -51,7 +51,8 @@ const HomepageInteractive = ({
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="liquid-bg min-h-screen overflow-hidden bg-background">
+      <div className="pointer-events-none fixed inset-x-0 top-0 h-32 bg-gradient-to-b from-background/80 to-transparent z-[1]" />
       <Header
         onSearchClick={() => setIsSearchOpen(true)}
         onCartClick={() => router.push('/shopping-cart')}

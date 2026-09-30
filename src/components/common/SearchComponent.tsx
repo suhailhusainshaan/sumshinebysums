@@ -86,8 +86,8 @@ const SearchComponent = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-background z-search-overlay">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="liquid-bg fixed inset-0 z-search-overlay bg-background/85 backdrop-blur-2xl">
+      <div className="mx-auto max-w-3xl px-4 py-8">
         {/* Search Header */}
         <div className="flex items-center space-x-4 mb-8">
           <div className="flex-1 relative">
@@ -102,7 +102,7 @@ const SearchComponent = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={placeholder}
-              className="w-full h-12 pl-12 pr-4 bg-input border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-luxe"
+              className="h-12 w-full rounded-full border border-white/40 bg-input/80 pl-12 pr-4 text-foreground shadow-warm-sm backdrop-blur-md transition-luxe placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             />
           </div>
           <button
@@ -115,7 +115,7 @@ const SearchComponent = ({
         </div>
 
         {/* Search Results */}
-        <div className="bg-card rounded-md shadow-warm-md max-h-[calc(100vh-200px)] overflow-y-auto">
+        <div className="glass-panel max-h-[calc(100vh-200px)] overflow-y-auto rounded-[28px]">
           {isLoading && (
             <div className="p-8 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
@@ -178,7 +178,7 @@ const SearchComponent = ({
                       key={category}
                       href={`/product-listing?category=${category.toLowerCase()}`}
                       onClick={handleResultClick}
-                      className="p-4 bg-muted rounded-md text-center text-foreground hover:bg-primary hover:text-primary-foreground transition-luxe"
+                      className="rounded-[18px] bg-white/25 p-4 text-center text-foreground transition-luxe hover:bg-primary hover:text-primary-foreground"
                     >
                       {category}
                     </Link>

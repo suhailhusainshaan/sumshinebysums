@@ -49,7 +49,7 @@ export default function AccountSidebar({ active }: AccountSidebarProps) {
   };
 
   return (
-    <aside className="lg:w-72 shrink-0 border-r border-border bg-background px-4 pt-8 pb-12 lg:px-6">
+    <aside className="hidden lg:block lg:w-72 shrink-0 border-r border-border bg-background px-4 pt-8 pb-12 lg:px-6">
       <div className="bg-card rounded-lg shadow-warm mb-3 overflow-hidden">
         <Link
           href="/account/profile"

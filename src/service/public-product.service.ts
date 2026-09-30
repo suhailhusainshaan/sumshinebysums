@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/lib/runtime-env';
 import {
   ProductFiltersResponse,
   ProductListingQuery,
@@ -10,8 +11,6 @@ import {
   HomepageHeroMediaAsset,
   HomepageSlider,
 } from '@/app/(public)/homepage/types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
 
 type SearchParamValue = string | string[] | undefined;
 type RawSearchParams = Record<string, SearchParamValue>;
@@ -90,6 +89,11 @@ interface ApiResponse<T> {
   status: number;
 }
 
+export interface StorefrontThemeResponse {
+  activeLightTheme: string;
+  availableLightThemes: string[];
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { cache: 'no-store' });
 
@@ -143,4 +147,8 @@ export async function getMediaAssetByKey(key: string) {
 
 export async function getHomepageSliders() {
   return fetchJson<HomepageSlider[]>('/public/homepage/sliders');
+}
+
+export async function getStorefrontTheme() {
+  return fetchJson<StorefrontThemeResponse>('/public/storefront/theme');
 }

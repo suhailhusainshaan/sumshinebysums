@@ -94,6 +94,7 @@ export interface OrderDetail {
   orderNumber: string;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
+  paymentMethod?: string | null; // e.g. "card", "upi"
   subtotal: number;
   discountTotal: number;
   shippingTotal: number;

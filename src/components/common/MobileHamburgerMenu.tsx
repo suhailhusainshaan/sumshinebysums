@@ -42,15 +42,15 @@ const MobileHamburgerMenu = ({ isOpen, onClose }: MobileHamburgerMenuProps) => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 z-[998]"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[1098]"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide-out panel */}
-      <div className="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-card shadow-warm-xl z-[999] flex flex-col overflow-hidden">
+      <div className="fixed top-0 right-0 bottom-0 z-[1099] flex w-80 max-w-[85vw] flex-col overflow-hidden border-l border-white/50 bg-background/90 shadow-warm-xl backdrop-blur-2xl">
         {/* Panel header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
+        <div className="flex items-center justify-between border-b border-white/35 px-6 py-4 flex-shrink-0">
           <Link href="/" onClick={handleLinkClick} className="flex items-center gap-2">
             <svg
               width="24"
@@ -106,7 +106,7 @@ const MobileHamburgerMenu = ({ isOpen, onClose }: MobileHamburgerMenuProps) => {
                     key={sub.label}
                     href={sub.path}
                     onClick={handleLinkClick}
-                    className="block px-3 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted rounded-md transition-luxe"
+                    className="block px-3 py-2.5 text-sm font-medium text-foreground/75 hover:text-foreground hover:bg-muted rounded-md transition-luxe"
                   >
                     {sub.label}
                   </Link>
@@ -182,8 +182,8 @@ const MobileHamburgerMenu = ({ isOpen, onClose }: MobileHamburgerMenuProps) => {
         </nav>
 
         {/* Footer */}
-        <div className="flex-shrink-0 px-6 py-4 border-t border-border bg-muted/30">
-          <p className="text-xs text-muted-foreground text-center">
+        <div className="flex-shrink-0 border-t border-white/35 bg-background/70 px-6 py-4 backdrop-blur-xl">
+          <p className="text-center text-xs font-medium text-foreground/70">
             © 2026 Sumshine By Sums. All rights reserved.
           </p>
         </div>

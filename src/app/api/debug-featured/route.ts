@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
+import { API_BASE_URL } from '@/lib/runtime-env';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
   const url = `${API_BASE_URL}/products/featured`;
 
   const debug: Record<string, unknown> = {
     step1_url_being_fetched: url,
-    step2_api_base_url_env: process.env.NEXT_PUBLIC_API_BASE_URL ?? '(not set, using default)',
+    step2_api_base_url_env: API_BASE_URL,
   };
 
   try {
