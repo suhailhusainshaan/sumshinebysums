@@ -5,6 +5,12 @@ import {
   OrderListItem,
   OrderDetailResponse,
 } from '@/app/admin/orders/types';
+import { AdminDashboardResponse } from '@/types/admin-dashboard';
+
+export const getAdminDashboard = async (): Promise<AdminDashboardResponse> => {
+  const { data } = await api.get('/admin/dashboard');
+  return data;
+};
 
 export const getAdminOrders = async (params: {
   page?: number;

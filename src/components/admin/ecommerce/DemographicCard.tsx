@@ -1,119 +1,86 @@
 'use client';
-import Image from 'next/image';
 
-import CountryMap from './CountryMap';
-import { useState } from 'react';
-import { MoreDotIcon } from '@/icons/admin';
-import { Dropdown } from '../ui/dropdown/Dropdown';
-import { DropdownItem } from '../ui/dropdown/DropdownItem';
+import { TopLocationPoint } from '@/types/admin-dashboard';
 
-export default function DemographicCard() {
-  const [isOpen, setIsOpen] = useState(false);
+interface DemographicCardProps {
+  topLocations: TopLocationPoint[];
+}
 
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
+const clampPercent = (value: number) => Math.min(Math.max(value, 0), 100);
+const formatNumber = (value: number) => new Intl.NumberFormat('en-IN').format(value);
 
-  function closeDropdown() {
-    setIsOpen(false);
-  }
+export default function DemographicCard({ topLocations }: DemographicCardProps) {
+  const topLocation = topLocations[0];
+  const totalOrders = topLocations.reduce((sum, location) => sum + location.count, 0);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-      <div className="flex justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Customers Demographic
-          </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Number of customer based on country
-          </p>
-        </div>
-
-        <div className="relative inline-block">
-          <button onClick={toggleDropdown} className="dropdown-toggle">
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
-          </button>
-          <Dropdown isOpen={isOpen} onClose={closeDropdown} className="w-40 p-2">
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              View More
-            </DropdownItem>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              Delete
-            </DropdownItem>
-          </Dropdown>
-        </div>
-      </div>
-      <div className="px-4 py-6 my-6 overflow-hidden border border-gary-200 rounded-2xl bg-gray-50 dark:border-gray-800 dark:bg-gray-900 sm:px-6">
-        <div
-          id="mapOne"
-          className="mapOne map-btn -mx-4 -my-6 h-[212px] w-[252px] 2xsm:w-[307px] xsm:w-[358px] sm:-mx-6 md:w-[668px] lg:w-[634px] xl:w-[393px] 2xl:w-[554px]"
-        >
-          <CountryMap />
-        </div>
+      <div>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+          Top Delivery Locations
+        </h3>
+        <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+          Orders by shipping state or city
+        </p>
       </div>
 
-      <div className="space-y-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="items-center w-full rounded-full max-w-8">
-              <Image
-                width={48}
-                height={48}
-                src="/images/country/country-01.svg"
-                alt="usa"
-                className="w-full"
-              />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">USA</p>
-              <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                2,379 Customers
-              </span>
+      {topLocation ? (
+        <>
+          <div className="mt-6 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white p-5 dark:border-brand-500/20 dark:from-brand-500/10 dark:to-white/[0.03]">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-theme-xs font-medium uppercase tracking-wide text-brand-500 dark:text-brand-400">
+                  Leading location
+                </p>
+                <h4 className="mt-2 text-xl font-semibold text-gray-800 dark:text-white/90">
+                  {topLocation.name}
+                </h4>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {formatNumber(topLocation.count)} of {formatNumber(totalOrders)} orders
+                </p>
+              </div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-3xl shadow-theme-sm dark:bg-gray-900">
+                📍
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full max-w-[140px] items-center gap-3">
-            <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-              <div className="absolute left-0 top-0 flex h-full w-[79%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
-            </div>
-            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">79%</p>
+          <div className="mt-6 space-y-4">
+            {topLocations.map((location, index) => (
+              <div key={location.name}>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
+                        {location.name}
+                      </p>
+                      <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                        {formatNumber(location.count)} order{location.count === 1 ? '' : 's'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                    {location.percent}%
+                  </p>
+                </div>
+                <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800">
+                  <div
+                    className="h-2 rounded-full bg-brand-500"
+                    style={{ width: `${clampPercent(location.percent)}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
           </div>
+        </>
+      ) : (
+        <div className="mt-6 rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+          No location data yet.
         </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="items-center w-full rounded-full max-w-8">
-              <Image
-                width={48}
-                height={48}
-                className="w-full"
-                src="/images/country/country-02.svg"
-                alt="france"
-              />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">France</p>
-              <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                589 Customers
-              </span>
-            </div>
-          </div>
-
-          <div className="flex w-full max-w-[140px] items-center gap-3">
-            <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-              <div className="absolute left-0 top-0 flex h-full w-[23%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
-            </div>
-            <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">23%</p>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
