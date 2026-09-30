@@ -5,6 +5,7 @@ import { Dropdown } from '../admin/ui/dropdown/Dropdown';
 import { DropdownItem } from '../admin/ui/dropdown/DropdownItem';
 import useAuth from '@/hooks/useAuth';
 import Icon from '@/components/ui/AppIcon';
+import { resolveImageSrc } from '@/lib/image';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +34,7 @@ export default function UserDropdown() {
             width={44}
             height={44}
             src={
-              user?.avatar
-                ? `${process.env.NEXT_PUBLIC_IMG_URL}${user.avatar}`
-                : '/images/user/owner.jpg'
+              user?.avatar ? resolveImageSrc(user.avatar, '/images/user/owner.jpg') : '/images/user/owner.jpg'
             }
             alt="User"
             className="object-cover w-full h-full"

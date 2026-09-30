@@ -8,10 +8,11 @@ import AccountSidebar from '@/components/account/AccountSidebar';
 import Icon from '@/components/ui/AppIcon';
 import useAuth from '@/hooks/useAuth';
 import { authService } from '@/service/auth.service';
+import { IMG_BASE_URL as RAW_IMG_BASE_URL } from '@/lib/runtime-env';
 import toast from 'react-hot-toast';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const IMG_BASE_URL = (process.env.NEXT_PUBLIC_IMG_URL || '').replace(/\/+$/, '');
+const IMG_BASE_URL = RAW_IMG_BASE_URL.replace(/\/+$/, '');
 
 function ProfileSkeleton() {
   return (

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/lib/runtime-env';
 import {
   ProductFiltersResponse,
   ProductListingQuery,
@@ -10,8 +11,6 @@ import {
   HomepageHeroMediaAsset,
   HomepageSlider,
 } from '@/app/(public)/homepage/types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
 
 type SearchParamValue = string | string[] | undefined;
 type RawSearchParams = Record<string, SearchParamValue>;

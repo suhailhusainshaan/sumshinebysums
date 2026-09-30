@@ -1,4 +1,6 @@
-const IMG_BASE_URL = (process.env.NEXT_PUBLIC_IMG_URL || '').replace(/\/+$/, '');
+import { IMG_BASE_URL as RAW_IMG_BASE_URL } from '@/lib/runtime-env';
+
+const IMG_BASE_URL = RAW_IMG_BASE_URL.replace(/\/+$/, '');
 
 export function resolveImageSrc(
   url: string | null | undefined,

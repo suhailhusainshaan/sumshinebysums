@@ -1,6 +1,5 @@
+import { API_BASE_URL } from '@/lib/runtime-env';
 import { StaticPage } from '@/types/page';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
 
 export async function getPageBySlug(slug: string): Promise<StaticPage | null> {
   try {
