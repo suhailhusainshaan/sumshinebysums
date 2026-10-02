@@ -56,41 +56,41 @@ const EmptyCart = ({ recommendedProducts }: EmptyCartProps) => {
       </div>
 
       {/* Recommended Products */}
-      {recommendedProducts.length > 0 && (
-        <div>
-          <h3 className="font-heading text-xl font-semibold text-foreground mb-6">
-            You Might Like These
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {recommendedProducts.map((product) => (
-              <Link
-                key={product.id}
-                href={`/product-detail/${product.id}`}
-                className="group bg-card border border-border rounded-md overflow-hidden hover:shadow-warm-md transition-luxe"
-              >
-                <div className="aspect-square overflow-hidden">
-                  <AppImage
-                    src={product.image}
-                    alt={product.alt}
-                    width={300}
-                    height={300}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-luxe"
-                  />
-                </div>
-                <div className="p-3">
-                  <p className="text-caption text-muted-foreground mb-1">{product.category}</p>
-                  <h4 className="font-medium text-foreground text-sm line-clamp-2 mb-2">
-                    {product.name}
-                  </h4>
-                  <p className="text-data font-semibold text-primary">
-                    ₹{product.price.toFixed(2)}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      {/*{recommendedProducts.length > 0 && (*/}
+      {/*  <div>*/}
+      {/*    <h3 className="font-heading text-xl font-semibold text-foreground mb-6">*/}
+      {/*      You Might Like These*/}
+      {/*    </h3>*/}
+      {/*    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">*/}
+      {/*      {recommendedProducts.map((product) => (*/}
+      {/*        <Link*/}
+      {/*          key={product.id}*/}
+      {/*          href={`/product-detail/${product.id}`}*/}
+      {/*          className="group bg-card border border-border rounded-md overflow-hidden hover:shadow-warm-md transition-luxe"*/}
+      {/*        >*/}
+      {/*          <div className="aspect-square overflow-hidden">*/}
+      {/*            <AppImage*/}
+      {/*              src={product.image}*/}
+      {/*              alt={product.alt}*/}
+      {/*              width={300}*/}
+      {/*              height={300}*/}
+      {/*              className="w-full h-full object-cover group-hover:scale-105 transition-luxe"*/}
+      {/*            />*/}
+      {/*          </div>*/}
+      {/*          <div className="p-3">*/}
+      {/*            <p className="text-caption text-muted-foreground mb-1">{product.category}</p>*/}
+      {/*            <h4 className="font-medium text-foreground text-sm line-clamp-2 mb-2">*/}
+      {/*              {product.name}*/}
+      {/*            </h4>*/}
+      {/*            <p className="text-data font-semibold text-primary">*/}
+      {/*              ₹{product.price.toFixed(2)}*/}
+      {/*            </p>*/}
+      {/*          </div>*/}
+      {/*        </Link>*/}
+      {/*      ))}*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   );
 };
